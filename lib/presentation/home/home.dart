@@ -8,8 +8,6 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('StudyMind'),
-        centerTitle: true,
-        elevation: 0,
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_outlined)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.person_outline)),

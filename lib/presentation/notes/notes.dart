@@ -8,18 +8,7 @@ class NotesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notes'),
-        centerTitle: true,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.sort),
-          ),
-        ],
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search)), IconButton(onPressed: () {}, icon: const Icon(Icons.sort))],
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -32,10 +21,7 @@ class NotesScreen extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
     );
   }
 }
@@ -45,11 +31,7 @@ class _NoteCard extends StatelessWidget {
   final String content;
   final DateTime date;
 
-  const _NoteCard({
-    required this.title,
-    required this.content,
-    required this.date,
-  });
+  const _NoteCard({required this.title, required this.content, required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -68,44 +50,22 @@ class _NoteCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  Text(
-                    '${date.day}/${date.month}/${date.year}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
-                  ),
+                  Text('${date.day}/${date.month}/${date.year}', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
                 ],
               ),
               const SizedBox(height: 8),
-              Text(
-                content,
-                style: const TextStyle(fontSize: 16),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+              Text(content, style: const TextStyle(fontSize: 16), maxLines: 2, overflow: TextOverflow.ellipsis),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.edit),
-                    iconSize: 20,
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.delete),
-                    iconSize: 20,
-                  ),
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.edit), iconSize: 20),
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.delete), iconSize: 20),
                 ],
               ),
             ],

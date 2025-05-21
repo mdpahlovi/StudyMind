@@ -6,7 +6,7 @@ class DocumentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Documents'), centerTitle: true, elevation: 0),
+      appBar: AppBar(title: const Text('Documents')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

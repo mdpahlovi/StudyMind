@@ -6,32 +6,15 @@ class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Library'),
-        centerTitle: true,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.filter_list),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Library'), actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list))]),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           const TextField(
-            decoration: InputDecoration(
-              hintText: 'Search in library...',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(),
-            ),
+            decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search), border: OutlineInputBorder()),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'My Books',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
+          const Text('My Books', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
           GridView.builder(
             shrinkWrap: true,
@@ -44,19 +27,12 @@ class LibraryScreen extends StatelessWidget {
             ),
             itemCount: 4,
             itemBuilder: (context, index) {
-              return _BookCard(
-                title: 'Book ${index + 1}',
-                author: 'Author ${index + 1}',
-                progress: (index + 1) * 0.25,
-              );
+              return _BookCard(title: 'Book ${index + 1}', author: 'Author ${index + 1}', progress: (index + 1) * 0.25);
             },
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
     );
   }
 }
@@ -66,11 +42,7 @@ class _BookCard extends StatelessWidget {
   final String author;
   final double progress;
 
-  const _BookCard({
-    required this.title,
-    required this.author,
-    required this.progress,
-  });
+  const _BookCard({required this.title, required this.author, required this.progress});
 
   @override
   Widget build(BuildContext context) {
@@ -84,40 +56,16 @@ class _BookCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Center(
-                    child: Icon(Icons.book, size: 40),
-                  ),
+                  decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(8)),
+                  child: const Center(child: Icon(Icons.book, size: 40)),
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
               const SizedBox(height: 4),
-              Text(
-                author,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              Text(author, style: TextStyle(fontSize: 14, color: Colors.grey[600]), maxLines: 1, overflow: TextOverflow.ellipsis),
               const SizedBox(height: 8),
-              LinearProgressIndicator(
-                value: progress,
-                backgroundColor: Colors.grey[200],
-              ),
+              LinearProgressIndicator(value: progress, backgroundColor: Colors.grey[200]),
             ],
           ),
         ),

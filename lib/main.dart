@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
-import 'routes/routes.dart';
+import 'package:studymind/routes/routes.dart';
+import 'package:studymind/theme/theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const StudyMind());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class StudyMind extends StatelessWidget {
+  const StudyMind({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'StudyMind',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.light,
-        ),
-      ),
+      themeMode: ThemeMode.dark,
+      theme: AppTheme('light').theme,
+      darkTheme: AppTheme('dark').theme,
       initialRoute: AppRoutes.initial,
       routes: AppRoutes.routes,
     );
