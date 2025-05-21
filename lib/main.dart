@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:studymind/controllers/theme.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/theme.dart';
 
-void main() {
-  runApp(const StudyMind());
+void main() async {
+  await GetStorage.init();
+  runApp(StudyMind());
 }
 
 class StudyMind extends StatelessWidget {
-  const StudyMind({super.key});
+  StudyMind({super.key});
+  final ThemeController themeController = Get.put(ThemeController());
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'StudyMind',
-      themeMode: ThemeMode.dark,
-      theme: AppTheme('light').theme,
-      darkTheme: AppTheme('dark').theme,
-      initialRoute: AppRoutes.initial,
-      routes: AppRoutes.routes,
+      themeMode: themeController.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      theme: AppTheme(mode: "light").theme,
+      darkTheme: AppTheme(mode: "dark").theme,
+      getPages: AppRoutes().routes,
     );
   }
 }

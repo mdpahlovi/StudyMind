@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:studymind/theme/colors.dart';
+
+class CustomIcon extends StatelessWidget {
+  final String icon;
+  final double size;
+  final Color? color;
+
+  const CustomIcon({super.key, required this.icon, this.size = 20, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorPalette colorPalette = AppColors().palette;
+
+    final Map<String, IconData> iconMap = {
+      'home': HugeIcons.strokeRoundedHome12,
+      'library': HugeIcons.strokeRoundedLibrary,
+      'community': HugeIcons.strokeRoundedUserGroup,
+      'profile': HugeIcons.strokeRoundedUserSettings01,
+      'add': HugeIcons.strokeRoundedAdd01,
+      'arrowRight': HugeIcons.strokeRoundedArrowRight01,
+      'noteEdit': HugeIcons.strokeRoundedTaskEdit01,
+      'documentScanner': HugeIcons.strokeRoundedAiScan,
+      'flashCard': HugeIcons.strokeRoundedNote,
+      'note': HugeIcons.strokeRoundedTask01,
+      'document': HugeIcons.strokeRoundedNotebook,
+    };
+
+    if (iconMap.containsKey(icon)) {
+      return HugeIcon(icon: iconMap[icon]!, size: size, color: color ?? colorPalette.content);
+    } else {
+      return HugeIcon(icon: HugeIcons.strokeRoundedHelpCircle, size: size, color: color ?? colorPalette.content);
+    }
+  }
+}

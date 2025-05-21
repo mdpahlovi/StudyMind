@@ -6,7 +6,7 @@ class AppTheme {
   final String mode;
   final ColorPalette color;
 
-  AppTheme(this.mode) : color = AppColors(mode: mode).palette;
+  AppTheme({required this.mode}) : color = AppColors().getPalette(mode);
 
   ThemeData get theme => ThemeData(
     useMaterial3: true,
@@ -61,10 +61,14 @@ class AppTheme {
       color: color.surface,
       foregroundColor: color.content,
       centerTitle: true,
-      shadowColor: color.surface,
       iconTheme: IconThemeData(color: color.content),
       titleTextStyle: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w600, color: color.content),
     ),
     scaffoldBackgroundColor: color.background,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: color.primary,
+      splashColor: color.primaryShades[500],
+      shape: const CircleBorder(),
+    ),
   );
 }

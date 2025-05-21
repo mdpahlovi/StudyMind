@@ -37,7 +37,15 @@ dependencies:
 
     # Google Fonts: https://pub.dev/packages/google_fonts
     google_fonts: ^6.2.1
+
+    # GetX: https://pub.dev/packages/get
     get: ^4.7.2
+
+    # GetStorage: https://pub.dev/packages/get_storage
+    get_storage: ^2.1.1
+    hugeicons: ^0.0.11
+    intl: ^0.20.2
+    cached_network_image: ^3.4.1
 
 dev_dependencies:
     flutter_test:
