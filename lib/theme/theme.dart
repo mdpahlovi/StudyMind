@@ -33,36 +33,37 @@ class AppTheme {
     ),
     textTheme: TextTheme(
       // Display Text
-      displayLarge: GoogleFonts.inter(fontSize: 36, fontWeight: FontWeight.bold, color: color.content, letterSpacing: -0.5, height: 1.2),
-      displayMedium: GoogleFonts.inter(fontSize: 30, fontWeight: FontWeight.bold, color: color.content, letterSpacing: -0.5, height: 1.2),
-      displaySmall: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w600, color: color.content, letterSpacing: -0.25, height: 1.3),
+      displayLarge: GoogleFonts.outfit(fontSize: 36, fontWeight: FontWeight.bold, color: color.content, letterSpacing: -0.5, height: 1.2),
+      displayMedium: GoogleFonts.outfit(fontSize: 30, fontWeight: FontWeight.bold, color: color.content, letterSpacing: -0.5, height: 1.2),
+      displaySmall: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.w600, color: color.content, letterSpacing: -0.25, height: 1.3),
 
       // Headline Text
-      headlineLarge: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w600, color: color.content, height: 1.4),
-      headlineMedium: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
-      headlineSmall: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
+      headlineLarge: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.w600, color: color.content, height: 1.4),
+      headlineMedium: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
+      headlineSmall: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
 
       // Title Text
-      titleLarge: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600, color: color.content, height: 1.4),
-      titleMedium: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
-      titleSmall: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
+      titleLarge: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.w600, color: color.content, height: 1.4),
+      titleMedium: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
+      titleSmall: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w500, color: color.contentLight, height: 1.4),
 
       // Body Text
-      bodyLarge: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.normal, color: color.content, height: 1.5),
-      bodyMedium: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.normal, color: color.content, height: 1.5),
-      bodySmall: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.normal, color: color.content, height: 1.5),
+      bodyLarge: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.normal, color: color.content, height: 1.5),
+      bodyMedium: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.normal, color: color.content, height: 1.5),
+      bodySmall: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.normal, color: color.contentLight, height: 1.5),
 
       // Label Text
-      labelLarge: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
-      labelMedium: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
-      labelSmall: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.normal, color: color.content, height: 1.4),
+      labelLarge: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
+      labelMedium: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w500, color: color.contentLight, height: 1.4),
+      labelSmall: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.normal, color: color.contentLight, height: 1.4),
     ),
     appBarTheme: AppBarTheme(
       color: color.surface,
       foregroundColor: color.content,
+      scrolledUnderElevation: 0,
       centerTitle: true,
       iconTheme: IconThemeData(color: color.content),
-      titleTextStyle: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w600, color: color.content),
+      titleTextStyle: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.w600, color: color.content),
     ),
     scaffoldBackgroundColor: color.background,
     floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -70,5 +71,6 @@ class AppTheme {
       splashColor: color.primaryShades[500],
       shape: const CircleBorder(),
     ),
+    cardTheme: CardTheme(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),
   );
 }

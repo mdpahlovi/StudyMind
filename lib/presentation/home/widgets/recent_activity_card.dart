@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:studymind/theme/colors.dart';
+import 'package:studymind/widgets/custom_badge.dart' show CustomBadge;
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/custom_image.dart';
 
@@ -49,7 +50,6 @@ class RecentActivityCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -63,39 +63,31 @@ class RecentActivityCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 child: SizedBox(width: 64, height: 64, child: CustomImage(imageUrl: imageUrl)),
               ),
-
               const SizedBox(width: 12),
-
               // Content
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Type Label
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(color: color.withAlpha(26), borderRadius: BorderRadius.circular(4)),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CustomIcon(icon: icon, color: color, size: 12),
-                          const SizedBox(width: 4),
-                          Text(type.capitalize!, style: textTheme.labelSmall?.copyWith(color: color)),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomBadge(label: type.capitalize!, icon: icon, color: color),
+                        CustomIcon(icon: 'arrowRight', color: colorPalette.content, size: 16),
+                      ],
                     ),
 
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
 
                     // Title
                     Text(title, style: textTheme.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
 
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
 
                     // Timestamp
-                    Text(getFormattedDate(timestamp), style: textTheme.bodySmall?.copyWith(color: colorPalette.content)),
+                    Text(getFormattedDate(timestamp), style: textTheme.bodySmall),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 2),
 
                     // Progress Bar
                     Row(
@@ -118,9 +110,6 @@ class RecentActivityCard extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // Continue Icon
-              CustomIcon(icon: 'arrowRight', color: colorPalette.content, size: 16),
             ],
           ),
         ),

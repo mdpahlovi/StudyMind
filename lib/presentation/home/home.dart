@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
       },
       {
         'id': 2,
-        "title": "Physics Textbook Chapter 4",
+        "title": "Physics Textbook Chapter 4 - Forces and Motion",
         "type": "document",
         "icon": "document",
         'color': colorPalette.info,
@@ -90,10 +90,7 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(height: 8),
-
-              // Recent Activity Cards
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -119,42 +116,33 @@ class HomeScreen extends StatelessWidget {
               // Study Stats
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Study Stats', style: textTheme.titleLarge),
-                            TextButton(
-                              onPressed: () {
-                                // Navigate to detailed stats
-                              },
-                              child: const Text('Details'),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            StatItem(value: '4.5', label: 'Hours', subLabel: 'Today', color: colorPalette.primary),
-                            StatItem(value: '12', label: 'Notes', subLabel: 'Created', color: colorPalette.info),
-                            StatItem(value: '85%', label: 'Flashcards', subLabel: 'Mastered', color: colorPalette.warning),
-                          ],
-                        ),
-                      ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Study Stats', style: textTheme.headlineMedium),
+                    TextButton(
+                      onPressed: () {
+                        // Navigate to view all recent activities
+                      },
+                      child: const Text('Details'),
                     ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      Expanded(child: StatItem(value: '4.5', label: 'Hours', subLabel: 'Today', color: colorPalette.primary)),
+                      Expanded(child: StatItem(value: '12', label: 'Notes', subLabel: 'Created', color: colorPalette.info)),
+                      Expanded(child: StatItem(value: '85%', label: 'Flashcards', subLabel: 'Mastered', color: colorPalette.warning)),
+                    ],
                   ),
                 ),
               ),
-
-              const SizedBox(height: 24),
             ],
           ),
         ),
