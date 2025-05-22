@@ -18,7 +18,6 @@ class ArticleCard extends StatelessWidget {
     return SizedBox(
       width: 256,
       child: Card(
-        clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () {},
           child: Column(

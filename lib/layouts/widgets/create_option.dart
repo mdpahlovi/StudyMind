@@ -16,8 +16,8 @@ class CreateOption extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return InkWell(
-      onTap: onTap,
       borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(border: Border.all(color: colorPalette.border), borderRadius: BorderRadius.circular(12)),
@@ -25,7 +25,7 @@ class CreateOption extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: color.withAlpha(26), borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(color: color.withAlpha(50), borderRadius: BorderRadius.circular(8)),
               child: CustomIcon(icon: icon, color: color, size: 24),
             ),
             const SizedBox(width: 16),

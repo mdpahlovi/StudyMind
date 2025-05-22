@@ -22,11 +22,13 @@ class CustomIcon extends StatelessWidget {
       'arrowRight': HugeIcons.strokeRoundedArrowRight01,
       'noteEdit': HugeIcons.strokeRoundedTaskEdit01,
       'documentScanner': HugeIcons.strokeRoundedAiScan,
-      'flashCard': HugeIcons.strokeRoundedNote,
+      'flashcard': HugeIcons.strokeRoundedNote,
       'note': HugeIcons.strokeRoundedTask01,
       'document': HugeIcons.strokeRoundedNotebook,
       'notification': HugeIcons.strokeRoundedNotification02,
       'arrowLeft': HugeIcons.strokeRoundedArrowLeft01,
+      'menuDot': HugeIcons.strokeRoundedMoreVertical,
+      'folder': HugeIcons.strokeRoundedFolder01,
     };
 
     if (iconMap.containsKey(icon)) {

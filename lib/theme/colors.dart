@@ -20,7 +20,7 @@ class ColorPalette {
   final Color background;
   final Color surface;
   final Color content;
-  final Color contentLight;
+  final Color contentDim;
   final Color border;
 
   const ColorPalette({
@@ -39,7 +39,7 @@ class ColorPalette {
     required this.background,
     required this.surface,
     required this.content,
-    required this.contentLight,
+    required this.contentDim,
     required this.border,
   });
 }
@@ -104,7 +104,7 @@ class AppColors {
     background: Color(0xFFFFFFFF), // White background
     surface: Color(0xFFF5F5F5), // Light gray surface
     content: Color(0xFF000000), // Black content text
-    contentLight: Color(0xFF575757), // Grayish content text
+    contentDim: Color(0xFF575757), // Grayish content text
     border: Color(0xFFE0E0E0), // Light gray border
   );
 
@@ -165,7 +165,7 @@ class AppColors {
     background: Color(0xFF0A0A0A), // Dark background as requested
     surface: Color(0xFF101010), // Slightly lighter surface
     content: Color(0xFFFFFFFF), // White content text as requested
-    contentLight: Color(0xFFB4B4BE), // Slightly lighter content text as requested
+    contentDim: Color(0xFFB4B4BE), // Slightly lighter content text as requested
     border: Color(0xFF242424), // Dark gray border
   );
 

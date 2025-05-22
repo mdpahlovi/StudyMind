@@ -45,17 +45,17 @@ class AppTheme {
       // Title Text
       titleLarge: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.w600, color: color.content, height: 1.4),
       titleMedium: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
-      titleSmall: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w500, color: color.contentLight, height: 1.4),
+      titleSmall: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w500, color: color.contentDim, height: 1.4),
 
       // Body Text
       bodyLarge: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.normal, color: color.content, height: 1.5),
       bodyMedium: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.normal, color: color.content, height: 1.5),
-      bodySmall: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.normal, color: color.contentLight, height: 1.5),
+      bodySmall: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.normal, color: color.contentDim, height: 1.5),
 
       // Label Text
       labelLarge: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
-      labelMedium: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w500, color: color.contentLight, height: 1.4),
-      labelSmall: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.normal, color: color.contentLight, height: 1.4),
+      labelMedium: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
+      labelSmall: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.normal, color: color.contentDim, height: 1.4),
     ),
     appBarTheme: AppBarTheme(
       color: color.surface,
@@ -70,6 +70,26 @@ class AppTheme {
       splashColor: color.primaryShades[500],
       shape: const CircleBorder(),
     ),
-    cardTheme: CardTheme(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),
+    cardTheme: CardTheme(
+      clipBehavior: Clip.antiAlias,
+      margin: const EdgeInsets.only(bottom: 0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      fillColor: color.surface,
+      filled: true,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: color.border, width: 1)),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: color.border, width: 1)),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: color.primary, width: 2)),
+      errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: color.error, width: 1)),
+      focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: color.error, width: 2)),
+      labelStyle: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w400, color: color.contentDim),
+      hintStyle: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w400, color: color.contentDim),
+      helperStyle: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w400, color: color.contentDim),
+      errorStyle: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w400, color: color.error),
+      prefixIconColor: color.contentDim,
+      suffixIconColor: color.contentDim,
+    ),
   );
 }

@@ -77,7 +77,7 @@ class MainLayoutState extends State<MainLayout> {
                     CreateOption(
                       onTap: () => Get.toNamed('/flashcard'),
                       title: "Create Flashcards",
-                      icon: "flashCard",
+                      icon: "flashcard",
                       color: colorPalette.warning,
                     ),
                     SizedBox(height: 12),

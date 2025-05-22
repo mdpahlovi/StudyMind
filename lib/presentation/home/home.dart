@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
     final List<Map<String, dynamic>> actionButtons = [
       {"title": "Notes", "icon": "noteEdit", 'color': colorPalette.primary, "route": "/notes"},
       {"title": "Documents", "icon": "documentScanner", 'color': colorPalette.info, "route": "/document"},
-      {"title": "Flashcards", "icon": "flashCard", 'color': colorPalette.warning, "route": "/flashcard"},
+      {"title": "Flashcards", "icon": "flashcard", 'color': colorPalette.warning, "route": "/flashcard"},
       {"title": "Groups", "icon": "community", 'color': colorPalette.secondary, "route": "/groups"},
     ];
 
@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
         'id': 3,
         "title": "Spanish Vocabulary Flashcards",
         "type": "flashcard",
-        "icon": "flashCard",
+        "icon": "flashcard",
         'color': colorPalette.warning,
         'timestamp': DateTime.now().subtract(const Duration(days: 2)),
         'progress': 0.6,
@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
         'id': 4,
         "title": "Chemistry Practice Questions",
         "type": "flashcard",
-        "icon": "flashCard",
+        "icon": "flashcard",
         'color': colorPalette.warning,
         'timestamp': DateTime.now().subtract(const Duration(days: 3)),
         'progress': 0.3,
@@ -104,18 +104,20 @@ class HomeScreen extends StatelessWidget {
               // Quick Actions
               Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Text('Quick Actions', style: textTheme.headlineMedium)),
               const SizedBox(height: 8),
-              Row(
-                children:
-                    actionButtons.map((button) {
-                      return Expanded(
-                        child: ActionButton(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children:
+                      actionButtons.map((button) {
+                        return ActionButton(
                           title: button['title'],
                           icon: button['icon'],
                           color: button['color'],
                           onTap: () => Get.toNamed(button['route']),
-                        ),
-                      );
-                    }).toList(),
+                        );
+                      }).toList(),
+                ),
               ),
               const SizedBox(height: 16),
 
@@ -131,7 +133,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              ListView.builder(
+              ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -149,8 +151,9 @@ class HomeScreen extends StatelessWidget {
                     onTap: () => Get.toNamed(activity['route']),
                   );
                 },
+                separatorBuilder: (context, index) => const SizedBox(height: 12),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 16),
 
               // Study Stats
               Padding(
@@ -170,8 +173,8 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   child: Row(
                     children: [
-                      Expanded(child: StatItem(value: '4.5', label: 'Hours', subLabel: 'Today', color: colorPalette.primary)),
-                      Expanded(child: StatItem(value: '12', label: 'Notes', subLabel: 'Created', color: colorPalette.info)),
+                      Expanded(child: StatItem(value: '4.5+', label: 'Hours', subLabel: 'Today', color: colorPalette.primary)),
+                      Expanded(child: StatItem(value: '12+', label: 'Notes', subLabel: 'Created', color: colorPalette.info)),
                       Expanded(child: StatItem(value: '85%', label: 'Flashcards', subLabel: 'Mastered', color: colorPalette.warning)),
                     ],
                   ),
@@ -184,17 +187,18 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text('Suggested For You', style: textTheme.headlineMedium),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 12),
               SizedBox(
-                height: 202,
-                child: ListView.builder(
+                height: 194,
+                child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  itemCount: 3,
+                  itemCount: suggestedContent.length,
                   itemBuilder: (context, index) {
                     final content = suggestedContent[index];
                     return ArticleCard(title: content['title'], type: content['type'], imageUrl: content['imageUrl']);
                   },
+                  separatorBuilder: (context, index) => const SizedBox(width: 12),
                 ),
               ),
             ],

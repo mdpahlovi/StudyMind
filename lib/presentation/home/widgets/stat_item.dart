@@ -16,7 +16,7 @@ class StatItem extends StatelessWidget {
       children: [
         Text(value, style: textTheme.headlineLarge),
         SizedBox(height: 4),
-        Text(label, style: textTheme.bodyMedium),
+        Text(label, style: textTheme.titleMedium),
         Text(subLabel, style: textTheme.bodySmall),
       ],
     );

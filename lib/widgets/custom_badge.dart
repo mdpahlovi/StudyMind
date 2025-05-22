@@ -14,7 +14,7 @@ class CustomBadge extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(color: color.withAlpha(26), borderRadius: BorderRadius.circular(4)),
+      decoration: BoxDecoration(color: color.withAlpha(50), borderRadius: BorderRadius.circular(4)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

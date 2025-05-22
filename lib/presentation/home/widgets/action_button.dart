@@ -13,25 +13,21 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Container(
-      width: 80,
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(color: color.withAlpha(26), shape: BoxShape.circle),
-              child: Center(child: CustomIcon(icon: icon, color: color, size: 28)),
-            ),
-            const SizedBox(height: 8),
-            Text(title, style: textTheme.labelMedium, textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
-          ],
-        ),
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(color: color.withAlpha(50), shape: BoxShape.circle),
+            child: Center(child: CustomIcon(icon: icon, color: color, size: 28)),
+          ),
+          const SizedBox(height: 8),
+          Text(title, style: textTheme.bodySmall, textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ],
       ),
     );
   }
