@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:studymind/presentation/home/widgets/action_button.dart';
+import 'package:studymind/presentation/home/widgets/article_card.dart';
 import 'package:studymind/presentation/home/widgets/recent_activity_card.dart';
 import 'package:studymind/presentation/home/widgets/stat_item.dart';
 import 'package:studymind/theme/colors.dart';
+import 'package:studymind/widgets/custom_icon.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,6 +14,13 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
+
+    final List<Map<String, dynamic>> actionButtons = [
+      {"title": "Notes", "icon": "noteEdit", 'color': colorPalette.primary, "route": "/notes"},
+      {"title": "Documents", "icon": "documentScanner", 'color': colorPalette.info, "route": "/document"},
+      {"title": "Flashcards", "icon": "flashCard", 'color': colorPalette.warning, "route": "/flashcard"},
+      {"title": "Groups", "icon": "community", 'color': colorPalette.secondary, "route": "/groups"},
+    ];
 
     final List<Map<String, dynamic>> recentActivities = [
       {
@@ -58,13 +68,30 @@ class HomeScreen extends StatelessWidget {
         "route": "/flashcard",
       },
     ];
+    final List<Map<String, dynamic>> suggestedContent = [
+      {
+        "title": "How to Take Effective Notes",
+        "type": "Article",
+        "imageUrl": "https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+      },
+      {
+        "title": "Memory Techniques for Exams",
+        "type": "Video",
+        "imageUrl": "https://images.pexels.com/photos/3059748/pexels-photo-3059748.jpeg?auto=compress&cs=tinysrgb&w=800",
+      },
+      {
+        "title": "Study Planner Template",
+        "type": "Template",
+        "imageUrl": "https://images.pixabay.com/photo/2015/07/19/10/00/school-items-851328_1280.jpg?auto=compress&cs=tinysrgb&w=800",
+      },
+    ];
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('StudyMind'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_outlined)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.person_outline)),
+          IconButton(onPressed: () {}, icon: const CustomIcon(icon: 'notification')),
+          IconButton(onPressed: () {}, icon: const CustomIcon(icon: 'profile')),
         ],
       ),
       body: SingleChildScrollView(
@@ -74,6 +101,24 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Quick Actions
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Text('Quick Actions', style: textTheme.headlineMedium)),
+              const SizedBox(height: 8),
+              Row(
+                children:
+                    actionButtons.map((button) {
+                      return Expanded(
+                        child: ActionButton(
+                          title: button['title'],
+                          icon: button['icon'],
+                          color: button['color'],
+                          onTap: () => Get.toNamed(button['route']),
+                        ),
+                      );
+                    }).toList(),
+              ),
+              const SizedBox(height: 16),
+
               // Recent Activity
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -81,16 +126,11 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Recent Activity', style: textTheme.headlineMedium),
-                    TextButton(
-                      onPressed: () {
-                        // Navigate to view all recent activities
-                      },
-                      child: const Text('View All'),
-                    ),
+                    Text('View All', style: textTheme.labelMedium?.copyWith(color: colorPalette.primary)),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -110,8 +150,7 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
-
-              const SizedBox(height: 16),
+              const SizedBox(height: 4),
 
               // Study Stats
               Padding(
@@ -120,16 +159,11 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Study Stats', style: textTheme.headlineMedium),
-                    TextButton(
-                      onPressed: () {
-                        // Navigate to view all recent activities
-                      },
-                      child: const Text('Details'),
-                    ),
+                    Text('Details', style: textTheme.labelMedium?.copyWith(color: colorPalette.primary)),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Card(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Padding(
@@ -141,6 +175,26 @@ class HomeScreen extends StatelessWidget {
                       Expanded(child: StatItem(value: '85%', label: 'Flashcards', subLabel: 'Mastered', color: colorPalette.warning)),
                     ],
                   ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Suggested Content
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text('Suggested For You', style: textTheme.headlineMedium),
+              ),
+              const SizedBox(height: 4),
+              SizedBox(
+                height: 202,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    final content = suggestedContent[index];
+                    return ArticleCard(title: content['title'], type: content['type'], imageUrl: content['imageUrl']);
+                  },
                 ),
               ),
             ],

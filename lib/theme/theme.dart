@@ -61,7 +61,6 @@ class AppTheme {
       color: color.surface,
       foregroundColor: color.content,
       scrolledUnderElevation: 0,
-      centerTitle: true,
       iconTheme: IconThemeData(color: color.content),
       titleTextStyle: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.w600, color: color.content),
     ),

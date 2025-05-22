@@ -25,6 +25,8 @@ class CustomIcon extends StatelessWidget {
       'flashCard': HugeIcons.strokeRoundedNote,
       'note': HugeIcons.strokeRoundedTask01,
       'document': HugeIcons.strokeRoundedNotebook,
+      'notification': HugeIcons.strokeRoundedNotification02,
+      'arrowLeft': HugeIcons.strokeRoundedArrowLeft01,
     };
 
     if (iconMap.containsKey(icon)) {
