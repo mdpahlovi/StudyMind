@@ -5,6 +5,7 @@ import 'package:studymind/presentation/community/community.dart';
 import 'package:studymind/presentation/home/home.dart';
 import 'package:studymind/presentation/library/library.dart';
 import 'package:studymind/presentation/profile/profile.dart';
+import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
@@ -64,26 +65,26 @@ class MainLayoutState extends State<MainLayout> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CreateOption(onTap: () => Get.toNamed('/notes'), title: "New Note", icon: "noteEdit", color: colorPalette.primary),
+                  CreateOption(onTap: () => Get.toNamed(AppRoutes.note), title: "New Note", icon: "noteEdit", color: colorPalette.primary),
                   SizedBox(height: 12),
                   CreateOption(
-                    onTap: () => Get.toNamed('/document'),
+                    onTap: () => Get.toNamed(AppRoutes.document),
                     title: "Scan Document",
                     icon: "documentScanner",
                     color: colorPalette.info,
                   ),
                   SizedBox(height: 12),
                   CreateOption(
-                    onTap: () => Get.toNamed('/flashcard'),
-                    title: "Create Flashcards",
+                    onTap: () => Get.toNamed(AppRoutes.flashcard),
+                    title: "Create Flashcard",
                     icon: "flashcard",
                     color: colorPalette.warning,
                   ),
                   SizedBox(height: 12),
                   CreateOption(
-                    onTap: () => Get.toNamed('/community'),
-                    title: "Create Group",
-                    icon: "community",
+                    onTap: () => Get.toNamed(AppRoutes.media),
+                    title: "Upload Media",
+                    icon: "upload",
                     color: colorPalette.secondary,
                   ),
                 ],

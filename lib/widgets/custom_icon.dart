@@ -30,6 +30,8 @@ class CustomIcon extends StatelessWidget {
       'menuDot': HugeIcons.strokeRoundedMoreVertical,
       'folder': HugeIcons.strokeRoundedFolder01,
       'arrowHeadLeft': HugeIcons.strokeRoundedArrowLeft02,
+      'upload': HugeIcons.strokeRoundedUpload03,
+      'media': HugeIcons.strokeRoundedAiVideo,
     };
 
     if (iconMap.containsKey(icon)) {

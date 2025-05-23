@@ -16,10 +16,10 @@ class HomeScreen extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     final List<Map<String, dynamic>> actionButtons = [
-      {"title": "Notes", "icon": "noteEdit", 'color': colorPalette.primary, "route": "/notes"},
-      {"title": "Documents", "icon": "documentScanner", 'color': colorPalette.info, "route": "/document"},
+      {"title": "Notes", "icon": "note", 'color': colorPalette.primary, "route": "/note"},
+      {"title": "Documents", "icon": "document", 'color': colorPalette.info, "route": "/document"},
       {"title": "Flashcards", "icon": "flashcard", 'color': colorPalette.warning, "route": "/flashcard"},
-      {"title": "Groups", "icon": "community", 'color': colorPalette.secondary, "route": "/groups"},
+      {"title": "Medias", "icon": "media", 'color': colorPalette.secondary, "route": "/media"},
     ];
 
     final List<Map<String, dynamic>> recentActivities = [
@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
         'timestamp': DateTime.now().subtract(const Duration(hours: 2)),
         'progress': 0.75,
         "imageUrl": "https://images.unsplash.com/photo-1530026186672-2cd00ffc50fe?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-        "route": "/notes",
+        "route": "/note",
       },
       {
         'id': 2,
