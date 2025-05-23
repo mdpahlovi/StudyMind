@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/presentation/library/widgets/item_details.dart';
 import 'package:studymind/presentation/library/widgets/item_options.dart';
 import 'package:studymind/presentation/library/widgets/item_type_style.dart';
+import 'package:studymind/routes/routes.dart' show AppRoutes;
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
@@ -27,10 +27,9 @@ class ItemCardState extends State<ItemCard> {
     return Card(
       child: InkWell(
         onTap: () {
-          libraryController.navigateToFolder(widget.item.id);
           switch (widget.item.type) {
             case ItemType.folder:
-              Get.to(() => ItemDetails());
+              Get.toNamed(AppRoutes.library.replaceFirst(':id', widget.item.id));
               break;
             default:
               break;

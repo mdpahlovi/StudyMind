@@ -18,14 +18,8 @@ class ItemDetailsState extends State<ItemDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: CustomIcon(icon: 'arrowHeadLeft'),
-          onPressed: () {
-            Get.back();
-            libraryController.navigateBack();
-          },
-        ),
-        title: Obx(() => Text(libraryController.selectedItem.value?.name ?? 'Item Details')),
+        leading: IconButton(icon: CustomIcon(icon: 'arrowHeadLeft'), onPressed: () => Get.back()),
+        title: Obx(() => Text(libraryController.currentItem.value?.name ?? 'Item Details')),
       ),
       body: Obx(() {
         List<LibraryItem> folderItems = libraryController.currentFolderItems.toList();

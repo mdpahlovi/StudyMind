@@ -68,8 +68,8 @@ enum ItemType { folder, note, document, flashcard, media }
 class LibraryController extends GetxController {
   final RxList<LibraryItem> allItems = <LibraryItem>[].obs;
   final RxList<LibraryItem> currentFolderItems = <LibraryItem>[].obs;
-  final Rxn<LibraryItem?> selectedItem = Rxn();
-  final RxList<LibraryItem> breadcrumb = <LibraryItem>[].obs;
+  final Rxn<LibraryItem> currentItem = Rxn<LibraryItem>();
+  final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs;
   final RxBool isLoading = false.obs;
 
   @override
@@ -120,7 +120,7 @@ class LibraryController extends GetxController {
   }
 
   void loadBreadcrumb(String? itemId) {
-    breadcrumb.clear();
+    breadcrumbs.clear();
 
     if (itemId == null) return;
 
@@ -133,27 +133,7 @@ class LibraryController extends GetxController {
       currentItem = getItemById(currentItem.parentId!);
     }
 
-    breadcrumb.assignAll(hierarchy);
-  }
-
-  void navigateToFolder(String itemId) {
-    LibraryItem? folder = getItemById(itemId);
-    selectedItem.value = folder;
-    if (folder != null && folder.type == ItemType.folder) {
-      loadFolderData(itemId);
-    }
-  }
-
-  void navigateBack() {
-    if (selectedItem.value != null) {
-      LibraryItem? parentFolder = getItemById(selectedItem.value!.parentId!);
-      selectedItem.value = parentFolder;
-      loadFolderData(parentFolder?.id);
-    }
-  }
-
-  void navigateToRoot() {
-    loadFolderData(null);
+    breadcrumbs.assignAll(hierarchy);
   }
 
   LibraryItem? getItemById(String id) {
@@ -194,9 +174,5 @@ class LibraryController extends GetxController {
       'Flashcards': folderItems.where((item) => item.type == ItemType.flashcard).length,
       'Medias': folderItems.where((item) => item.type == ItemType.media).length,
     };
-  }
-
-  void refreshData() {
-    loadDataFromJson();
   }
 }
