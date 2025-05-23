@@ -63,13 +63,13 @@ class LibraryItem {
   }
 }
 
-enum ItemType { folder, note, document, flashcard, recording }
+enum ItemType { folder, note, document, flashcard, media }
 
 class LibraryController extends GetxController {
-  final RxList<LibraryItem> items = <LibraryItem>[].obs;
-  final RxList<LibraryItem> parentItems = <LibraryItem>[].obs;
-  final RxnString parentId = RxnString();
-  final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs;
+  final RxList<LibraryItem> allItems = <LibraryItem>[].obs;
+  final RxList<LibraryItem> currentFolderItems = <LibraryItem>[].obs;
+  final Rxn<LibraryItem?> selectedItem = Rxn();
+  final RxList<LibraryItem> breadcrumb = <LibraryItem>[].obs;
   final RxBool isLoading = false.obs;
 
   @override
@@ -78,7 +78,6 @@ class LibraryController extends GetxController {
     loadDataFromJson();
   }
 
-  // Load data from JSON
   void loadDataFromJson() {
     try {
       List<dynamic> sampleData = jsonDecode(SampleData.libraryData);
@@ -90,9 +89,8 @@ class LibraryController extends GetxController {
       }
 
       isLoading.value = true;
-      items.assignAll(libraryItems);
+      allItems.assignAll(libraryItems);
 
-      // Load root items by default
       loadFolderData(null);
 
       isLoading.value = false;
@@ -102,13 +100,11 @@ class LibraryController extends GetxController {
     }
   }
 
-  // Get folder contents by folderId
-  void loadFolderData(String? folderId) {
+  void loadFolderData(String? itemId) {
     isLoading.value = true;
 
-    List<LibraryItem> folderItems = items.where((item) => item.parentId == folderId && !item.isDeleted).toList();
+    List<LibraryItem> folderItems = allItems.where((item) => item.parentId == itemId && !item.isDeleted).toList();
 
-    // Sort: folders first, then by sort_order, then alphabetically
     folderItems.sort((a, b) {
       if (a.type == ItemType.folder && b.type != ItemType.folder) return -1;
       if (a.type != ItemType.folder && b.type == ItemType.folder) return 1;
@@ -117,23 +113,19 @@ class LibraryController extends GetxController {
       return a.name.toLowerCase().compareTo(b.name.toLowerCase());
     });
 
-    parentItems.assignAll(folderItems);
-    parentId.value = folderId;
-
-    // Update breadcrumb
-    loadBreadcrumb(folderId);
+    currentFolderItems.assignAll(folderItems);
+    loadBreadcrumb(itemId);
 
     isLoading.value = false;
   }
 
-  // Update breadcrumbs by folderId
-  void loadBreadcrumb(String? folderId) {
-    breadcrumbs.clear();
+  void loadBreadcrumb(String? itemId) {
+    breadcrumb.clear();
 
-    if (folderId == null) return;
+    if (itemId == null) return;
 
     List<LibraryItem> hierarchy = [];
-    LibraryItem? currentItem = getItemById(folderId);
+    LibraryItem? currentItem = getItemById(itemId);
 
     while (currentItem != null) {
       hierarchy.insert(0, currentItem);
@@ -141,64 +133,58 @@ class LibraryController extends GetxController {
       currentItem = getItemById(currentItem.parentId!);
     }
 
-    breadcrumbs.assignAll(hierarchy);
+    breadcrumb.assignAll(hierarchy);
   }
 
-  // Navigate to folder
-  void navigateToFolder(String folderId) {
-    LibraryItem? folder = getItemById(folderId);
+  void navigateToFolder(String itemId) {
+    LibraryItem? folder = getItemById(itemId);
+    selectedItem.value = folder;
     if (folder != null && folder.type == ItemType.folder) {
-      loadFolderData(folderId);
+      loadFolderData(itemId);
     }
   }
 
-  // Navigate back to parent folder
   void navigateBack() {
-    if (breadcrumbs.isNotEmpty) {
-      LibraryItem currentFolder = breadcrumbs.last;
-      loadFolderData(currentFolder.parentId);
+    if (selectedItem.value != null) {
+      LibraryItem? parentFolder = getItemById(selectedItem.value!.parentId!);
+      selectedItem.value = parentFolder;
+      loadFolderData(parentFolder?.id);
     }
   }
 
-  // Navigate to root
   void navigateToRoot() {
     loadFolderData(null);
   }
 
-  // Get item by ID
   LibraryItem? getItemById(String id) {
     try {
-      return items.firstWhere((item) => item.id == id && !item.isDeleted);
+      return allItems.firstWhere((item) => item.id == id && !item.isDeleted);
     } catch (e) {
       return null;
     }
   }
 
-  // Search items
   List<LibraryItem> searchItems(String query) {
     if (query.isEmpty) return [];
 
     String lowercaseQuery = query.toLowerCase();
-    return items.where((item) => item.name.toLowerCase().contains(lowercaseQuery) && !item.isDeleted).toList();
+    return allItems.where((item) => item.name.toLowerCase().contains(lowercaseQuery) && !item.isDeleted).toList();
   }
 
-  // Get items by type
   List<LibraryItem> getItemsByType(ItemType type) {
-    return items.where((item) => item.type == type && !item.isDeleted).toList();
+    return allItems.where((item) => item.type == type && !item.isDeleted).toList();
   }
 
-  // Get recent items
   List<LibraryItem> getRecentItems({int days = 7}) {
     DateTime cutoffDate = DateTime.now().subtract(Duration(days: days));
-    List<LibraryItem> recentItems = items.where((item) => item.updatedAt.isAfter(cutoffDate) && !item.isDeleted).toList();
+    List<LibraryItem> recentItems = allItems.where((item) => item.updatedAt.isAfter(cutoffDate) && !item.isDeleted).toList();
 
     recentItems.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return recentItems;
   }
 
-  // Get folder statistics
-  Map<String, int> getFolderStats(String? folderId) {
-    List<LibraryItem> folderItems = items.where((item) => item.parentId == folderId && !item.isDeleted).toList();
+  Map<String, int> getFolderStats(String? itemId) {
+    List<LibraryItem> folderItems = allItems.where((item) => item.parentId == itemId && !item.isDeleted).toList();
 
     return {
       'Total Items': folderItems.length,
@@ -206,45 +192,11 @@ class LibraryController extends GetxController {
       'Notes': folderItems.where((item) => item.type == ItemType.note).length,
       'Documents': folderItems.where((item) => item.type == ItemType.document).length,
       'Flashcards': folderItems.where((item) => item.type == ItemType.flashcard).length,
-      'Recordings': folderItems.where((item) => item.type == ItemType.recording).length,
+      'Medias': folderItems.where((item) => item.type == ItemType.media).length,
     };
   }
 
-  // Refresh data
   void refreshData() {
     loadDataFromJson();
-  }
-
-  // Debug: Print folder structure
-  void printFolderStructure({String? parentId, int indent = 0}) {
-    List<LibraryItem> folderItems = items.where((item) => item.parentId == parentId && !item.isDeleted).toList();
-
-    folderItems.sort((a, b) {
-      if (a.type == ItemType.folder && b.type != ItemType.folder) return -1;
-      if (a.type != ItemType.folder && b.type == ItemType.folder) return 1;
-      return a.sortOrder.compareTo(b.sortOrder);
-    });
-
-    for (LibraryItem item in folderItems) {
-      String prefix = '  ' * indent;
-      String icon =
-          item.type == ItemType.folder
-              ? '📁'
-              : item.type == ItemType.note
-              ? '📄'
-              : item.type == ItemType.document
-              ? '📋'
-              : item.type == ItemType.flashcard
-              ? '🎴'
-              : item.type == ItemType.recording
-              ? '🎤'
-              : '📄';
-
-      print('$prefix$icon ${item.name}');
-
-      if (item.type == ItemType.folder) {
-        printFolderStructure(parentId: item.id, indent: indent + 1);
-      }
-    }
   }
 }

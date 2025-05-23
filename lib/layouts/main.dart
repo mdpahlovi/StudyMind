@@ -54,43 +54,41 @@ class MainLayoutState extends State<MainLayout> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+          Get.bottomSheet(
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+              decoration: BoxDecoration(
+                color: colorPalette.background,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CreateOption(onTap: () => Get.toNamed('/notes'), title: "New Note", icon: "noteEdit", color: colorPalette.primary),
+                  SizedBox(height: 12),
+                  CreateOption(
+                    onTap: () => Get.toNamed('/document'),
+                    title: "Scan Document",
+                    icon: "documentScanner",
+                    color: colorPalette.info,
+                  ),
+                  SizedBox(height: 12),
+                  CreateOption(
+                    onTap: () => Get.toNamed('/flashcard'),
+                    title: "Create Flashcards",
+                    icon: "flashcard",
+                    color: colorPalette.warning,
+                  ),
+                  SizedBox(height: 12),
+                  CreateOption(
+                    onTap: () => Get.toNamed('/community'),
+                    title: "Create Group",
+                    icon: "community",
+                    color: colorPalette.secondary,
+                  ),
+                ],
+              ),
             ),
-            builder: (context) {
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CreateOption(onTap: () => Get.toNamed('/notes'), title: "New Note", icon: "noteEdit", color: colorPalette.primary),
-                    SizedBox(height: 12),
-                    CreateOption(
-                      onTap: () => Get.toNamed('/document'),
-                      title: "Scan Document",
-                      icon: "documentScanner",
-                      color: colorPalette.info,
-                    ),
-                    SizedBox(height: 12),
-                    CreateOption(
-                      onTap: () => Get.toNamed('/flashcard'),
-                      title: "Create Flashcards",
-                      icon: "flashcard",
-                      color: colorPalette.warning,
-                    ),
-                    SizedBox(height: 12),
-                    CreateOption(
-                      onTap: () => Get.toNamed('/community'),
-                      title: "Create Group",
-                      icon: "community",
-                      color: colorPalette.secondary,
-                    ),
-                  ],
-                ),
-              );
-            },
           );
         },
         child: CustomIcon(icon: 'add', size: 24),

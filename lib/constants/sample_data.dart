@@ -95,7 +95,7 @@ class SampleData {
     {
       "id": "8",
       "name": "Calculus Lecture 1",
-      "type": "RECORDING",
+      "type": "MEDIA",
       "parent_id": "4",
       "user_id": "user_123",
       "path": "/Mathematics/Calculus/Calculus Lecture 1",

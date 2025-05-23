@@ -29,6 +29,7 @@ class CustomIcon extends StatelessWidget {
       'arrowLeft': HugeIcons.strokeRoundedArrowLeft01,
       'menuDot': HugeIcons.strokeRoundedMoreVertical,
       'folder': HugeIcons.strokeRoundedFolder01,
+      'arrowHeadLeft': HugeIcons.strokeRoundedArrowLeft02,
     };
 
     if (iconMap.containsKey(icon)) {

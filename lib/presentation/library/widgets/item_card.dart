@@ -1,42 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
+import 'package:studymind/presentation/library/widgets/item_details.dart';
+import 'package:studymind/presentation/library/widgets/item_options.dart';
+import 'package:studymind/presentation/library/widgets/item_type_style.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
-class TypeDecoration {
-  final Color color;
-  final String icon;
-
-  const TypeDecoration({required this.color, required this.icon});
-}
-
-class ItemCard extends StatelessWidget {
+class ItemCard extends StatefulWidget {
   final LibraryItem item;
   const ItemCard({super.key, required this.item});
+
+  @override
+  State<ItemCard> createState() => ItemCardState();
+}
+
+class ItemCardState extends State<ItemCard> {
+  final LibraryController libraryController = Get.put(LibraryController());
 
   @override
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
-
-    TypeDecoration getTypeDecoration() {
-      switch (item.type) {
-        case ItemType.folder:
-          return TypeDecoration(color: colorPalette.primary, icon: 'folder');
-        case ItemType.note:
-          return TypeDecoration(color: colorPalette.secondary, icon: 'note');
-        case ItemType.document:
-          return TypeDecoration(color: colorPalette.tertiary, icon: 'document');
-        case ItemType.flashcard:
-          return TypeDecoration(color: colorPalette.success, icon: 'flashcard');
-        case ItemType.recording:
-          return TypeDecoration(color: colorPalette.warning, icon: 'recording');
-      }
-    }
+    final TypeStyle typeStyle = ItemTypeStyle(type: widget.item.type).decoration;
 
     return Card(
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          libraryController.navigateToFolder(widget.item.id);
+          switch (widget.item.type) {
+            case ItemType.folder:
+              Get.to(() => ItemDetails());
+              break;
+            default:
+              break;
+          }
+        },
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -47,16 +46,16 @@ class ItemCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: getTypeDecoration().color.withAlpha(50),
+                      color: typeStyle.color.withAlpha(50),
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: CustomIcon(icon: getTypeDecoration().icon, size: 16, color: getTypeDecoration().color),
+                    child: CustomIcon(icon: typeStyle.icon, size: 16, color: typeStyle.color),
                   ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      item.name,
+                      widget.item.name,
                       style: textTheme.labelMedium?.copyWith(height: 1.25),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -64,7 +63,7 @@ class ItemCard extends StatelessWidget {
                   ),
                   InkWell(
                     borderRadius: BorderRadius.circular(14),
-                    onTap: () {},
+                    onTap: () => Get.bottomSheet(ItemOptions(item: widget.item)),
                     child: Container(
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(shape: BoxShape.circle),
@@ -77,7 +76,7 @@ class ItemCard extends StatelessWidget {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(color: colorPalette.contentDim.withAlpha(50), borderRadius: BorderRadius.circular(8)),
-                  child: Center(child: CustomIcon(icon: getTypeDecoration().icon, size: 40)),
+                  child: Center(child: CustomIcon(icon: typeStyle.icon, size: 40)),
                 ),
               ),
             ],

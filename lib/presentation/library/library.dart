@@ -22,8 +22,14 @@ class LibraryScreenState extends State<LibraryScreen> {
         children: [
           TextField(decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search))),
           const SizedBox(height: 16),
-          Obx(
-            () => GridView.builder(
+          Obx(() {
+            List<LibraryItem> folderItems = libraryController.currentFolderItems.toList();
+
+            if (folderItems.isEmpty) {
+              return const Center(child: Text('No items found'));
+            }
+
+            return GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -32,12 +38,10 @@ class LibraryScreenState extends State<LibraryScreen> {
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
               ),
-              itemCount: libraryController.parentItems.length,
-              itemBuilder: (context, index) {
-                return ItemCard(item: libraryController.parentItems[index]);
-              },
-            ),
-          ),
+              itemCount: folderItems.length,
+              itemBuilder: (context, index) => ItemCard(item: folderItems[index]),
+            );
+          }),
         ],
       ),
     );
