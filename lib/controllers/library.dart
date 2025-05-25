@@ -102,6 +102,11 @@ class LibraryController extends GetxController {
 
   void loadFolderData(String? itemId) {
     isLoading.value = true;
+    if (itemId == null) {
+      currentItem.value = null;
+    } else {
+      currentItem.value = getItemById(itemId);
+    }
 
     List<LibraryItem> folderItems = allItems.where((item) => item.parentId == itemId && !item.isDeleted).toList();
 

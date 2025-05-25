@@ -29,9 +29,11 @@ class ItemCardState extends State<ItemCard> {
         onTap: () {
           switch (widget.item.type) {
             case ItemType.folder:
+              libraryController.loadFolderData(widget.item.id);
               Get.toNamed(AppRoutes.library.replaceFirst(':id', widget.item.id));
               break;
             default:
+              Get.snackbar('Work in progress', "Item type '${widget.item.type.toString().split('.').last.toUpperCase()}' is not supported");
               break;
           }
         },

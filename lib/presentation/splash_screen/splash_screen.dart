@@ -28,6 +28,21 @@ class SplashScreenState extends State<SplashScreen> {
               onPressed: () => Get.toNamed(AppRoutes.home),
               child: Text('Home', style: textTheme.labelLarge),
             ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: colorPalette.primary),
+              onPressed: () => Get.toNamed(AppRoutes.login),
+              child: Text('Login', style: textTheme.labelLarge),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: colorPalette.primary),
+              onPressed: () => Get.toNamed(AppRoutes.register),
+              child: Text('Register', style: textTheme.labelLarge),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: colorPalette.primary),
+              onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
+              child: Text('Forgot Password', style: textTheme.labelLarge),
+            ),
           ],
         ),
       ),

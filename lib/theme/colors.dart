@@ -48,58 +48,58 @@ class AppColors {
   final ThemeController themeController = Get.put(ThemeController());
 
   static const light = ColorPalette(
-    // Primary color (Olive Green)
-    primary: Color(0xFF606C38),
+    // Primary color (Electric Blue)
+    primary: Color(0xFF2563EB),
     primaryShades: {
-      50: Color(0xFFF4F6ED),
-      100: Color(0xFFE5E8D7),
-      200: Color(0xFFCED5B3),
-      300: Color(0xFFB3BE8F),
-      400: Color(0xFF8FA06B),
-      500: Color(0xFF778A4F),
-      600: Color(0xFF606C38), // Your main primary color
-      700: Color(0xFF505A30),
-      800: Color(0xFF3F4725),
-      900: Color(0xFF2E351C),
+      50: Color(0xFFEFF6FF),
+      100: Color(0xFFDBEAFE),
+      200: Color(0xFFBFDBFE),
+      300: Color(0xFF93C5FD),
+      400: Color(0xFF60A5FA),
+      500: Color(0xFF3B82F6),
+      600: Color(0xFF2563EB), // Main primary color
+      700: Color(0xFF1D4ED8),
+      800: Color(0xFF1E40AF),
+      900: Color(0xFF1E3A8A),
     },
 
-    // Secondary color (Dark Green)
-    secondary: Color(0xFF283618),
+    // Secondary color (Vibrant Purple)
+    secondary: Color(0xFF7C3AED),
     secondaryShades: {
-      50: Color(0xFFEAECE6),
-      100: Color(0xFFD5D9CC),
-      200: Color(0xFFAFB599),
-      300: Color(0xFF879167),
-      400: Color(0xFF5F6D41),
-      500: Color(0xFF424D29),
-      600: Color(0xFF283618), // Your main secondary color
-      700: Color(0xFF212D14),
-      800: Color(0xFF192210),
-      900: Color(0xFF10180A),
+      50: Color(0xFFF5F3FF),
+      100: Color(0xFFEDE9FE),
+      200: Color(0xFFDDD6FE),
+      300: Color(0xFFC4B5FD),
+      400: Color(0xFFA78BFA),
+      500: Color(0xFF8B5CF6),
+      600: Color(0xFF7C3AED), // Main secondary color
+      700: Color(0xFF6D28D9),
+      800: Color(0xFF5B21B6),
+      900: Color(0xFF4C1D95),
     },
 
-    // Tertiary color (Cream)
-    tertiary: Color(0xFFFEFAE0),
+    // Tertiary color (Hot Pink/Magenta)
+    tertiary: Color(0xFFEC4899),
     tertiaryShades: {
-      50: Color(0xFFFFFFFB),
-      100: Color(0xFFFFFEF7),
-      200: Color(0xFFFFFDE8),
-      300: Color(0xFFFEFCE7),
-      400: Color(0xFFFEFBE4),
-      500: Color(0xFFFEFAE0), // Your main tertiary color
-      600: Color(0xFFE5E1CA),
-      700: Color(0xFFCCC9B4),
-      800: Color(0xFFB3B19E),
-      900: Color(0xFF999788),
+      50: Color(0xFFFDF2F8),
+      100: Color(0xFFFCE7F3),
+      200: Color(0xFFFBCFE8),
+      300: Color(0xFFF9A8D4),
+      400: Color(0xFFF472B6),
+      500: Color(0xFFEC4899), // Main tertiary color
+      600: Color(0xFFDB2777),
+      700: Color(0xFFBE185D),
+      800: Color(0xFF9D174D),
+      900: Color(0xFF831843),
     },
 
     // Utility colors
     white: Color(0xFFFFFFFF),
     black: Color(0xFF000000),
-    success: Color(0xFF588157), // A complementary green for success
-    warning: Color(0xFFDDA15E), // Warm earthy tone for warning
-    error: Color(0xFFBC6C25), // Rusty orange for error
-    info: Color(0xFF344E41), // Deep forest green for info
+    success: Color(0xFF10B981), // Emerald green
+    warning: Color(0xFFF59E0B), // Amber
+    error: Color(0xFFEF4444), // Red
+    info: Color(0xFF06B6D4), // Cyan
     // UI colors
     background: Color(0xFFFFFFFF), // White background
     surface: Color(0xFFF5F5F5), // Light gray surface
@@ -109,63 +109,63 @@ class AppColors {
   );
 
   static const dark = ColorPalette(
-    // Primary color (Olive Green)
-    primary: Color(0xFF8FA06B),
+    // Primary color (Brighter Blue for dark mode)
+    primary: Color(0xFF60A5FA),
     primaryShades: {
-      50: Color(0xFFF4F6ED),
-      100: Color(0xFFE5E8D7),
-      200: Color(0xFFCED5B3),
-      300: Color(0xFFB3BE8F),
-      400: Color(0xFF8FA06B), // Using this as primary in dark mode
-      500: Color(0xFF778A4F),
-      600: Color(0xFF606C38),
-      700: Color(0xFF505A30),
-      800: Color(0xFF3F4725),
-      900: Color(0xFF2E351C),
+      50: Color(0xFFEFF6FF),
+      100: Color(0xFFDBEAFE),
+      200: Color(0xFFBFDBFE),
+      300: Color(0xFF93C5FD),
+      400: Color(0xFF60A5FA), // Main primary for dark mode
+      500: Color(0xFF3B82F6),
+      600: Color(0xFF2563EB),
+      700: Color(0xFF1D4ED8),
+      800: Color(0xFF1E40AF),
+      900: Color(0xFF1E3A8A),
     },
 
-    // Secondary color (Dark Green)
-    secondary: Color(0xFF424D29),
+    // Secondary color (Brighter Purple for dark mode)
+    secondary: Color(0xFFA78BFA),
     secondaryShades: {
-      50: Color(0xFFEAECE6),
-      100: Color(0xFFD5D9CC),
-      200: Color(0xFFAFB599),
-      300: Color(0xFF879167),
-      400: Color(0xFF5F6D41),
-      500: Color(0xFF424D29), // Using this as secondary in dark mode
-      600: Color(0xFF283618),
-      700: Color(0xFF212D14),
-      800: Color(0xFF192210),
-      900: Color(0xFF10180A),
+      50: Color(0xFFF5F3FF),
+      100: Color(0xFFEDE9FE),
+      200: Color(0xFFDDD6FE),
+      300: Color(0xFFC4B5FD),
+      400: Color(0xFFA78BFA), // Main secondary for dark mode
+      500: Color(0xFF8B5CF6),
+      600: Color(0xFF7C3AED),
+      700: Color(0xFF6D28D9),
+      800: Color(0xFF5B21B6),
+      900: Color(0xFF4C1D95),
     },
 
-    // Tertiary color (Cream)
-    tertiary: Color(0xFFCCC9B4),
+    // Tertiary color (Softer Pink for dark mode)
+    tertiary: Color(0xFFF472B6),
     tertiaryShades: {
-      50: Color(0xFFFFFFFB),
-      100: Color(0xFFFFFEF7),
-      200: Color(0xFFFFFDE8),
-      300: Color(0xFFFEFCE7),
-      400: Color(0xFFFEFBE4),
-      500: Color(0xFFFEFAE0),
-      600: Color(0xFFE5E1CA),
-      700: Color(0xFFCCC9B4), // Using this as tertiary in dark mode
-      800: Color(0xFFB3B19E),
-      900: Color(0xFF999788),
+      50: Color(0xFFFDF2F8),
+      100: Color(0xFFFCE7F3),
+      200: Color(0xFFFBCFE8),
+      300: Color(0xFFF9A8D4),
+      400: Color(0xFFF472B6), // Main tertiary for dark mode
+      500: Color(0xFFEC4899),
+      600: Color(0xFFDB2777),
+      700: Color(0xFFBE185D),
+      800: Color(0xFF9D174D),
+      900: Color(0xFF831843),
     },
 
     // Utility colors
     white: Color(0xFFFFFFFF),
     black: Color(0xFF000000),
-    success: Color(0xFF80AB82), // Lighter green for success in dark mode
-    warning: Color(0xFFE6C280), // Lighter warm tone for warning
-    error: Color(0xFFDE9151), // Lighter orange for error
-    info: Color(0xFF5B8266), // Lighter forest green for info
+    success: Color(0xFF34D399), // Brighter emerald for dark mode
+    warning: Color(0xFFFBBF24), // Brighter amber for dark mode
+    error: Color(0xFFF87171), // Brighter red for dark mode
+    info: Color(0xFF22D3EE), // Brighter cyan for dark mode
     // UI colors
-    background: Color(0xFF0A0A0A), // Dark background as requested
+    background: Color(0xFF0A0A0A), // Dark background
     surface: Color(0xFF101010), // Slightly lighter surface
-    content: Color(0xFFFFFFFF), // White content text as requested
-    contentDim: Color(0xFFB4B4BE), // Slightly lighter content text as requested
+    content: Color(0xFFFFFFFF), // White content text
+    contentDim: Color(0xFFB4B4BE), // Slightly lighter content text
     border: Color(0xFF242424), // Dark gray border
   );
 

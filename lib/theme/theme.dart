@@ -45,7 +45,7 @@ class AppTheme {
       // Title Text
       titleLarge: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.w600, color: color.content, height: 1.4),
       titleMedium: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
-      titleSmall: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w500, color: color.contentDim, height: 1.4),
+      titleSmall: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w500, color: color.content, height: 1.4),
 
       // Body Text
       bodyLarge: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.normal, color: color.content, height: 1.5),
@@ -90,6 +90,15 @@ class AppTheme {
       errorStyle: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w400, color: color.error),
       prefixIconColor: color.contentDim,
       suffixIconColor: color.contentDim,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color.primary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
     ),
   );
 }

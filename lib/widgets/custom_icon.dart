@@ -32,6 +32,12 @@ class CustomIcon extends StatelessWidget {
       'arrowHeadLeft': HugeIcons.strokeRoundedArrowLeft02,
       'upload': HugeIcons.strokeRoundedUpload03,
       'media': HugeIcons.strokeRoundedAiVideo,
+      'mail': HugeIcons.strokeRoundedMail01,
+      'lock': HugeIcons.strokeRoundedSquareLock01,
+      'view': HugeIcons.strokeRoundedView,
+      'viewOff': HugeIcons.strokeRoundedViewOff,
+      'google': HugeIcons.strokeRoundedGoogle,
+      'facebook': HugeIcons.strokeRoundedFacebook01,
     };
 
     if (iconMap.containsKey(icon)) {
