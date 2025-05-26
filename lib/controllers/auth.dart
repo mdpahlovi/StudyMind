@@ -83,7 +83,7 @@ class AuthResponse {
 }
 
 class AuthController extends GetxController {
-  final AuthService authService = AuthServiceImpl();
+  final AuthService authService = AuthService();
   final StorageService storageService = StorageService();
 
   final Rxn<User> user = Rxn<User>();

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:studymind/controllers/auth.dart';
+import 'package:studymind/core/logger.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 
@@ -11,10 +13,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashScreenState extends State<SplashScreen> {
+  final AuthController authController = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
+
+    logger.t(authController.user.value);
 
     return Scaffold(
       body: Center(

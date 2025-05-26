@@ -89,131 +89,142 @@ class RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [colorPalette.primary, colorPalette.secondary],
+      body: SingleChildScrollView(
+        child: Container(
+          height: size.height,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [colorPalette.primary, colorPalette.secondary],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Form(
-            key: formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Intro Section
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(color: colorPalette.content.withAlpha(50), shape: BoxShape.circle),
-                          child: Icon(HugeIcons.strokeRoundedUserAdd02, size: 48, color: colorPalette.content),
-                        ),
-                        const SizedBox(height: 16),
-                        Text('Create Account', style: textTheme.displayMedium, textAlign: TextAlign.center),
-                        const SizedBox(height: 8),
-                        RichText(
-                          text: TextSpan(
+          child: SafeArea(
+            child: Form(
+              key: formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Intro Section
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: colorPalette.content.withAlpha(50),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(HugeIcons.strokeRoundedUserAdd02, size: 48, color: colorPalette.content),
+                          ),
+                          const SizedBox(height: 16),
+                          Text('Create Account', style: textTheme.displayMedium, textAlign: TextAlign.center),
+                          const SizedBox(height: 8),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(text: 'Already have an account?', style: textTheme.bodyMedium),
+                                TextSpan(
+                                  text: ' Login',
+                                  style: textTheme.bodyMedium,
+                                  recognizer: TapGestureRecognizer()..onTap = () => Get.toNamed(AppRoutes.login),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Form Container
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: colorPalette.background,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Name Field
+                          CustomTextField(
+                            controller: nameController,
+                            label: 'Full Name',
+                            prefixIcon: 'profile',
+                            validator: validateName,
+                          ),
+                          const SizedBox(height: 16),
+                          // Email Field
+                          CustomTextField(
+                            controller: emailController,
+                            label: 'Email',
+                            prefixIcon: 'mail',
+                            keyboardType: TextInputType.emailAddress,
+                            validator: validateEmail,
+                          ),
+                          const SizedBox(height: 16),
+                          // Password Field
+                          CustomTextField(
+                            controller: passwordController,
+                            label: 'Password',
+                            prefixIcon: 'lock',
+                            isPassword: true,
+                            validator: validatePassword,
+                          ),
+                          const SizedBox(height: 16),
+                          // Confirm Password Field
+                          CustomTextField(
+                            controller: confirmPasswordController,
+                            label: 'Confirm Password',
+                            prefixIcon: 'lock',
+                            isPassword: true,
+                            validator: validateConfirmPassword,
+                          ),
+                          const SizedBox(height: 24),
+                          // Register Button
+                          Obx(
+                            () => CustomButton(
+                              text: 'Register',
+                              isLoading: authController.isLogging.value,
+                              onPressed: handleRegister,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          // Divider
+                          Row(
                             children: [
-                              TextSpan(text: 'Already have an account?', style: textTheme.bodyMedium),
-                              TextSpan(
-                                text: ' Login',
-                                style: textTheme.bodyMedium,
-                                recognizer: TapGestureRecognizer()..onTap = () => Get.toNamed(AppRoutes.login),
+                              Expanded(child: Divider(color: colorPalette.border)),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Text('or continue with', style: textTheme.labelSmall),
                               ),
+                              Expanded(child: Divider(color: colorPalette.border)),
                             ],
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Form Container
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(color: colorPalette.background, borderRadius: BorderRadius.circular(20)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // Name Field
-                        CustomTextField(
-                          controller: nameController,
-                          label: 'Full Name',
-                          prefixIcon: 'profile',
-                          validator: validateName,
-                        ),
-                        const SizedBox(height: 16),
-                        // Email Field
-                        CustomTextField(
-                          controller: emailController,
-                          label: 'Email',
-                          prefixIcon: 'mail',
-                          keyboardType: TextInputType.emailAddress,
-                          validator: validateEmail,
-                        ),
-                        const SizedBox(height: 16),
-                        // Password Field
-                        CustomTextField(
-                          controller: passwordController,
-                          label: 'Password',
-                          prefixIcon: 'lock',
-                          isPassword: true,
-                          validator: validatePassword,
-                        ),
-                        const SizedBox(height: 16),
-                        // Confirm Password Field
-                        CustomTextField(
-                          controller: confirmPasswordController,
-                          label: 'Confirm Password',
-                          prefixIcon: 'lock',
-                          isPassword: true,
-                          validator: validateConfirmPassword,
-                        ),
-                        const SizedBox(height: 24),
-                        // Register Button
-                        Obx(
-                          () => CustomButton(
-                            text: 'Register',
-                            isLoading: authController.isLogging.value,
-                            onPressed: handleRegister,
+                          const SizedBox(height: 20),
+                          // Social Login Buttons
+                          Row(
+                            children: [
+                              Expanded(child: SocialButton(text: 'Google', color: Colors.red, onPressed: () {})),
+                              const SizedBox(width: 16),
+                              Expanded(child: SocialButton(text: 'Facebook', color: Colors.blue, onPressed: () {})),
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        // Divider
-                        Row(
-                          children: [
-                            Expanded(child: Divider(color: colorPalette.border)),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Text('or continue with', style: textTheme.labelSmall),
-                            ),
-                            Expanded(child: Divider(color: colorPalette.border)),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        // Social Login Buttons
-                        Row(
-                          children: [
-                            Expanded(child: SocialButton(text: 'Google', color: Colors.red, onPressed: () {})),
-                            const SizedBox(width: 16),
-                            Expanded(child: SocialButton(text: 'Facebook', color: Colors.blue, onPressed: () {})),
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
