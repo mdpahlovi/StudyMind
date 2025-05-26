@@ -53,6 +53,12 @@ dependencies:
     # Cached Network Image: https://pub.dev/packages/cached_network_image
     cached_network_image: ^3.4.1
 
+    # Dio: https://pub.dev/packages/dio
+    dio: ^5.8.0+1
+
+    # Logger: https://pub.dev/packages/logger
+    logger: ^2.5.0
+
 dev_dependencies:
     flutter_test:
         sdk: flutter

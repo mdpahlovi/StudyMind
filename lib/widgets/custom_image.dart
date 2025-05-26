@@ -11,7 +11,14 @@ class CustomImage extends StatelessWidget {
   /// If null, a default asset image is shown.
   final Widget? errorWidget;
 
-  const CustomImage({super.key, required this.imageUrl, this.width = 60, this.height = 60, this.fit = BoxFit.cover, this.errorWidget});
+  const CustomImage({
+    super.key,
+    required this.imageUrl,
+    this.width = 60,
+    this.height = 60,
+    this.fit = BoxFit.cover,
+    this.errorWidget,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +30,16 @@ class CustomImage extends StatelessWidget {
 
       // Use caller-supplied widget if provided, else fallback asset.
       errorWidget:
-          (context, url, error) => errorWidget ?? Image.asset('assets/images/broken-image.jpg', fit: fit, width: width, height: height),
+          (context, url, error) =>
+              errorWidget ?? Image.asset('assets/images/broken-image.jpg', fit: fit, width: width, height: height),
 
       placeholder:
-          (context, url) =>
-              Container(width: width, height: height, color: Colors.grey[200], child: const Center(child: CircularProgressIndicator())),
+          (context, url) => Container(
+            width: width,
+            height: height,
+            color: Colors.grey[200],
+            child: const Center(child: CircularProgressIndicator()),
+          ),
     );
   }
 }

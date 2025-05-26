@@ -152,7 +152,12 @@ class RegisterScreenState extends State<RegisterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Name Field
-                        CustomTextField(controller: nameController, label: 'Full Name', prefixIcon: 'profile', validator: validateName),
+                        CustomTextField(
+                          controller: nameController,
+                          label: 'Full Name',
+                          prefixIcon: 'profile',
+                          validator: validateName,
+                        ),
                         const SizedBox(height: 16),
                         // Email Field
                         CustomTextField(

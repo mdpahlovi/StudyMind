@@ -102,7 +102,10 @@ class RecentActivityCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Text('${(progress * 100).toInt()}%', style: textTheme.labelSmall?.copyWith(color: colorPalette.content)),
+                        Text(
+                          '${(progress * 100).toInt()}%',
+                          style: textTheme.labelSmall?.copyWith(color: colorPalette.content),
+                        ),
                       ],
                     ),
                   ],

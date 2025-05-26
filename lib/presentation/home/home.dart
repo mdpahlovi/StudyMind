@@ -31,7 +31,8 @@ class HomeScreen extends StatelessWidget {
         'color': colorPalette.primary,
         'timestamp': DateTime.now().subtract(const Duration(hours: 2)),
         'progress': 0.75,
-        "imageUrl": "https://images.unsplash.com/photo-1530026186672-2cd00ffc50fe?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        "imageUrl":
+            "https://images.unsplash.com/photo-1530026186672-2cd00ffc50fe?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
         "route": "/note",
       },
       {
@@ -53,7 +54,8 @@ class HomeScreen extends StatelessWidget {
         'color': colorPalette.warning,
         'timestamp': DateTime.now().subtract(const Duration(days: 2)),
         'progress': 0.6,
-        "imageUrl": "https://images.pixabay.com/photo/2016/01/19/01/42/library-1147815_1280.jpg?auto=compress&cs=tinysrgb&w=800",
+        "imageUrl":
+            "https://images.pixabay.com/photo/2016/01/19/01/42/library-1147815_1280.jpg?auto=compress&cs=tinysrgb&w=800",
         "route": "/flashcard",
       },
       {
@@ -64,7 +66,8 @@ class HomeScreen extends StatelessWidget {
         'color': colorPalette.warning,
         'timestamp': DateTime.now().subtract(const Duration(days: 3)),
         'progress': 0.3,
-        "imageUrl": "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        "imageUrl":
+            "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
         "route": "/flashcard",
       },
     ];
@@ -72,17 +75,20 @@ class HomeScreen extends StatelessWidget {
       {
         "title": "How to Take Effective Notes",
         "type": "Article",
-        "imageUrl": "https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        "imageUrl":
+            "https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
       },
       {
         "title": "Memory Techniques for Exams",
         "type": "Video",
-        "imageUrl": "https://images.pexels.com/photos/3059748/pexels-photo-3059748.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "imageUrl":
+            "https://images.pexels.com/photos/3059748/pexels-photo-3059748.jpeg?auto=compress&cs=tinysrgb&w=800",
       },
       {
         "title": "Study Planner Template",
         "type": "Template",
-        "imageUrl": "https://images.pixabay.com/photo/2015/07/19/10/00/school-items-851328_1280.jpg?auto=compress&cs=tinysrgb&w=800",
+        "imageUrl":
+            "https://images.pixabay.com/photo/2015/07/19/10/00/school-items-851328_1280.jpg?auto=compress&cs=tinysrgb&w=800",
       },
     ];
 
@@ -102,7 +108,10 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Quick Actions
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Text('Quick Actions', style: textTheme.headlineMedium)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text('Quick Actions', style: textTheme.headlineMedium),
+              ),
               const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -173,9 +182,20 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   child: Row(
                     children: [
-                      Expanded(child: StatItem(value: '4.5+', label: 'Hours', subLabel: 'Today', color: colorPalette.primary)),
-                      Expanded(child: StatItem(value: '12+', label: 'Notes', subLabel: 'Created', color: colorPalette.info)),
-                      Expanded(child: StatItem(value: '85%', label: 'Flashcards', subLabel: 'Mastered', color: colorPalette.warning)),
+                      Expanded(
+                        child: StatItem(value: '4.5+', label: 'Hours', subLabel: 'Today', color: colorPalette.primary),
+                      ),
+                      Expanded(
+                        child: StatItem(value: '12+', label: 'Notes', subLabel: 'Created', color: colorPalette.info),
+                      ),
+                      Expanded(
+                        child: StatItem(
+                          value: '85%',
+                          label: 'Flashcards',
+                          subLabel: 'Mastered',
+                          color: colorPalette.warning,
+                        ),
+                      ),
                     ],
                   ),
                 ),

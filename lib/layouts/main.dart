@@ -65,7 +65,12 @@ class MainLayoutState extends State<MainLayout> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CreateOption(onTap: () => Get.toNamed(AppRoutes.note), title: "New Note", icon: "noteEdit", color: colorPalette.primary),
+                  CreateOption(
+                    onTap: () => Get.toNamed(AppRoutes.note),
+                    title: "New Note",
+                    icon: "noteEdit",
+                    color: colorPalette.primary,
+                  ),
                   SizedBox(height: 12),
                   CreateOption(
                     onTap: () => Get.toNamed(AppRoutes.document),

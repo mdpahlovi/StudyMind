@@ -71,7 +71,9 @@ class LoginScreenState extends State<LoginScreen> {
       await Future.delayed(const Duration(seconds: 2));
       setState(() => isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Login successful!'), backgroundColor: Colors.green));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Login successful!'), backgroundColor: Colors.green));
       }
     }
   }

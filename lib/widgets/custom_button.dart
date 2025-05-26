@@ -20,7 +20,11 @@ class CustomButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         child:
             isLoading
-                ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: colorPalette.content, strokeWidth: 2))
+                ? SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(color: colorPalette.content, strokeWidth: 2),
+                )
                 : Text(text, style: textTheme.titleMedium),
       ),
     );

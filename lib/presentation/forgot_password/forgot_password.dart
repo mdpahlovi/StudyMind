@@ -27,7 +27,10 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> with TickerP
   void initState() {
     super.initState();
     animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
-    fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: animationController, curve: Curves.easeInOut));
+    fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: animationController, curve: Curves.easeInOut));
     slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.5),
       end: Offset.zero,
@@ -135,7 +138,10 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> with TickerP
                               children: [
                                 Icon(Icons.check_circle_outline, size: 80, color: Colors.green[400]),
                                 const SizedBox(height: 20),
-                                const Text('Email Sent Successfully!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                const Text(
+                                  'Email Sent Successfully!',
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                ),
                                 const SizedBox(height: 10),
                                 Text(
                                   'Please check your inbox and follow the instructions to reset your password.',

@@ -8,7 +8,10 @@ class NoteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Note'),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search)), IconButton(onPressed: () {}, icon: const Icon(Icons.sort))],
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.sort)),
+        ],
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -55,7 +58,10 @@ class _NoteCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  Text('${date.day}/${date.month}/${date.year}', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                  Text(
+                    '${date.day}/${date.month}/${date.year}',
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),

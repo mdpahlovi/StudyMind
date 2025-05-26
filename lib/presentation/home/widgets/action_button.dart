@@ -26,7 +26,13 @@ class ActionButton extends StatelessWidget {
             child: Center(child: CustomIcon(icon: icon, color: color, size: 28)),
           ),
           const SizedBox(height: 8),
-          Text(title, style: textTheme.bodySmall, textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text(
+            title,
+            style: textTheme.bodySmall,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     );

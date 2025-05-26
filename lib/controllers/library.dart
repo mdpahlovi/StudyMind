@@ -162,7 +162,8 @@ class LibraryController extends GetxController {
 
   List<LibraryItem> getRecentItems({int days = 7}) {
     DateTime cutoffDate = DateTime.now().subtract(Duration(days: days));
-    List<LibraryItem> recentItems = allItems.where((item) => item.updatedAt.isAfter(cutoffDate) && !item.isDeleted).toList();
+    List<LibraryItem> recentItems =
+        allItems.where((item) => item.updatedAt.isAfter(cutoffDate) && !item.isDeleted).toList();
 
     recentItems.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return recentItems;

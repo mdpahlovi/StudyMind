@@ -33,7 +33,10 @@ class ItemCardState extends State<ItemCard> {
               Get.toNamed(AppRoutes.library.replaceFirst(':id', widget.item.id));
               break;
             default:
-              Get.snackbar('Work in progress', "Item type '${widget.item.type.toString().split('.').last.toUpperCase()}' is not supported");
+              Get.snackbar(
+                'Work in progress',
+                "Item type '${widget.item.type.toString().split('.').last.toUpperCase()}' is not supported",
+              );
               break;
           }
         },
@@ -76,7 +79,10 @@ class ItemCardState extends State<ItemCard> {
               const SizedBox(height: 6),
               Expanded(
                 child: Container(
-                  decoration: BoxDecoration(color: colorPalette.contentDim.withAlpha(50), borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(
+                    color: colorPalette.contentDim.withAlpha(50),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Center(child: CustomIcon(icon: typeStyle.icon, size: 40)),
                 ),
               ),

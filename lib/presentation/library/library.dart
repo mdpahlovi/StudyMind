@@ -16,7 +16,10 @@ class LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Library'), actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list))]),
+      appBar: AppBar(
+        title: const Text('Library'),
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list))],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

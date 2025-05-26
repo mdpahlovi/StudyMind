@@ -20,7 +20,10 @@ class CreateOption extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-        decoration: BoxDecoration(border: Border.all(color: colorPalette.border), borderRadius: BorderRadius.circular(12)),
+        decoration: BoxDecoration(
+          border: Border.all(color: colorPalette.border),
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Row(
           children: [
             Container(
