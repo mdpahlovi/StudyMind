@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/models/auth.dart';
+import 'package:studymind/routes/routes.dart';
 import 'package:studymind/services/auth.dart';
 import 'package:studymind/services/storage.dart';
 
@@ -87,6 +88,7 @@ class AuthController extends GetxController {
   final StorageService storageService = StorageService();
 
   final Rxn<User> user = Rxn<User>();
+  final RxBool isLoading = true.obs;
   final RxBool isLogging = false.obs;
   final RxBool isRegistering = false.obs;
   final RxBool isLoggedIn = false.obs;
@@ -103,6 +105,7 @@ class AuthController extends GetxController {
       user.value = User.fromJson(currentUser);
       isLoggedIn.value = true;
     }
+    isLoading.value = false;
   }
 
   // Login method
@@ -124,6 +127,7 @@ class AuthController extends GetxController {
         storageService.set(Key.refreshToken, authResponse.refreshToken);
 
         Notification().success("Welcome back '${authResponse.user.name}'");
+        Get.offAllNamed(AppRoutes.home);
       } else {
         Notification().error(response.message);
       }
@@ -149,6 +153,7 @@ class AuthController extends GetxController {
         storageService.set(Key.refreshToken, authResponse.refreshToken);
 
         Notification().success("Welcome '${authResponse.user.name}'");
+        Get.offAllNamed(AppRoutes.home);
       } else {
         Notification().error(response.message);
       }
