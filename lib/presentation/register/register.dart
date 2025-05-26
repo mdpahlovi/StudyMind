@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:studymind/controllers/auth.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_button.dart';
@@ -16,12 +17,13 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class RegisterScreenState extends State<RegisterScreen> {
+  final AuthController authController = Get.put(AuthController());
+
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  bool isLoading = false;
 
   @override
   void initState() {
@@ -79,14 +81,7 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> handleRegister() async {
     if (formKey.currentState!.validate()) {
-      setState(() => isLoading = true);
-      await Future.delayed(const Duration(seconds: 2));
-      setState(() => isLoading = false);
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Registration successful!'), backgroundColor: Colors.green));
-      }
+      await authController.register(emailController.text, passwordController.text, nameController.text);
     }
   }
 
@@ -187,7 +182,13 @@ class RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 24),
                         // Register Button
-                        CustomButton(text: 'Register', isLoading: isLoading, onPressed: handleRegister),
+                        Obx(
+                          () => CustomButton(
+                            text: 'Register',
+                            isLoading: authController.isLogging.value,
+                            onPressed: handleRegister,
+                          ),
+                        ),
                         const SizedBox(height: 20),
                         // Divider
                         Row(

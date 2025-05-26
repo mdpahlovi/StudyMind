@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/models/auth.dart';
@@ -81,14 +83,13 @@ class AuthResponse {
 }
 
 class AuthController extends GetxController {
-  // Dependencies
   final AuthService authService = AuthServiceImpl();
-  final StorageService storageService = StorageServiceImpl();
+  final StorageService storageService = StorageService();
 
   final Rxn<User> user = Rxn<User>();
-  final RxBool isLoading = false.obs;
-  final RxBool isAuthenticated = false.obs;
-  final RxString errorMessage = ''.obs;
+  final RxBool isLogging = false.obs;
+  final RxBool isRegistering = false.obs;
+  final RxBool isLoggedIn = false.obs;
 
   @override
   void onInit() {
@@ -96,81 +97,61 @@ class AuthController extends GetxController {
     checkAuthStatus();
   }
 
-  void checkAuthStatus() async {
-    final user = await storageService.get(Key.user);
-    if (user != null) {
-      this.user.value = User.fromJson(await user);
-      isAuthenticated.value = true;
+  void checkAuthStatus() {
+    final currentUser = storageService.get(Key.user);
+    if (currentUser != null) {
+      user.value = User.fromJson(currentUser);
+      isLoggedIn.value = true;
     }
   }
 
   // Login method
-  Future<bool> login(String email, String password) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
+  Future<void> login(String email, String password) async {
+    isLogging.value = true;
 
-      final request = LoginRequest(email: email, password: password);
-      final response = await authService.login(request);
+    authService.login(LoginRequest(email: email, password: password)).then((response) {
+      isLogging.value = false;
 
       if (response.success && response.data != null) {
-        user.value = response.data?.user;
-        isAuthenticated.value = true;
+        final AuthResponse authResponse = AuthResponse.fromJson(response.data);
+
+        user.value = authResponse.user;
+        isLoggedIn.value = true;
 
         // Save user data and token
-        await storageService.set(Key.user, response.data?.user);
-        if (response.data?.accessToken != null) {
-          await storageService.set(Key.accessToken, response.data?.accessToken);
-        }
+        storageService.set(Key.user, jsonEncode(authResponse.user));
+        storageService.set(Key.accessToken, authResponse.accessToken);
+        storageService.set(Key.refreshToken, authResponse.refreshToken);
 
-        Notification().success('Welcome back, ${response.data?.user.name}!');
-        return true;
+        Notification().success("Welcome back '${authResponse.user.name}'");
       } else {
-        errorMessage.value = response.message;
         Notification().error(response.message);
-        return false;
       }
-    } catch (e) {
-      errorMessage.value = 'An unexpected error occurred';
-      Notification().error('An unexpected error occurred');
-      return false;
-    } finally {
-      isLoading.value = false;
-    }
+    });
   }
 
   // Register method
-  Future<bool> register(String email, String password, String name) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
+  Future<void> register(String email, String password, String name) async {
+    isRegistering.value = true;
 
-      final request = RegisterRequest(email: email, password: password, name: name);
-      final response = await authService.register(request);
+    authService.register(RegisterRequest(email: email, password: password, name: name)).then((response) {
+      isRegistering.value = false;
 
       if (response.success && response.data != null) {
-        user.value = response.data?.user;
-        isAuthenticated.value = true;
+        final AuthResponse authResponse = AuthResponse.fromJson(response.data);
+
+        user.value = authResponse.user;
+        isLoggedIn.value = true;
 
         // Save user data and token
-        await storageService.set(Key.user, response.data?.user);
-        if (response.data?.accessToken != null) {
-          await storageService.set(Key.accessToken, response.data?.accessToken);
-        }
+        storageService.set(Key.user, jsonEncode(authResponse.user));
+        storageService.set(Key.accessToken, authResponse.accessToken);
+        storageService.set(Key.refreshToken, authResponse.refreshToken);
 
-        Notification().success('Welcome, ${response.data?.user.name}! Account created successfully.');
-        return true;
+        Notification().success("Welcome '${authResponse.user.name}'");
       } else {
-        errorMessage.value = response.message;
         Notification().error(response.message);
-        return false;
       }
-    } catch (e) {
-      errorMessage.value = 'An unexpected error occurred';
-      Notification().error('An unexpected error occurred');
-      return false;
-    } finally {
-      isLoading.value = false;
-    }
+    });
   }
 }

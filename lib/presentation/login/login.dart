@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:studymind/controllers/auth.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_button.dart';
@@ -16,11 +17,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
+  final AuthController authController = Get.put(AuthController());
+
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  bool isLoading = false;
 
   @override
   void initState() {
@@ -67,14 +69,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   Future<void> handleLogin() async {
     if (formKey.currentState!.validate()) {
-      setState(() => isLoading = true);
-      await Future.delayed(const Duration(seconds: 2));
-      setState(() => isLoading = false);
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Login successful!'), backgroundColor: Colors.green));
-      }
+      await authController.login(emailController.text, passwordController.text);
     }
   }
 
@@ -177,7 +172,13 @@ class LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 24),
                         // Login Button
-                        CustomButton(text: 'Login', isLoading: isLoading, onPressed: handleLogin),
+                        Obx(
+                          () => CustomButton(
+                            text: 'Login',
+                            isLoading: authController.isLogging.value,
+                            onPressed: handleLogin,
+                          ),
+                        ),
                         const SizedBox(height: 20),
                         // Divider
                         Row(

@@ -8,22 +8,14 @@ class Key {
   static const String user = 'user';
 }
 
-abstract class StorageService {
-  Future<void> set(String key, dynamic value);
-  Future<dynamic> get(String key);
-  Future<void> remove(String key);
-}
-
-class StorageServiceImpl implements StorageService {
+class StorageService {
   final GetStorage storage = GetStorage();
 
-  @override
-  Future<void> set(String key, dynamic value) async {
+  void set(String key, dynamic value) {
     storage.write(key, jsonEncode(value));
   }
 
-  @override
-  Future<dynamic> get(String key) async {
+  dynamic get(String key) {
     final value = storage.read(key);
     if (value != null) {
       return jsonDecode(value);
@@ -31,8 +23,7 @@ class StorageServiceImpl implements StorageService {
     return null;
   }
 
-  @override
-  Future<void> remove(String key) async {
+  void remove(String key) {
     storage.remove(key);
   }
 }
