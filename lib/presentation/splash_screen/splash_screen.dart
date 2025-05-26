@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/auth.dart';
-import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,20 +14,19 @@ class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixi
   late Animation<double> rotateAnimation;
   late AnimationController rotateController;
 
-  final AuthController authController = Get.put(AuthController());
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   void initState() {
     super.initState();
-    initializeAnimations();
+    initAnimations();
     startAnimations();
-    handleAuthRedirect();
+    authController.checkAuthStatus();
   }
 
-  void initializeAnimations() {
+  void initAnimations() {
     rotateController = AnimationController(duration: Duration(milliseconds: 3000), vsync: this);
 
-    //I want circular motion
     rotateAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -37,18 +35,6 @@ class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixi
 
   void startAnimations() {
     rotateController.repeat();
-  }
-
-  void handleAuthRedirect() {
-    Future.delayed(Duration(milliseconds: 1000), () {
-      if (!authController.isLoading.value) {
-        if (authController.isLoggedIn.value) {
-          Get.offAllNamed(AppRoutes.home);
-        } else {
-          Get.offAllNamed(AppRoutes.login);
-        }
-      }
-    });
   }
 
   @override

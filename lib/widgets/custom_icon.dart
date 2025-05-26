@@ -17,7 +17,7 @@ class CustomIcon extends StatelessWidget {
       'home': HugeIcons.strokeRoundedHome12,
       'library': HugeIcons.strokeRoundedLibrary,
       'community': HugeIcons.strokeRoundedUserGroup,
-      'profile': HugeIcons.strokeRoundedUserSettings01,
+      'profile': HugeIcons.strokeRoundedUser03,
       'add': HugeIcons.strokeRoundedAdd01,
       'arrowRight': HugeIcons.strokeRoundedArrowRight01,
       'noteEdit': HugeIcons.strokeRoundedTaskEdit01,
@@ -29,7 +29,6 @@ class CustomIcon extends StatelessWidget {
       'arrowLeft': HugeIcons.strokeRoundedArrowLeft01,
       'menuDot': HugeIcons.strokeRoundedMoreVertical,
       'folder': HugeIcons.strokeRoundedFolder01,
-      'arrowHeadLeft': HugeIcons.strokeRoundedArrowLeft02,
       'upload': HugeIcons.strokeRoundedUpload03,
       'media': HugeIcons.strokeRoundedAiVideo,
       'mail': HugeIcons.strokeRoundedMail01,
@@ -41,9 +40,9 @@ class CustomIcon extends StatelessWidget {
     };
 
     if (iconMap.containsKey(icon)) {
-      return HugeIcon(icon: iconMap[icon]!, size: size, color: color ?? colorPalette.content);
+      return Icon(iconMap[icon]!, size: size, color: color ?? colorPalette.content);
     } else {
-      return HugeIcon(icon: HugeIcons.strokeRoundedHelpCircle, size: size, color: color ?? colorPalette.content);
+      return Icon(HugeIcons.strokeRoundedHelpCircle, size: size, color: color ?? colorPalette.content);
     }
   }
 }

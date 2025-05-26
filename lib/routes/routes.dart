@@ -11,6 +11,7 @@ import 'package:studymind/presentation/register/register.dart';
 import 'package:studymind/presentation/splash_screen/splash_screen.dart';
 
 class AppRoutes {
+  static const String splashScreen = '/';
   static const String home = '/home';
   static const String document = '/document';
   static const String note = '/note';
@@ -22,7 +23,7 @@ class AppRoutes {
   static const String forgotPassword = '/forgot-password';
 
   List<GetPage<dynamic>> routes = [
-    GetPage(name: '/', page: () => const SplashScreen(), transition: Transition.fadeIn),
+    GetPage(name: splashScreen, page: () => const SplashScreen(), transition: Transition.fadeIn),
     GetPage(name: home, page: () => const MainLayout(), transition: Transition.fadeIn),
     GetPage(name: document, page: () => const DocumentScreen(), transition: Transition.fadeIn),
     GetPage(name: note, page: () => const NoteScreen(), transition: Transition.fadeIn),

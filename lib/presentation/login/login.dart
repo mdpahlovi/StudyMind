@@ -17,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  final AuthController authController = Get.put(AuthController());
+  final AuthController authController = Get.find<AuthController>();
 
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();

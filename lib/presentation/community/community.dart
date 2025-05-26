@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studymind/widgets/notification_button.dart';
 
 class CommunityScreen extends StatelessWidget {
   const CommunityScreen({super.key});
@@ -6,7 +7,7 @@ class CommunityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Community')),
+      appBar: AppBar(title: const Text('Community'), actions: [NotificationButton()]),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

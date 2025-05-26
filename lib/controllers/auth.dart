@@ -88,24 +88,32 @@ class AuthController extends GetxController {
   final StorageService storageService = StorageService();
 
   final Rxn<User> user = Rxn<User>();
-  final RxBool isLoading = true.obs;
+  final RxBool isLoading = true.obs; // Initial Loading
   final RxBool isLogging = false.obs;
   final RxBool isRegistering = false.obs;
   final RxBool isLoggedIn = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    checkAuthStatus();
-  }
-
   void checkAuthStatus() {
+    final accessToken = storageService.get(Key.accessToken);
+    final refreshToken = storageService.get(Key.refreshToken);
     final currentUser = storageService.get(Key.user);
-    if (currentUser != null) {
-      user.value = User.fromJson(currentUser);
+
+    if (accessToken != null && refreshToken != null && currentUser != null) {
+      user.value = User.fromJson(jsonDecode(currentUser));
       isLoggedIn.value = true;
+
+      // Redirect to home after 3 seconds
+      Future.delayed(Duration(milliseconds: 3000), () {
+        isLoading.value = false;
+        Get.offAllNamed(AppRoutes.home);
+      });
+    } else {
+      // Redirect to login after 3 seconds
+      Future.delayed(Duration(milliseconds: 3000), () {
+        isLoading.value = false;
+        Get.offAllNamed(AppRoutes.login);
+      });
     }
-    isLoading.value = false;
   }
 
   // Login method

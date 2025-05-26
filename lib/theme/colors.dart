@@ -45,7 +45,7 @@ class ColorPalette {
 }
 
 class AppColors {
-  final ThemeController themeController = Get.put(ThemeController());
+  final ThemeController themeController = Get.find<ThemeController>();
 
   static const light = ColorPalette(
     // Primary color (Electric Blue)

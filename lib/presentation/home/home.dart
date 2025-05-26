@@ -5,7 +5,7 @@ import 'package:studymind/presentation/home/widgets/article_card.dart';
 import 'package:studymind/presentation/home/widgets/recent_activity_card.dart';
 import 'package:studymind/presentation/home/widgets/stat_item.dart';
 import 'package:studymind/theme/colors.dart';
-import 'package:studymind/widgets/custom_icon.dart';
+import 'package:studymind/widgets/notification_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -93,13 +93,7 @@ class HomeScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('StudyMind'),
-        actions: [
-          IconButton(onPressed: () {}, icon: const CustomIcon(icon: 'notification')),
-          IconButton(onPressed: () {}, icon: const CustomIcon(icon: 'profile')),
-        ],
-      ),
+      appBar: AppBar(title: const Text('StudyMind'), actions: [NotificationButton()]),
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Padding(

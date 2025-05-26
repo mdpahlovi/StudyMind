@@ -17,7 +17,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class RegisterScreenState extends State<RegisterScreen> {
-  final AuthController authController = Get.put(AuthController());
+  final AuthController authController = Get.find<AuthController>();
 
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
