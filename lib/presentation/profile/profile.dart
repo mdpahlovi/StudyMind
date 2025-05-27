@@ -36,15 +36,13 @@ class ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.all(16),
         children: [
           Obx(() {
-            final phone = authController.user.value!.phone;
+            final imageUrl = authController.user.value!.photo;
             return Center(
               child: Container(
                 width: 96,
                 height: 96,
                 decoration: BoxDecoration(shape: BoxShape.circle),
-                child: ClipOval(
-                  child: CustomImage(imageUrl: phone ?? 'assets/images/placeholder.png', fit: BoxFit.cover),
-                ),
+                child: ClipOval(child: CustomImage(imageUrl: imageUrl!, fit: BoxFit.cover)),
               ),
             );
           }),
