@@ -43,13 +43,6 @@ class DioService {
   Future<void> onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) async {
     loggerSimp.t(response.data);
 
-    switch (response.statusCode) {
-      case 401:
-        handleUnauthorized();
-        Notification().error('Please login to continue');
-        break;
-    }
-
     // Update access token if new access token is available
     updateAccessToken(response);
     handler.next(response);
@@ -58,20 +51,17 @@ class DioService {
   Future<void> onError(DioException error, ErrorInterceptorHandler handler) async {
     loggerSimp.e('ERROR: ${error.response?.data}');
 
-    if (error.response != null) {
-      Notification().error(error.response?.data['message'] ?? 'Something went wrong');
+    if (error.response?.statusCode == 401) {
+      handleUnauthorize();
     } else {
-      Notification().error(error.message ?? 'Something went wrong');
+      if (error.response != null) {
+        Notification().error(error.response?.data['message'] ?? 'Something went wrong');
+      } else {
+        Notification().error(error.message ?? 'Something went wrong');
+      }
     }
 
     handler.reject(error);
-  }
-
-  void handleUnauthorized() {
-    storage.remove(Key.accessToken);
-    storage.remove(Key.refreshToken);
-
-    Get.offAllNamed(AppRoutes.login);
   }
 
   void updateAccessToken(Response<dynamic>? response) {
@@ -81,5 +71,12 @@ class DioService {
     if (newAccessToken != null && currentAccessToken != newAccessToken) {
       storage.set(Key.accessToken, newAccessToken);
     }
+  }
+
+  void handleUnauthorize() {
+    storage.remove(Key.accessToken);
+    storage.remove(Key.refreshToken);
+
+    Get.offAllNamed(AppRoutes.login);
   }
 }

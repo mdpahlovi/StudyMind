@@ -22,8 +22,12 @@ class ItemTypeStyle {
         return TypeStyle(color: Color(0xFFFEFAE0), icon: 'document');
       case ItemType.flashcard:
         return TypeStyle(color: Color(0xFF588157), icon: 'flashcard');
-      case ItemType.media:
-        return TypeStyle(color: Color(0xFFDDA15E), icon: 'media');
+      case ItemType.audio:
+        return TypeStyle(color: Color(0xFFDDA15E), icon: 'audio');
+      case ItemType.video:
+        return TypeStyle(color: Color(0xFFDDA15E), icon: 'video');
+      case ItemType.image:
+        return TypeStyle(color: Color(0xFFDDA15E), icon: 'image');
     }
   }
 }

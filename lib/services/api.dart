@@ -20,9 +20,9 @@ class ApiResponse {
 class ApiService {
   final DioService dioService = DioService();
 
-  Future<ApiResponse> get(String url) async {
+  Future<ApiResponse> get(String url, {queryParameters}) async {
     try {
-      final response = await dioService.dio.get(url);
+      final response = await dioService.dio.get(url, queryParameters: queryParameters);
 
       return ApiResponse.fromJson(response.data);
     } catch (error) {
@@ -43,6 +43,25 @@ class ApiService {
   Future<ApiResponse> post(String url, {data}) async {
     try {
       final response = await dioService.dio.post(url, data: data);
+
+      return ApiResponse.fromJson(response.data);
+    } catch (error) {
+      late String? message;
+
+      if (error is DioException) {
+        if (error.response != null) {
+          message = error.response?.data['message'];
+        } else {
+          message = error.message;
+        }
+      }
+      return ApiResponse(success: false, message: message ?? 'Something went wrong', data: null);
+    }
+  }
+
+  Future<ApiResponse> patch(String url, {data}) async {
+    try {
+      final response = await dioService.dio.patch(url, data: data);
 
       return ApiResponse.fromJson(response.data);
     } catch (error) {

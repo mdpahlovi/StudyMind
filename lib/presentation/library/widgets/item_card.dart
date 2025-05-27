@@ -30,7 +30,7 @@ class ItemCardState extends State<ItemCard> {
           switch (widget.item.type) {
             case ItemType.folder:
               libraryController.loadFolderData(widget.item.id);
-              Get.toNamed(AppRoutes.library.replaceFirst(':id', widget.item.id));
+              Get.toNamed(AppRoutes.library.replaceFirst(':id', widget.item.id.toString()));
               break;
             default:
               Get.snackbar(

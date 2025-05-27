@@ -23,6 +23,7 @@ class MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
+    final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       body: screens[currentIndex],
@@ -65,6 +66,10 @@ class MainLayoutState extends State<MainLayout> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Text("Create", style: textTheme.titleMedium),
+                  SizedBox(height: 12),
+                  CreateOption(onTap: () {}, title: "New Folder", icon: "folder", color: colorPalette.primary),
+                  SizedBox(height: 12),
                   CreateOption(
                     onTap: () => Get.toNamed(AppRoutes.note),
                     title: "New Note",

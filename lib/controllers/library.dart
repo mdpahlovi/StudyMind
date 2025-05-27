@@ -4,66 +4,70 @@ import 'package:get/get.dart';
 import 'package:studymind/constants/sample_data.dart';
 
 class LibraryItem {
-  final String id;
+  final int id;
+  final String uid;
+  final bool isActive;
   final String name;
   final ItemType type;
-  final String? parentId;
-  final String userId;
+  final int? parentId;
+  final int userId;
   final String path;
+  final Map<String, dynamic>? metadata;
+  final int sortOrder;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final Map<String, dynamic>? metadata;
-  final bool isDeleted;
-  final int sortOrder;
 
   LibraryItem({
     required this.id,
+    required this.uid,
+    required this.isActive,
     required this.name,
     required this.type,
     this.parentId,
     required this.userId,
     required this.path,
+    this.metadata,
+    this.sortOrder = 0,
     required this.createdAt,
     required this.updatedAt,
-    this.metadata,
-    this.isDeleted = false,
-    this.sortOrder = 0,
   });
 
   factory LibraryItem.fromJson(Map<String, dynamic> json) {
     return LibraryItem(
       id: json['id'],
+      uid: json['uid'],
+      isActive: json['isActive'],
       name: json['name'],
       type: ItemType.values.firstWhere((e) => e.toString().split('.').last == json['type'].toLowerCase()),
-      parentId: json['parent_id'],
-      userId: json['user_id'],
+      parentId: json['parentId'],
+      userId: json['userId'],
       path: json['path'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
       metadata: json['metadata'],
-      isDeleted: json['is_deleted'] ?? false,
-      sortOrder: json['sort_order'] ?? 0,
+      sortOrder: json['sortOrder'] ?? 0,
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'uid': uid,
+      'isActive': isActive,
       'name': name,
-      'type': type.toString().split('.').last,
-      'parent_id': parentId,
-      'user_id': userId,
+      'type': type.toString().split('.').last.toUpperCase(),
+      'parentId': parentId,
+      'userId': userId,
       'path': path,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
       'metadata': metadata,
-      'is_deleted': isDeleted,
-      'sort_order': sortOrder,
+      'sortOrder': sortOrder,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 }
 
-enum ItemType { folder, note, document, flashcard, media }
+enum ItemType { folder, note, document, flashcard, audio, video, image }
 
 class LibraryController extends GetxController {
   final RxList<LibraryItem> allItems = <LibraryItem>[].obs;
@@ -100,7 +104,7 @@ class LibraryController extends GetxController {
     }
   }
 
-  void loadFolderData(String? itemId) {
+  void loadFolderData(int? itemId) {
     isLoading.value = true;
     if (itemId == null) {
       currentItem.value = null;
@@ -108,7 +112,7 @@ class LibraryController extends GetxController {
       currentItem.value = getItemById(itemId);
     }
 
-    List<LibraryItem> folderItems = allItems.where((item) => item.parentId == itemId && !item.isDeleted).toList();
+    List<LibraryItem> folderItems = allItems.where((item) => item.isActive && item.parentId == itemId).toList();
 
     folderItems.sort((a, b) {
       if (a.type == ItemType.folder && b.type != ItemType.folder) return -1;
@@ -124,7 +128,7 @@ class LibraryController extends GetxController {
     isLoading.value = false;
   }
 
-  void loadBreadcrumb(String? itemId) {
+  void loadBreadcrumb(int? itemId) {
     breadcrumbs.clear();
 
     if (itemId == null) return;
@@ -141,9 +145,9 @@ class LibraryController extends GetxController {
     breadcrumbs.assignAll(hierarchy);
   }
 
-  LibraryItem? getItemById(String id) {
+  LibraryItem? getItemById(int id) {
     try {
-      return allItems.firstWhere((item) => item.id == id && !item.isDeleted);
+      return allItems.firstWhere((item) => item.isActive && item.id == id);
     } catch (e) {
       return null;
     }
@@ -153,24 +157,24 @@ class LibraryController extends GetxController {
     if (query.isEmpty) return [];
 
     String lowercaseQuery = query.toLowerCase();
-    return allItems.where((item) => item.name.toLowerCase().contains(lowercaseQuery) && !item.isDeleted).toList();
+    return allItems.where((item) => item.name.toLowerCase().contains(lowercaseQuery) && item.isActive).toList();
   }
 
   List<LibraryItem> getItemsByType(ItemType type) {
-    return allItems.where((item) => item.type == type && !item.isDeleted).toList();
+    return allItems.where((item) => item.type == type && item.isActive).toList();
   }
 
   List<LibraryItem> getRecentItems({int days = 7}) {
     DateTime cutoffDate = DateTime.now().subtract(Duration(days: days));
     List<LibraryItem> recentItems =
-        allItems.where((item) => item.updatedAt.isAfter(cutoffDate) && !item.isDeleted).toList();
+        allItems.where((item) => item.updatedAt.isAfter(cutoffDate) && item.isActive).toList();
 
     recentItems.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return recentItems;
   }
 
-  Map<String, int> getFolderStats(String? itemId) {
-    List<LibraryItem> folderItems = allItems.where((item) => item.parentId == itemId && !item.isDeleted).toList();
+  Map<String, int> getFolderStats(int? itemId) {
+    List<LibraryItem> folderItems = allItems.where((item) => item.parentId == itemId && item.isActive).toList();
 
     return {
       'Total Items': folderItems.length,
@@ -178,7 +182,9 @@ class LibraryController extends GetxController {
       'Notes': folderItems.where((item) => item.type == ItemType.note).length,
       'Documents': folderItems.where((item) => item.type == ItemType.document).length,
       'Flashcards': folderItems.where((item) => item.type == ItemType.flashcard).length,
-      'Medias': folderItems.where((item) => item.type == ItemType.media).length,
+      'Audios': folderItems.where((item) => item.type == ItemType.audio).length,
+      'Videos': folderItems.where((item) => item.type == ItemType.video).length,
+      'Images': folderItems.where((item) => item.type == ItemType.image).length,
     };
   }
 }
