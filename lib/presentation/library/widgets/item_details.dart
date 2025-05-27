@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/library/widgets/item_card.dart';
+import 'package:studymind/presentation/library/widgets/item_empty.dart';
+import 'package:studymind/presentation/library/widgets/item_loader.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/notification_button.dart';
 
@@ -17,42 +19,40 @@ class ItemDetailsState extends State<ItemDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: CustomIcon(icon: 'arrowLeft', size: 28),
-          onPressed: () {
-            libraryController.loadFolderData(libraryController.currentItem.value?.parentId);
-            Get.back();
-          },
-        ),
-        title: Obx(() => Text(libraryController.currentItem.value?.name ?? 'Item Details')),
-        actions: [NotificationButton()],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Obx(() {
-            List<LibraryItem> folderItems = libraryController.currentFolderItems.toList();
+    return PopScope(
+      canPop: false,
+      child: RefreshIndicator(
+        onRefresh: () async => libraryController.refreshData(),
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: CustomIcon(icon: 'arrowLeft', size: 28),
+              onPressed: () => libraryController.navigateToBack(),
+            ),
+            title: Obx(() => Text(libraryController.parent.value?.name ?? '')),
+            actions: [NotificationButton()],
+          ),
+          body: Obx(() {
+            List<LibraryItem> libraryItems = libraryController.libraryItems.toList();
 
-            if (folderItems.isEmpty) {
-              return const Center(child: Text('Item not found'));
-            }
+            if (libraryController.isLoading.value) return const ItemLoader();
+
+            if (libraryItems.isEmpty) return const ItemEmpty();
 
             return GridView.builder(
+              padding: const EdgeInsets.all(16),
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 1,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
               ),
-              itemCount: folderItems.length,
-              itemBuilder: (context, index) => ItemCard(item: folderItems[index]),
+              itemCount: libraryItems.length,
+              itemBuilder: (context, index) => ItemCard(item: libraryItems[index]),
             );
           }),
-        ],
+        ),
       ),
     );
   }

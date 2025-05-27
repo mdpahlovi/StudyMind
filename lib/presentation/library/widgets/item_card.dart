@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/library/widgets/item_options.dart';
 import 'package:studymind/presentation/library/widgets/item_type_style.dart';
-import 'package:studymind/routes/routes.dart' show AppRoutes;
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
@@ -29,8 +28,7 @@ class ItemCardState extends State<ItemCard> {
         onTap: () {
           switch (widget.item.type) {
             case ItemType.folder:
-              libraryController.loadFolderData(widget.item.id);
-              Get.toNamed(AppRoutes.library.replaceFirst(':id', widget.item.id.toString()));
+              libraryController.navigateToFolder(widget.item.uid);
               break;
             default:
               Get.snackbar(

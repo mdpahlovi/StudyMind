@@ -17,7 +17,7 @@ class AppRoutes {
   static const String note = '/note';
   static const String flashcard = '/flashcard';
   static const String media = '/media';
-  static const String library = '/library/:id';
+  static const String library = '/library/:uid';
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';

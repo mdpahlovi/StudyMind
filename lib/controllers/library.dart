@@ -1,7 +1,10 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:studymind/constants/sample_data.dart';
+import 'package:studymind/core/notification.dart';
+import 'package:studymind/models/library.dart';
+import 'package:studymind/routes/routes.dart' show AppRoutes;
+import 'package:studymind/services/library.dart';
+
+enum ItemType { folder, note, document, flashcard, audio, video, image }
 
 class LibraryItem {
   final int id;
@@ -10,6 +13,7 @@ class LibraryItem {
   final String name;
   final ItemType type;
   final int? parentId;
+  final String? parentUid;
   final int userId;
   final String path;
   final Map<String, dynamic>? metadata;
@@ -24,6 +28,7 @@ class LibraryItem {
     required this.name,
     required this.type,
     this.parentId,
+    this.parentUid,
     required this.userId,
     required this.path,
     this.metadata,
@@ -40,6 +45,7 @@ class LibraryItem {
       name: json['name'],
       type: ItemType.values.firstWhere((e) => e.toString().split('.').last == json['type'].toLowerCase()),
       parentId: json['parentId'],
+      parentUid: json['parentUid'],
       userId: json['userId'],
       path: json['path'],
       metadata: json['metadata'],
@@ -57,6 +63,7 @@ class LibraryItem {
       'name': name,
       'type': type.toString().split('.').last.toUpperCase(),
       'parentId': parentId,
+      'parentUid': parentUid,
       'userId': userId,
       'path': path,
       'metadata': metadata,
@@ -67,124 +74,94 @@ class LibraryItem {
   }
 }
 
-enum ItemType { folder, note, document, flashcard, audio, video, image }
+class LibraryResponse {
+  final LibraryItem? parent;
+  final List<LibraryItem> libraryItems;
+  final int total;
+
+  LibraryResponse({this.parent, required this.libraryItems, required this.total});
+
+  factory LibraryResponse.fromJson(Map<String, dynamic> json) {
+    return LibraryResponse(
+      parent: json['parent'] != null ? LibraryItem.fromJson(json['parent']) : null,
+      libraryItems: List<LibraryItem>.from(json['libraryItems'].map((x) => LibraryItem.fromJson(x))),
+      total: json['total'] ?? 0,
+    );
+  }
+}
 
 class LibraryController extends GetxController {
-  final RxList<LibraryItem> allItems = <LibraryItem>[].obs;
-  final RxList<LibraryItem> currentFolderItems = <LibraryItem>[].obs;
-  final Rxn<LibraryItem> currentItem = Rxn<LibraryItem>();
-  final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs;
-  final RxBool isLoading = false.obs;
+  final libraryService = LibraryService();
+
+  final RxBool isLoading = true.obs;
+  final Rxn<LibraryItem> parent = Rxn<LibraryItem>();
+  final RxList<LibraryItem> libraryItems = <LibraryItem>[].obs;
+  final RxInt total = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadDataFromJson();
+    fetchLibraryItems(parentUid: Get.parameters['uid']);
   }
 
-  void loadDataFromJson() {
-    try {
-      List<dynamic> sampleData = jsonDecode(SampleData.libraryData);
-      List<LibraryItem> libraryItems = [];
+  @override
+  void onClose() {
+    super.onClose();
+    libraryItems.clear();
+    parent.value = null;
+    isLoading.value = true;
+  }
 
-      for (int index = 0; index < sampleData.length; index++) {
-        LibraryItem item = LibraryItem.fromJson(sampleData[index]);
-        libraryItems.add(item);
+  void fetchLibraryItems({String? parentUid}) {
+    isLoading.value = true;
+
+    libraryService.getLibraryItems(GetLibraryItemsQuery(parentUid: parentUid)).then((response) {
+      if (response.success && response.data != null) {
+        final libraryResponse = LibraryResponse.fromJson(response.data);
+        parent.value = libraryResponse.parent;
+        libraryItems.value = libraryResponse.libraryItems;
+        total.value = libraryResponse.total;
+      } else {
+        Notification().error(response.message);
+        Get.back();
       }
 
-      isLoading.value = true;
-      allItems.assignAll(libraryItems);
-
-      loadFolderData(null);
-
       isLoading.value = false;
-    } catch (error) {
-      isLoading.value = false;
-      Get.snackbar('Error', 'Failed to load data: $error');
-    }
-  }
-
-  void loadFolderData(int? itemId) {
-    isLoading.value = true;
-    if (itemId == null) {
-      currentItem.value = null;
-    } else {
-      currentItem.value = getItemById(itemId);
-    }
-
-    List<LibraryItem> folderItems = allItems.where((item) => item.isActive && item.parentId == itemId).toList();
-
-    folderItems.sort((a, b) {
-      if (a.type == ItemType.folder && b.type != ItemType.folder) return -1;
-      if (a.type != ItemType.folder && b.type == ItemType.folder) return 1;
-      int sortComparison = a.sortOrder.compareTo(b.sortOrder);
-      if (sortComparison != 0) return sortComparison;
-      return a.name.toLowerCase().compareTo(b.name.toLowerCase());
     });
-
-    currentFolderItems.assignAll(folderItems);
-    loadBreadcrumb(itemId);
-
-    isLoading.value = false;
   }
 
-  void loadBreadcrumb(int? itemId) {
-    breadcrumbs.clear();
-
-    if (itemId == null) return;
-
-    List<LibraryItem> hierarchy = [];
-    LibraryItem? currentItem = getItemById(itemId);
-
-    while (currentItem != null) {
-      hierarchy.insert(0, currentItem);
-      if (currentItem.parentId == null) break;
-      currentItem = getItemById(currentItem.parentId!);
-    }
-
-    breadcrumbs.assignAll(hierarchy);
+  void navigateToFolder(String uid) {
+    Get.toNamed(AppRoutes.library.replaceFirst(':uid', uid));
+    fetchLibraryItems(parentUid: uid);
   }
 
-  LibraryItem? getItemById(int id) {
-    try {
-      return allItems.firstWhere((item) => item.isActive && item.id == id);
-    } catch (e) {
-      return null;
+  void navigateToBack() {
+    if (parent.value != null) {
+      Get.back();
+      fetchLibraryItems(parentUid: parent.value!.parentUid);
     }
   }
 
-  List<LibraryItem> searchItems(String query) {
-    if (query.isEmpty) return [];
+  void refreshData() {
+    final parentUid = Get.parameters['uid'];
 
-    String lowercaseQuery = query.toLowerCase();
-    return allItems.where((item) => item.name.toLowerCase().contains(lowercaseQuery) && item.isActive).toList();
+    if (Get.currentRoute == AppRoutes.home) {
+      fetchLibraryItems(parentUid: null);
+    } else {
+      fetchLibraryItems(parentUid: parentUid);
+    }
   }
 
-  List<LibraryItem> getItemsByType(ItemType type) {
-    return allItems.where((item) => item.type == type && item.isActive).toList();
-  }
-
-  List<LibraryItem> getRecentItems({int days = 7}) {
-    DateTime cutoffDate = DateTime.now().subtract(Duration(days: days));
-    List<LibraryItem> recentItems =
-        allItems.where((item) => item.updatedAt.isAfter(cutoffDate) && item.isActive).toList();
-
-    recentItems.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-    return recentItems;
-  }
-
-  Map<String, int> getFolderStats(int? itemId) {
-    List<LibraryItem> folderItems = allItems.where((item) => item.parentId == itemId && item.isActive).toList();
-
+  Map<String, int> getFolderStats() {
     return {
-      'Total Items': folderItems.length,
-      'Folders': folderItems.where((item) => item.type == ItemType.folder).length,
-      'Notes': folderItems.where((item) => item.type == ItemType.note).length,
-      'Documents': folderItems.where((item) => item.type == ItemType.document).length,
-      'Flashcards': folderItems.where((item) => item.type == ItemType.flashcard).length,
-      'Audios': folderItems.where((item) => item.type == ItemType.audio).length,
-      'Videos': folderItems.where((item) => item.type == ItemType.video).length,
-      'Images': folderItems.where((item) => item.type == ItemType.image).length,
+      'Total Items': libraryItems.length,
+      'Folders': libraryItems.where((item) => item.type == ItemType.folder).length,
+      'Notes': libraryItems.where((item) => item.type == ItemType.note).length,
+      'Documents': libraryItems.where((item) => item.type == ItemType.document).length,
+      'Flashcards': libraryItems.where((item) => item.type == ItemType.flashcard).length,
+      'Audios': libraryItems.where((item) => item.type == ItemType.audio).length,
+      'Videos': libraryItems.where((item) => item.type == ItemType.video).length,
+      'Images': libraryItems.where((item) => item.type == ItemType.image).length,
     };
   }
 }

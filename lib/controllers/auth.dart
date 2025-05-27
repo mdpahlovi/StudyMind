@@ -121,8 +121,6 @@ class AuthController extends GetxController {
     isLogging.value = true;
 
     authService.login(LoginRequest(email: email, password: password)).then((response) {
-      isLogging.value = false;
-
       if (response.success && response.data != null) {
         final AuthResponse authResponse = AuthResponse.fromJson(response.data);
 
@@ -139,6 +137,8 @@ class AuthController extends GetxController {
       } else {
         Notification().error(response.message);
       }
+
+      isLogging.value = false;
     });
   }
 
@@ -147,8 +147,6 @@ class AuthController extends GetxController {
     isRegistering.value = true;
 
     authService.register(RegisterRequest(email: email, password: password, name: name)).then((response) {
-      isRegistering.value = false;
-
       if (response.success && response.data != null) {
         final AuthResponse authResponse = AuthResponse.fromJson(response.data);
 
@@ -165,6 +163,8 @@ class AuthController extends GetxController {
       } else {
         Notification().error(response.message);
       }
+
+      isRegistering.value = false;
     });
   }
 }
