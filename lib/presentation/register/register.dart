@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/controllers/auth.dart';
+import 'package:studymind/core/validators.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_button.dart';
@@ -37,46 +38,6 @@ class RegisterScreenState extends State<RegisterScreen> {
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
-  }
-
-  String? validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Name is required';
-    }
-    if (value.length < 2) {
-      return 'Name must be at least 2 characters';
-    }
-    return null;
-  }
-
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Email is required';
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Please enter a valid email';
-    }
-    return null;
-  }
-
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Password is required';
-    }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters';
-    }
-    return null;
-  }
-
-  String? validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please confirm your password';
-    }
-    if (value != passwordController.text) {
-      return 'Passwords do not match';
-    }
-    return null;
   }
 
   Future<void> handleRegister() async {
@@ -161,7 +122,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             controller: nameController,
                             label: 'Full Name',
                             prefixIcon: 'profile',
-                            validator: validateName,
+                            validator: Validators.validateName,
                           ),
                           const SizedBox(height: 16),
                           // Email Field
@@ -170,7 +131,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             label: 'Email',
                             prefixIcon: 'mail',
                             keyboardType: TextInputType.emailAddress,
-                            validator: validateEmail,
+                            validator: Validators.validateEmail,
                           ),
                           const SizedBox(height: 16),
                           // Password Field
@@ -179,7 +140,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             label: 'Password',
                             prefixIcon: 'lock',
                             isPassword: true,
-                            validator: validatePassword,
+                            validator: Validators.validatePassword,
                           ),
                           const SizedBox(height: 16),
                           // Confirm Password Field
@@ -188,7 +149,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             label: 'Confirm Password',
                             prefixIcon: 'lock',
                             isPassword: true,
-                            validator: validateConfirmPassword,
+                            validator: (value) => Validators.validateConfirmPassword(value, passwordController.text),
                           ),
                           const SizedBox(height: 24),
                           // Register Button

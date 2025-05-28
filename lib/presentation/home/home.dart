@@ -4,6 +4,7 @@ import 'package:studymind/presentation/home/widgets/action_button.dart';
 import 'package:studymind/presentation/home/widgets/article_card.dart';
 import 'package:studymind/presentation/home/widgets/recent_activity_card.dart';
 import 'package:studymind/presentation/home/widgets/stat_item.dart';
+import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/notification_button.dart';
 
@@ -131,7 +132,10 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Recent Activity', style: textTheme.headlineMedium),
-                    Text('View All', style: textTheme.labelMedium?.copyWith(color: colorPalette.primary)),
+                    GestureDetector(
+                      onTap: () => Get.toNamed(AppRoutes.login),
+                      child: Text('View All', style: textTheme.labelMedium?.copyWith(color: colorPalette.primary)),
+                    ),
                   ],
                 ),
               ),
