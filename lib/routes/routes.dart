@@ -5,6 +5,7 @@ import 'package:studymind/layouts/main.dart';
 import 'package:studymind/presentation/document/document.dart';
 import 'package:studymind/presentation/flashcard/flashcard.dart';
 import 'package:studymind/presentation/forgot_password/forgot_password.dart';
+import 'package:studymind/presentation/library/widgets/item_by_type.dart';
 import 'package:studymind/presentation/library/widgets/item_details.dart';
 import 'package:studymind/presentation/login/login.dart';
 import 'package:studymind/presentation/media/media.dart';
@@ -15,6 +16,7 @@ import 'package:studymind/presentation/splash_screen/splash_screen.dart';
 class AppRoutes {
   static const String splashScreen = '/splash';
   static const String home = '/home';
+  static const String itemByType = '/item_by_type/:type';
   static const String document = '/document';
   static const String note = '/note';
   static const String flashcard = '/flashcard';
@@ -66,6 +68,12 @@ class AppRoutes {
     GetPage(
       name: library,
       page: () => const ItemDetails(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: itemByType,
+      page: () => const ItemByType(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),

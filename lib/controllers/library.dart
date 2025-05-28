@@ -87,63 +87,89 @@ class LibraryResponse {
 class LibraryController extends GetxController {
   final libraryService = LibraryService();
 
-  final RxBool isLoading = true.obs;
-  final Rxn<LibraryItem> libraryItem = Rxn<LibraryItem>();
-  final RxList<LibraryItem> folderItems = <LibraryItem>[].obs;
-  final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs;
-  final RxInt total = 0.obs;
+  final RxBool isLoadingItem = true.obs;
+  final RxBool isLoadingRecent = true.obs;
+  final RxBool isLoadingType = true.obs;
+  final RxBool isLoadingFolder = true.obs;
+  final Rxn<LibraryItem> libraryItem = Rxn<LibraryItem>(); // To show in item details screen
+  final RxList<LibraryItem> recentItems = <LibraryItem>[].obs; // To show in home screen
+  final RxList<LibraryItem> libraryItems = <LibraryItem>[].obs; // To show in by type screen
+  final RxList<LibraryItem> folderItems = <LibraryItem>[].obs; // To show in library and it's folder screen
+  final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs; // To show in library and it's folder screen
 
   @override
   void onInit() {
     super.onInit();
     fetchLibraryItems(parentUid: Get.parameters['uid']);
+    fetchLibraryItemsByRecent();
   }
 
   @override
   void onClose() {
     super.onClose();
-    isLoading.value = true;
+    isLoadingItem.value = true;
+    isLoadingRecent.value = true;
+    isLoadingType.value = true;
+    isLoadingFolder.value = true;
     libraryItem.value = null;
+    recentItems.clear();
+    libraryItems.clear();
     folderItems.clear();
     breadcrumbs.clear();
   }
 
-  void fetchLibraryItems({String? parentUid}) {
-    isLoading.value = true;
+  void fetchLibraryItems({String? parentUid, int page = 1, int limit = 12}) {
+    isLoadingFolder.value = true;
 
-    libraryService.getLibraryItems(GetLibraryItemsQuery(parentUid: parentUid)).then((response) {
+    final query = GetLibraryItemsQuery(parentUid: parentUid, page: page, limit: limit);
+    libraryService.getLibraryItems(query).then((response) {
       if (response.success && response.data != null) {
         final libraryResponse = LibraryResponse.fromJson(response.data);
         folderItems.value = libraryResponse.libraryItems;
-        total.value = libraryResponse.total;
       } else {
         Notification().error(response.message);
         Get.back();
       }
 
-      isLoading.value = false;
+      isLoadingFolder.value = false;
     });
   }
 
-  void fetchLibraryItemsByType({String search = '', ItemType? type}) {
-    isLoading.value = true;
+  void fetchLibraryItemsByRecent() {
+    isLoadingRecent.value = true;
 
-    libraryService.getLibraryItemsByType(GetLibraryItemsByTypeQuery(search: search, type: type)).then((response) {
+    libraryService.getLibraryItemsByType(GetLibraryItemsByTypeQuery(limit: 6)).then((response) {
       if (response.success && response.data != null) {
         final libraryResponse = LibraryResponse.fromJson(response.data);
-        folderItems.value = libraryResponse.libraryItems;
-        total.value = libraryResponse.total;
+        recentItems.value = libraryResponse.libraryItems;
       } else {
         Notification().error(response.message);
         Get.back();
       }
 
-      isLoading.value = false;
+      isLoadingRecent.value = false;
+    });
+  }
+
+  void fetchLibraryItemsByType({String search = '', String type = '', int page = 1, int limit = 12}) {
+    isLoadingType.value = true;
+
+    final query = GetLibraryItemsByTypeQuery(search: search, type: type, page: page, limit: limit);
+    libraryService.getLibraryItemsByType(query).then((response) {
+      if (response.success && response.data != null) {
+        final libraryResponse = LibraryResponse.fromJson(response.data);
+        libraryItems.value = libraryResponse.libraryItems;
+      } else {
+        Notification().error(response.message);
+        Get.back();
+      }
+
+      isLoadingType.value = false;
     });
   }
 
   void fetchLibraryItemByUid(String uid) {
-    isLoading.value = true;
+    isLoadingItem.value = true;
 
     libraryService.getLibraryItemByUid(uid).then((response) {
       if (response.success && response.data != null) {
@@ -154,8 +180,18 @@ class LibraryController extends GetxController {
         Get.back();
       }
 
-      isLoading.value = false;
+      isLoadingItem.value = false;
     });
+  }
+
+  void navigateToItemByType(String type) {
+    if (type == '') {
+      Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', 'recent_activities'));
+      fetchLibraryItemsByType(type: '');
+    } else {
+      Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', type));
+      fetchLibraryItemsByType(type: type);
+    }
   }
 
   void navigateToFolder(LibraryItem item) {
@@ -178,6 +214,7 @@ class LibraryController extends GetxController {
     }
   }
 
+  // Refresh data for library and folder screen
   void refreshData() {
     final parentUid = Get.parameters['uid'];
 

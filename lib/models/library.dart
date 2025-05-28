@@ -14,18 +14,13 @@ class GetLibraryItemsQuery {
 
 class GetLibraryItemsByTypeQuery {
   final String search;
-  final ItemType? type;
+  final String type;
   final int page;
   final int limit;
 
-  GetLibraryItemsByTypeQuery({this.search = '', this.type, this.page = 1, this.limit = 12});
+  GetLibraryItemsByTypeQuery({this.search = '', this.type = '', this.page = 1, this.limit = 12});
 
-  Map<String, dynamic> toJson() => {
-    'search': search,
-    'type': type?.toString().split('.').last.toUpperCase(),
-    'page': page,
-    'limit': limit,
-  };
+  Map<String, dynamic> toJson() => {'search': search, 'type': type.toUpperCase(), 'page': page, 'limit': limit};
 }
 
 class CreateLibraryItem {

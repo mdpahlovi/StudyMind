@@ -9,7 +9,7 @@ class LibraryService {
   }
 
   Future<ApiResponse> getLibraryItemsByType(GetLibraryItemsByTypeQuery query) async {
-    return await apiService.get('/library', queryParameters: query.toJson());
+    return await apiService.get('/library/by-type', queryParameters: query.toJson());
   }
 
   Future<ApiResponse> getLibraryItemByUid(String uid) async {

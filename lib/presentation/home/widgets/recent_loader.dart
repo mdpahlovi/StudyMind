@@ -1,39 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:studymind/theme/colors.dart';
 
-class ItemLoader extends StatelessWidget {
-  const ItemLoader({super.key});
+class RecentLoader extends StatefulWidget {
+  final bool isSearch;
+  const RecentLoader({super.key, this.isSearch = false});
 
   @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-          ),
-          itemCount: 12,
-          itemBuilder: (context, index) => const ItemLoaderCard(),
-        ),
-      ],
-    );
-  }
+  State<RecentLoader> createState() => RecentLoaderState();
 }
 
-class ItemLoaderCard extends StatefulWidget {
-  const ItemLoaderCard({super.key});
-
-  @override
-  State<ItemLoaderCard> createState() => ItemLoaderCardState();
-}
-
-class ItemLoaderCardState extends State<ItemLoaderCard> with SingleTickerProviderStateMixin {
+class RecentLoaderState extends State<RecentLoader> with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> animation;
 
@@ -62,11 +38,10 @@ class ItemLoaderCardState extends State<ItemLoaderCard> with SingleTickerProvide
     final ColorPalette colorPalette = AppColors().palette;
 
     return AnimatedBuilder(
-      animation: animation,
+      animation: animationController,
       builder: (context, child) {
         return Container(
-          width: double.infinity,
-          height: double.infinity,
+          height: 92,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             gradient: LinearGradient(

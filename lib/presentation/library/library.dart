@@ -25,18 +25,11 @@ class LibraryScreenState extends State<LibraryScreen> {
         body: Obx(() {
           List<LibraryItem> folderItems = libraryController.folderItems.toList();
 
-          if (libraryController.isLoading.value) return const ItemLoader(isSearch: true);
+          if (libraryController.isLoadingFolder.value) return const ItemLoader();
 
           if (folderItems.isEmpty) return const ItemEmpty();
 
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              TextField(decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search))),
-              const SizedBox(height: 16),
-              ItemGrid(items: folderItems),
-            ],
-          );
+          return ItemGrid(items: folderItems);
         }),
       ),
     );

@@ -42,11 +42,11 @@ class ItemDetailsState extends State<ItemDetails> {
           body: Obx(() {
             List<LibraryItem> folderItems = libraryController.folderItems.toList();
 
-            if (libraryController.isLoading.value) return const ItemLoader();
+            if (libraryController.isLoadingFolder.value) return const ItemLoader();
 
             if (folderItems.isEmpty) return const ItemEmpty();
 
-            return ListView(padding: const EdgeInsets.all(16), children: [ItemGrid(items: folderItems)]);
+            return ItemGrid(items: folderItems);
           }),
           floatingActionButton: FloatingActionButton(
             onPressed: () => Get.bottomSheet(CreateLibraryItems()),

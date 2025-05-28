@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:studymind/controllers/library.dart';
+import 'package:studymind/presentation/library/widgets/item_grid.dart';
+import 'package:studymind/presentation/library/widgets/item_loader.dart';
+import 'package:studymind/widgets/custom_icon.dart';
+
+class ItemByType extends StatelessWidget {
+  const ItemByType({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final LibraryController libraryController = Get.find<LibraryController>();
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final Size size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(icon: CustomIcon(icon: 'arrowLeft', size: 28), onPressed: () => Get.back()),
+        title: Text(
+          Get.parameters['type'] != null ? Get.parameters['type']!.split('_').map((e) => e.capitalize!).join(' ') : "",
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          TextField(decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search))),
+          const SizedBox(height: 16),
+          Obx(() {
+            final List<LibraryItem> libraryItems = libraryController.libraryItems;
+
+            if (libraryController.isLoadingType.value) {
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                ),
+                itemCount: 8,
+                itemBuilder: (context, index) => const ItemLoaderCard(),
+              );
+            }
+
+            if (libraryItems.isEmpty) {
+              return SizedBox(
+                height: size.height * 0.6,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(HugeIcons.strokeRoundedSadDizzy, size: 64),
+                    const SizedBox(height: 16),
+                    Text('Oops! No items found', style: textTheme.bodyMedium),
+                  ],
+                ),
+              );
+            }
+            ;
+
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+              ),
+              itemCount: libraryItems.length,
+              itemBuilder: (context, index) => buildItemCard(context, libraryItems[index]),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+}

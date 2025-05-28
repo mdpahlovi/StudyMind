@@ -6,28 +6,28 @@ import 'package:studymind/presentation/library/widgets/item_type_style.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
-class ItemGrid extends StatefulWidget {
+class ItemGrid extends StatelessWidget {
   final List<LibraryItem> items;
   const ItemGrid({super.key, required this.items});
 
   @override
-  State<ItemGrid> createState() => ItemGridState();
-}
-
-class ItemGridState extends State<ItemGrid> {
-  @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-      ),
-      itemCount: widget.items.length,
-      itemBuilder: (context, index) => buildItemCard(context, widget.items[index]),
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+          ),
+          itemCount: items.length,
+          itemBuilder: (context, index) => buildItemCard(context, items[index]),
+        ),
+      ],
     );
   }
 }
