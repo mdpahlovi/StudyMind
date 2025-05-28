@@ -15,7 +15,7 @@ class ItemCard extends StatefulWidget {
 }
 
 class ItemCardState extends State<ItemCard> {
-  final LibraryController libraryController = Get.put(LibraryController());
+  final LibraryController libraryController = Get.find<LibraryController>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class ItemCardState extends State<ItemCard> {
         onTap: () {
           switch (widget.item.type) {
             case ItemType.folder:
-              libraryController.navigateToFolder(widget.item.uid);
+              libraryController.navigateToFolder(widget.item);
               break;
             default:
               Get.snackbar(

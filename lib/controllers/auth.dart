@@ -93,27 +93,21 @@ class AuthController extends GetxController {
   final RxBool isRegistering = false.obs;
   final RxBool isLoggedIn = false.obs;
 
+  // Check if user is logged in
   void checkAuthStatus() {
-    final accessToken = storageService.get(Key.accessToken);
-    final refreshToken = storageService.get(Key.refreshToken);
-    final currentUser = storageService.get(Key.user);
+    final accessToken = storageService.get(StorageKey.accessToken);
+    final refreshToken = storageService.get(StorageKey.refreshToken);
+    final currentUser = storageService.get(StorageKey.user);
 
     if (accessToken != null && refreshToken != null && currentUser != null) {
       user.value = User.fromJson(jsonDecode(currentUser));
-      isLoggedIn.value = true;
 
-      // Redirect to home after 3 seconds
-      Future.delayed(Duration(milliseconds: 3000), () {
-        isLoading.value = false;
-        Get.offAllNamed(AppRoutes.home);
-      });
+      Get.offAllNamed(AppRoutes.home);
     } else {
-      // Redirect to login after 3 seconds
-      Future.delayed(Duration(milliseconds: 3000), () {
-        isLoading.value = false;
-        Get.offAllNamed(AppRoutes.login);
-      });
+      Get.offAllNamed(AppRoutes.login);
     }
+
+    isLoading.value = false;
   }
 
   // Login method
@@ -128,9 +122,9 @@ class AuthController extends GetxController {
         isLoggedIn.value = true;
 
         // Save user data and token
-        storageService.set(Key.user, jsonEncode(authResponse.user));
-        storageService.set(Key.accessToken, authResponse.accessToken);
-        storageService.set(Key.refreshToken, authResponse.refreshToken);
+        storageService.set(StorageKey.user, jsonEncode(authResponse.user));
+        storageService.set(StorageKey.accessToken, authResponse.accessToken);
+        storageService.set(StorageKey.refreshToken, authResponse.refreshToken);
 
         Notification().success("Welcome back '${authResponse.user.name}'");
         Get.offAllNamed(AppRoutes.home);
@@ -154,9 +148,9 @@ class AuthController extends GetxController {
         isLoggedIn.value = true;
 
         // Save user data and token
-        storageService.set(Key.user, jsonEncode(authResponse.user));
-        storageService.set(Key.accessToken, authResponse.accessToken);
-        storageService.set(Key.refreshToken, authResponse.refreshToken);
+        storageService.set(StorageKey.user, jsonEncode(authResponse.user));
+        storageService.set(StorageKey.accessToken, authResponse.accessToken);
+        storageService.set(StorageKey.refreshToken, authResponse.refreshToken);
 
         Notification().success("Welcome '${authResponse.user.name}'");
         Get.offAllNamed(AppRoutes.home);

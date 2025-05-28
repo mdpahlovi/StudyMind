@@ -24,8 +24,8 @@ class DioService {
   }
 
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final accessToken = await storage.get(Key.accessToken);
-    final refreshToken = await storage.get(Key.refreshToken);
+    final accessToken = await storage.get(StorageKey.accessToken);
+    final refreshToken = await storage.get(StorageKey.refreshToken);
 
     options.headers.putIfAbsent("Content-Type", () => "application/json");
 
@@ -66,16 +66,16 @@ class DioService {
 
   void updateAccessToken(Response<dynamic>? response) {
     final newAccessToken = response?.headers['x-access-token'];
-    final currentAccessToken = storage.get(Key.accessToken);
+    final currentAccessToken = storage.get(StorageKey.accessToken);
 
     if (newAccessToken != null && currentAccessToken != newAccessToken) {
-      storage.set(Key.accessToken, newAccessToken);
+      storage.set(StorageKey.accessToken, newAccessToken);
     }
   }
 
   void handleUnauthorize() {
-    storage.remove(Key.accessToken);
-    storage.remove(Key.refreshToken);
+    storage.remove(StorageKey.accessToken);
+    storage.remove(StorageKey.refreshToken);
 
     Get.offAllNamed(AppRoutes.login);
   }

@@ -21,7 +21,8 @@ class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixi
     super.initState();
     initAnimations();
     startAnimations();
-    authController.checkAuthStatus();
+
+    // authController.checkAuthStatus();
   }
 
   void initAnimations() {

@@ -14,7 +14,7 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class LibraryScreenState extends State<LibraryScreen> {
-  final LibraryController libraryController = Get.put(LibraryController());
+  final LibraryController libraryController = Get.find<LibraryController>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +23,11 @@ class LibraryScreenState extends State<LibraryScreen> {
       child: Scaffold(
         appBar: AppBar(title: const Text('Library'), actions: [NotificationButton()]),
         body: Obx(() {
-          List<LibraryItem> libraryItems = libraryController.libraryItems.toList();
+          List<LibraryItem> folderItems = libraryController.folderItems.toList();
 
           if (libraryController.isLoading.value) return const ItemLoader(isSearch: true);
 
-          if (libraryItems.isEmpty) return const ItemEmpty();
+          if (folderItems.isEmpty) return const ItemEmpty();
 
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -43,8 +43,8 @@ class LibraryScreenState extends State<LibraryScreen> {
                   mainAxisSpacing: 12,
                   crossAxisSpacing: 12,
                 ),
-                itemCount: libraryItems.length,
-                itemBuilder: (context, index) => ItemCard(item: libraryItems[index]),
+                itemCount: folderItems.length,
+                itemBuilder: (context, index) => ItemCard(item: folderItems[index]),
               ),
             ],
           );

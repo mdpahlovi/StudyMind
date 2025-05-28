@@ -15,7 +15,7 @@ class ItemDetails extends StatefulWidget {
 }
 
 class ItemDetailsState extends State<ItemDetails> {
-  final LibraryController libraryController = Get.put(LibraryController());
+  final LibraryController libraryController = Get.find<LibraryController>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +29,21 @@ class ItemDetailsState extends State<ItemDetails> {
               icon: CustomIcon(icon: 'arrowLeft', size: 28),
               onPressed: () => libraryController.navigateToBack(),
             ),
-            title: Obx(() => Text(libraryController.parent.value?.name ?? '')),
+            title: Obx(() {
+              if (libraryController.breadcrumbs.isEmpty) {
+                return const Text('');
+              } else {
+                return Text(libraryController.breadcrumbs.last.name);
+              }
+            }),
             actions: [NotificationButton()],
           ),
           body: Obx(() {
-            List<LibraryItem> libraryItems = libraryController.libraryItems.toList();
+            List<LibraryItem> folderItems = libraryController.folderItems.toList();
 
             if (libraryController.isLoading.value) return const ItemLoader();
 
-            if (libraryItems.isEmpty) return const ItemEmpty();
+            if (folderItems.isEmpty) return const ItemEmpty();
 
             return GridView.builder(
               padding: const EdgeInsets.all(16),
@@ -48,8 +54,8 @@ class ItemDetailsState extends State<ItemDetails> {
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
               ),
-              itemCount: libraryItems.length,
-              itemBuilder: (context, index) => ItemCard(item: libraryItems[index]),
+              itemCount: folderItems.length,
+              itemBuilder: (context, index) => ItemCard(item: folderItems[index]),
             );
           }),
         ),

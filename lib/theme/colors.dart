@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:studymind/controllers/theme.dart';
 
 class ColorPalette {
   final Color primary;
@@ -45,8 +43,6 @@ class ColorPalette {
 }
 
 class AppColors {
-  final ThemeController themeController = Get.find<ThemeController>();
-
   static const light = ColorPalette(
     // Primary color (Electric Blue)
     primary: Color(0xFF2563EB),
@@ -169,6 +165,6 @@ class AppColors {
     border: Color(0xFF242424), // Dark gray border
   );
 
-  ColorPalette get palette => themeController.isDarkMode ? dark : light;
+  ColorPalette get palette => dark;
   ColorPalette getPalette(String mode) => mode == "dark" ? dark : light;
 }

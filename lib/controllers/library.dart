@@ -13,7 +13,6 @@ class LibraryItem {
   final String name;
   final ItemType type;
   final int? parentId;
-  final String? parentUid;
   final int userId;
   final String path;
   final Map<String, dynamic>? metadata;
@@ -28,7 +27,6 @@ class LibraryItem {
     required this.name,
     required this.type,
     this.parentId,
-    this.parentUid,
     required this.userId,
     required this.path,
     this.metadata,
@@ -45,7 +43,6 @@ class LibraryItem {
       name: json['name'],
       type: ItemType.values.firstWhere((e) => e.toString().split('.').last == json['type'].toLowerCase()),
       parentId: json['parentId'],
-      parentUid: json['parentUid'],
       userId: json['userId'],
       path: json['path'],
       metadata: json['metadata'],
@@ -63,7 +60,6 @@ class LibraryItem {
       'name': name,
       'type': type.toString().split('.').last.toUpperCase(),
       'parentId': parentId,
-      'parentUid': parentUid,
       'userId': userId,
       'path': path,
       'metadata': metadata,
@@ -75,15 +71,13 @@ class LibraryItem {
 }
 
 class LibraryResponse {
-  final LibraryItem? parent;
   final List<LibraryItem> libraryItems;
   final int total;
 
-  LibraryResponse({this.parent, required this.libraryItems, required this.total});
+  LibraryResponse({required this.libraryItems, required this.total});
 
   factory LibraryResponse.fromJson(Map<String, dynamic> json) {
     return LibraryResponse(
-      parent: json['parent'] != null ? LibraryItem.fromJson(json['parent']) : null,
       libraryItems: List<LibraryItem>.from(json['libraryItems'].map((x) => LibraryItem.fromJson(x))),
       total: json['total'] ?? 0,
     );
@@ -94,8 +88,8 @@ class LibraryController extends GetxController {
   final libraryService = LibraryService();
 
   final RxBool isLoading = true.obs;
-  final Rxn<LibraryItem> parent = Rxn<LibraryItem>();
-  final RxList<LibraryItem> libraryItems = <LibraryItem>[].obs;
+  final RxList<LibraryItem> folderItems = <LibraryItem>[].obs;
+  final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs;
   final RxInt total = 0.obs;
 
   @override
@@ -107,9 +101,9 @@ class LibraryController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    libraryItems.clear();
-    parent.value = null;
     isLoading.value = true;
+    folderItems.clear();
+    breadcrumbs.clear();
   }
 
   void fetchLibraryItems({String? parentUid}) {
@@ -118,8 +112,7 @@ class LibraryController extends GetxController {
     libraryService.getLibraryItems(GetLibraryItemsQuery(parentUid: parentUid)).then((response) {
       if (response.success && response.data != null) {
         final libraryResponse = LibraryResponse.fromJson(response.data);
-        parent.value = libraryResponse.parent;
-        libraryItems.value = libraryResponse.libraryItems;
+        folderItems.value = libraryResponse.libraryItems;
         total.value = libraryResponse.total;
       } else {
         Notification().error(response.message);
@@ -130,15 +123,23 @@ class LibraryController extends GetxController {
     });
   }
 
-  void navigateToFolder(String uid) {
-    Get.toNamed(AppRoutes.library.replaceFirst(':uid', uid));
-    fetchLibraryItems(parentUid: uid);
+  void navigateToFolder(LibraryItem item) {
+    breadcrumbs.add(item);
+
+    Get.toNamed(AppRoutes.library.replaceFirst(':uid', item.uid));
+    fetchLibraryItems(parentUid: item.uid);
   }
 
   void navigateToBack() {
-    if (parent.value != null) {
+    if (breadcrumbs.isNotEmpty) {
+      breadcrumbs.removeLast();
+
       Get.back();
-      fetchLibraryItems(parentUid: parent.value!.parentUid);
+      if (breadcrumbs.isEmpty) {
+        fetchLibraryItems(parentUid: null);
+      } else {
+        fetchLibraryItems(parentUid: breadcrumbs.last.uid);
+      }
     }
   }
 
@@ -154,14 +155,14 @@ class LibraryController extends GetxController {
 
   Map<String, int> getFolderStats() {
     return {
-      'Total Items': libraryItems.length,
-      'Folders': libraryItems.where((item) => item.type == ItemType.folder).length,
-      'Notes': libraryItems.where((item) => item.type == ItemType.note).length,
-      'Documents': libraryItems.where((item) => item.type == ItemType.document).length,
-      'Flashcards': libraryItems.where((item) => item.type == ItemType.flashcard).length,
-      'Audios': libraryItems.where((item) => item.type == ItemType.audio).length,
-      'Videos': libraryItems.where((item) => item.type == ItemType.video).length,
-      'Images': libraryItems.where((item) => item.type == ItemType.image).length,
+      'Total Items': folderItems.length,
+      'Folders': folderItems.where((item) => item.type == ItemType.folder).length,
+      'Notes': folderItems.where((item) => item.type == ItemType.note).length,
+      'Documents': folderItems.where((item) => item.type == ItemType.document).length,
+      'Flashcards': folderItems.where((item) => item.type == ItemType.flashcard).length,
+      'Audios': folderItems.where((item) => item.type == ItemType.audio).length,
+      'Videos': folderItems.where((item) => item.type == ItemType.video).length,
+      'Images': folderItems.where((item) => item.type == ItemType.image).length,
     };
   }
 }
