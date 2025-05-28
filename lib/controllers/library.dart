@@ -88,6 +88,7 @@ class LibraryController extends GetxController {
   final libraryService = LibraryService();
 
   final RxBool isLoading = true.obs;
+  final Rxn<LibraryItem> libraryItem = Rxn<LibraryItem>();
   final RxList<LibraryItem> folderItems = <LibraryItem>[].obs;
   final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs;
   final RxInt total = 0.obs;
@@ -102,6 +103,7 @@ class LibraryController extends GetxController {
   void onClose() {
     super.onClose();
     isLoading.value = true;
+    libraryItem.value = null;
     folderItems.clear();
     breadcrumbs.clear();
   }
@@ -114,6 +116,39 @@ class LibraryController extends GetxController {
         final libraryResponse = LibraryResponse.fromJson(response.data);
         folderItems.value = libraryResponse.libraryItems;
         total.value = libraryResponse.total;
+      } else {
+        Notification().error(response.message);
+        Get.back();
+      }
+
+      isLoading.value = false;
+    });
+  }
+
+  void fetchLibraryItemsByType({String search = '', ItemType? type}) {
+    isLoading.value = true;
+
+    libraryService.getLibraryItemsByType(GetLibraryItemsByTypeQuery(search: search, type: type)).then((response) {
+      if (response.success && response.data != null) {
+        final libraryResponse = LibraryResponse.fromJson(response.data);
+        folderItems.value = libraryResponse.libraryItems;
+        total.value = libraryResponse.total;
+      } else {
+        Notification().error(response.message);
+        Get.back();
+      }
+
+      isLoading.value = false;
+    });
+  }
+
+  void fetchLibraryItemByUid(String uid) {
+    isLoading.value = true;
+
+    libraryService.getLibraryItemByUid(uid).then((response) {
+      if (response.success && response.data != null) {
+        final fetchedItem = LibraryItem.fromJson(response.data);
+        libraryItem.value = fetchedItem;
       } else {
         Notification().error(response.message);
         Get.back();

@@ -23,7 +23,6 @@ class LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
 
   @override
   void initState() {
@@ -34,7 +33,6 @@ class LoginScreenState extends State<LoginScreen> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -48,33 +46,33 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final EdgeInsets paddings = MediaQuery.of(context).padding;
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          height: size.height,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [colorPalette.primary, colorPalette.secondary],
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [colorPalette.primary, colorPalette.secondary],
           ),
-          child: SafeArea(
-            child: Form(
-              key: formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Intro Section
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: size.height - paddings.top - paddings.bottom),
+              child: Form(
+                key: formKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      // Intro Section
+                      Column(
                         children: [
+                          const SizedBox(height: 16),
                           Container(
                             width: 80,
                             height: 80,
@@ -93,97 +91,98 @@ class LoginScreenState extends State<LoginScreen> {
                                 TextSpan(text: 'Don\'t have an account?', style: textTheme.bodyMedium),
                                 TextSpan(
                                   text: ' Register',
-                                  style: textTheme.bodyMedium,
+                                  style: textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline),
                                   recognizer: TapGestureRecognizer()..onTap = () => Get.toNamed(AppRoutes.register),
                                 ),
                               ],
                             ),
                             textAlign: TextAlign.center,
                           ),
+                          const SizedBox(height: 40),
                         ],
                       ),
-                    ),
-                    // Form Container
-                    const SizedBox(height: 20),
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: colorPalette.background,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // Email Field
-                          CustomTextField(
-                            controller: emailController,
-                            label: 'Email',
-                            prefixIcon: 'mail',
-                            keyboardType: TextInputType.emailAddress,
-                            validator: Validators.validateEmail,
-                          ),
-                          const SizedBox(height: 16),
-                          // Password Field
-                          CustomTextField(
-                            controller: passwordController,
-                            label: 'Password',
-                            prefixIcon: 'lock',
-                            isPassword: true,
-                            validator: Validators.validatePassword,
-                          ),
-                          const SizedBox(height: 16),
-                          // Confirm Password Field
-                          CustomTextField(
-                            controller: confirmPasswordController,
-                            label: 'Confirm Password',
-                            prefixIcon: 'lock',
-                            isPassword: true,
-                            validator: (value) => Validators.validateConfirmPassword(value, passwordController.text),
-                          ),
-                          const SizedBox(height: 20),
-                          // Forgot Password
-                          InkWell(
-                            onTap: () => Get.toNamed(AppRoutes.forgotPassword),
-                            child: Text(
-                              'Forgot Password?',
-                              style: textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline),
-                              textAlign: TextAlign.right,
+                      // Form Container
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: colorPalette.background,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Email Field
+                            CustomTextField(
+                              controller: emailController,
+                              label: 'Email',
+                              prefixIcon: 'mail',
+                              keyboardType: TextInputType.emailAddress,
+                              validator: Validators.validateEmail,
                             ),
-                          ),
-                          const SizedBox(height: 24),
-                          // Login Button
-                          Obx(
-                            () => CustomButton(
-                              text: 'Login',
-                              isLoading: authController.isLogging.value,
-                              onPressed: handleLogin,
+                            const SizedBox(height: 16),
+                            // Password Field
+                            CustomTextField(
+                              controller: passwordController,
+                              label: 'Password',
+                              prefixIcon: 'lock',
+                              isPassword: true,
+                              validator: Validators.validatePassword,
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          // Divider
-                          Row(
-                            children: [
-                              Expanded(child: Divider(color: colorPalette.border)),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: Text('or continue with', style: textTheme.labelSmall),
+                            const SizedBox(height: 16),
+                            // Forgot Password
+                            InkWell(
+                              onTap: () => Get.toNamed(AppRoutes.forgotPassword),
+                              child: Text(
+                                'Forgot Password?',
+                                style: textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline),
+                                textAlign: TextAlign.right,
                               ),
-                              Expanded(child: Divider(color: colorPalette.border)),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          // Social Login Buttons
-                          Row(
-                            children: [
-                              Expanded(child: SocialButton(text: 'Google', color: Colors.red, onPressed: () {})),
-                              const SizedBox(width: 16),
-                              Expanded(child: SocialButton(text: 'Facebook', color: Colors.blue, onPressed: () {})),
-                            ],
-                          ),
-                        ],
+                            ),
+                            const SizedBox(height: 20),
+                            // Login Button
+                            Obx(
+                              () => CustomButton(
+                                text: 'Login',
+                                isLoading: authController.isLogging.value,
+                                onPressed: handleLogin,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            // Divider
+                            Row(
+                              children: [
+                                Expanded(child: Divider(color: colorPalette.border)),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text('or continue with', style: textTheme.labelSmall),
+                                ),
+                                Expanded(child: Divider(color: colorPalette.border)),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            // Social Login Buttons
+                            SocialButton(
+                              text: 'Google',
+                              color: Colors.red,
+                              onPressed: () {
+                                // Handle Google login
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            SocialButton(
+                              text: 'Facebook',
+                              color: Colors.blue,
+                              onPressed: () {
+                                // Handle Facebook login
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

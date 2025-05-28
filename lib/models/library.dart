@@ -7,9 +7,25 @@ class GetLibraryItemsQuery {
   final int limit;
   final String? parentUid;
 
-  GetLibraryItemsQuery({this.page = 1, this.limit = 10, this.parentUid});
+  GetLibraryItemsQuery({this.page = 1, this.limit = 12, this.parentUid});
 
   Map<String, dynamic> toJson() => {'page': page, 'limit': limit, 'parentUid': parentUid};
+}
+
+class GetLibraryItemsByTypeQuery {
+  final String search;
+  final ItemType? type;
+  final int page;
+  final int limit;
+
+  GetLibraryItemsByTypeQuery({this.search = '', this.type, this.page = 1, this.limit = 12});
+
+  Map<String, dynamic> toJson() => {
+    'search': search,
+    'type': type?.toString().split('.').last.toUpperCase(),
+    'page': page,
+    'limit': limit,
+  };
 }
 
 class CreateLibraryItem {

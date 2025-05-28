@@ -132,8 +132,8 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Recent Activity', style: textTheme.headlineMedium),
-                    GestureDetector(
-                      onTap: () => Get.toNamed(AppRoutes.login),
+                    TextButton(
+                      onPressed: () => Get.toNamed(AppRoutes.login),
                       child: Text('View All', style: textTheme.labelMedium?.copyWith(color: colorPalette.primary)),
                     ),
                   ],
