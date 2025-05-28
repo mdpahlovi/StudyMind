@@ -6,6 +6,8 @@ class CommunityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Community'), actions: [NotificationButton()]),
       body: ListView(
@@ -17,14 +19,14 @@ class CommunityScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Welcome to StudyMind Community',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
+                  Text('Welcome to StudyMind Community', style: textTheme.headlineLarge),
                   const SizedBox(height: 8),
-                  const Text('Connect with fellow learners and share your knowledge', style: TextStyle(fontSize: 16)),
+                  Text(
+                    'Connect with fellow learners and share your knowledge. Join our community to get started!',
+                    style: textTheme.bodyMedium,
+                  ),
                   const SizedBox(height: 16),
-                  ElevatedButton(onPressed: () {}, child: const Text('Join Discussion')),
+                  ElevatedButton(onPressed: () {}, child: Text('Join Discussion', style: textTheme.titleMedium)),
                 ],
               ),
             ),

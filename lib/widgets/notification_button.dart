@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:studymind/routes/routes.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
 class NotificationButton extends StatelessWidget {
@@ -6,6 +8,9 @@ class NotificationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(onPressed: () {}, icon: const CustomIcon(icon: 'notification'));
+    return IconButton(
+      onPressed: () => Get.toNamed(AppRoutes.notification),
+      icon: const CustomIcon(icon: 'notification'),
+    );
   }
 }

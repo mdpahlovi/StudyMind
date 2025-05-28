@@ -10,6 +10,7 @@ import 'package:studymind/presentation/library/widgets/item_details.dart';
 import 'package:studymind/presentation/login/login.dart';
 import 'package:studymind/presentation/media/media.dart';
 import 'package:studymind/presentation/note/note.dart';
+import 'package:studymind/presentation/notification/notification.dart';
 import 'package:studymind/presentation/register/register.dart';
 import 'package:studymind/presentation/splash_screen/splash_screen.dart';
 
@@ -25,6 +26,7 @@ class AppRoutes {
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
+  static const String notification = '/notification';
 
   List<GetPage<dynamic>> routes = [
     GetPage(
@@ -92,6 +94,12 @@ class AppRoutes {
     GetPage(
       name: forgotPassword,
       page: () => const ForgotPasswordScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: notification,
+      page: () => const NotificationScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
