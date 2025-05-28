@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -6,8 +8,16 @@ import 'package:studymind/presentation/library/widgets/item_grid.dart';
 import 'package:studymind/presentation/library/widgets/item_loader.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
-class ItemByType extends StatelessWidget {
+class ItemByType extends StatefulWidget {
   const ItemByType({super.key});
+
+  @override
+  State<ItemByType> createState() => ItemByTypeState();
+}
+
+class ItemByTypeState extends State<ItemByType> {
+  late String searchQuery;
+  Timer? debounce;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +35,23 @@ class ItemByType extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          TextField(decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search))),
+          TextField(
+            onChanged:
+                (value) => setState(() {
+                  searchQuery = value;
+                  if (debounce?.isActive ?? false) debounce?.cancel();
+                  debounce = Timer(const Duration(milliseconds: 500), () {
+                    final type = Get.parameters['type'];
+
+                    if (type == 'recent_activities') {
+                      libraryController.fetchLibraryItemsByType(search: searchQuery, type: '');
+                    } else if (type != null) {
+                      libraryController.fetchLibraryItemsByType(search: searchQuery, type: type);
+                    }
+                  });
+                }),
+            decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search)),
+          ),
           const SizedBox(height: 16),
           Obx(() {
             final List<LibraryItem> libraryItems = libraryController.libraryItems;

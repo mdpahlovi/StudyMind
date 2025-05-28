@@ -15,19 +15,19 @@ class ItemTypeStyle {
   TypeStyle get decoration {
     switch (type) {
       case ItemType.folder:
-        return TypeStyle(color: Color(0xFF606C38), icon: 'folder');
+        return TypeStyle(color: Color(0xFFA8C686), icon: 'folder');
       case ItemType.note:
-        return TypeStyle(color: Color(0xFF283618), icon: 'note');
+        return TypeStyle(color: Color(0xFF7D9B5F), icon: 'note');
       case ItemType.document:
-        return TypeStyle(color: Color(0xFFFEFAE0), icon: 'document');
+        return TypeStyle(color: Color(0xFFF5F5DC), icon: 'document');
       case ItemType.flashcard:
-        return TypeStyle(color: Color(0xFF588157), icon: 'flashcard');
+        return TypeStyle(color: Color(0xFF8FBC8F), icon: 'flashcard');
       case ItemType.audio:
-        return TypeStyle(color: Color(0xFFDDA15E), icon: 'audio');
+        return TypeStyle(color: Color(0xFFE6C79C), icon: 'audio');
       case ItemType.video:
-        return TypeStyle(color: Color(0xFFDDA15E), icon: 'video');
+        return TypeStyle(color: Color(0xFFE6C79C), icon: 'video');
       case ItemType.image:
-        return TypeStyle(color: Color(0xFFDDA15E), icon: 'image');
+        return TypeStyle(color: Color(0xFFE6C79C), icon: 'image');
     }
   }
 }

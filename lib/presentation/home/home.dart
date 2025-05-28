@@ -20,10 +20,10 @@ class HomeScreen extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     final List<Map<String, dynamic>> actionButtons = [
-      {'title': "Notes", 'icon': "note", 'color': colorPalette.primary, 'type': 'note'},
-      {'title': "Documents", 'icon': "document", 'color': colorPalette.info, 'type': 'document'},
-      {'title': "Flashcards", 'icon': "flashcard", 'color': colorPalette.warning, 'type': 'flashcard'},
-      {'title': "Medias", 'icon': "media", 'color': colorPalette.secondary, 'type': 'media'},
+      {'title': "Notes", 'icon': "note", 'color': Color(0xFF7D9B5F), 'type': 'note'},
+      {'title': "Documents", 'icon': "document", 'color': Color(0xFFF5F5DC), 'type': 'document'},
+      {'title': "Flashcards", 'icon': "flashcard", 'color': Color(0xFF8FBC8F), 'type': 'flashcard'},
+      {'title': "Medias", 'icon': "media", 'color': Color(0xFFE6C79C), 'type': 'media'},
     ];
 
     final List<Map<String, dynamic>> suggestedContent = [

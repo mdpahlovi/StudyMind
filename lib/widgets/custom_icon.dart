@@ -37,6 +37,9 @@ class CustomIcon extends StatelessWidget {
       'viewOff': HugeIcons.strokeRoundedViewOff,
       'google': HugeIcons.strokeRoundedGoogle,
       'facebook': HugeIcons.strokeRoundedFacebook01,
+      'audio': HugeIcons.strokeRoundedAiAudio,
+      'video': HugeIcons.strokeRoundedAiVideo,
+      'image': HugeIcons.strokeRoundedAiImage,
     };
 
     if (iconMap.containsKey(icon)) {
