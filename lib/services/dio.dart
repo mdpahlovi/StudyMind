@@ -16,7 +16,7 @@ class DioService {
   }
 
   void initializeDio() {
-    dio.options.baseUrl = 'http://192.168.79.42:4000/api/v1';
+    dio.options.baseUrl = 'https://studymind.onrender.com/api/v1';
     dio.options.connectTimeout = const Duration(seconds: 60);
     dio.options.receiveTimeout = const Duration(seconds: 60);
 

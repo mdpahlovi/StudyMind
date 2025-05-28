@@ -13,7 +13,7 @@ import 'package:studymind/presentation/register/register.dart';
 import 'package:studymind/presentation/splash_screen/splash_screen.dart';
 
 class AppRoutes {
-  static const String splashScreen = '/';
+  static const String splashScreen = '/splash';
   static const String home = '/home';
   static const String document = '/document';
   static const String note = '/note';

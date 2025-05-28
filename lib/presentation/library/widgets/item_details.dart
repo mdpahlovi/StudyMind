@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/presentation/library/widgets/item_card.dart';
 import 'package:studymind/presentation/library/widgets/item_empty.dart';
+import 'package:studymind/presentation/library/widgets/item_grid.dart';
 import 'package:studymind/presentation/library/widgets/item_loader.dart';
+import 'package:studymind/widgets/create_library_items.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/notification_button.dart';
 
@@ -45,19 +46,12 @@ class ItemDetailsState extends State<ItemDetails> {
 
             if (folderItems.isEmpty) return const ItemEmpty();
 
-            return GridView.builder(
-              padding: const EdgeInsets.all(16),
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-              ),
-              itemCount: folderItems.length,
-              itemBuilder: (context, index) => ItemCard(item: folderItems[index]),
-            );
+            return ListView(padding: const EdgeInsets.all(16), children: [ItemGrid(items: folderItems)]);
           }),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => Get.bottomSheet(CreateLibraryItems()),
+            child: CustomIcon(icon: 'add', size: 24),
+          ),
         ),
       ),
     );

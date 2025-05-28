@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:studymind/layouts/widgets/create_option.dart';
 import 'package:studymind/presentation/community/community.dart';
 import 'package:studymind/presentation/home/home.dart';
 import 'package:studymind/presentation/library/library.dart';
 import 'package:studymind/presentation/profile/profile.dart';
-import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
+import 'package:studymind/widgets/create_library_items.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
 class MainLayout extends StatefulWidget {
@@ -23,7 +22,6 @@ class MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
-    final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       body: screens[currentIndex],
@@ -55,53 +53,7 @@ class MainLayoutState extends State<MainLayout> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.bottomSheet(
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              decoration: BoxDecoration(
-                color: colorPalette.background,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("Create", style: textTheme.titleMedium),
-                  SizedBox(height: 12),
-                  CreateOption(onTap: () {}, title: "New Folder", icon: "folder", color: colorPalette.primary),
-                  SizedBox(height: 12),
-                  CreateOption(
-                    onTap: () => Get.toNamed(AppRoutes.note),
-                    title: "New Note",
-                    icon: "noteEdit",
-                    color: colorPalette.primary,
-                  ),
-                  SizedBox(height: 12),
-                  CreateOption(
-                    onTap: () => Get.toNamed(AppRoutes.document),
-                    title: "Scan Document",
-                    icon: "documentScanner",
-                    color: colorPalette.info,
-                  ),
-                  SizedBox(height: 12),
-                  CreateOption(
-                    onTap: () => Get.toNamed(AppRoutes.flashcard),
-                    title: "Create Flashcard",
-                    icon: "flashcard",
-                    color: colorPalette.warning,
-                  ),
-                  SizedBox(height: 12),
-                  CreateOption(
-                    onTap: () => Get.toNamed(AppRoutes.media),
-                    title: "Upload Media",
-                    icon: "upload",
-                    color: colorPalette.secondary,
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+        onPressed: () => Get.bottomSheet(CreateLibraryItems()),
         child: CustomIcon(icon: 'add', size: 24),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

@@ -201,5 +201,6 @@ class AppTheme {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
     ),
+    dividerTheme: DividerThemeData(space: 0, thickness: 1, color: colorPalette.border),
   );
 }

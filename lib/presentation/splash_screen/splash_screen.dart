@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/auth.dart';
+import 'package:studymind/core/logger.dart';
 import 'package:studymind/theme/colors.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -11,10 +12,10 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+  final AuthController authController = Get.find<AuthController>();
+
   late Animation<double> rotateAnimation;
   late AnimationController rotateController;
-
-  final AuthController authController = Get.find<AuthController>();
 
   @override
   void initState() {
@@ -68,17 +69,23 @@ class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixi
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 160,
-                        height: 160,
-                        decoration: BoxDecoration(
-                          color: colorPalette.white.withAlpha(50),
-                          borderRadius: BorderRadius.circular(30),
-                          boxShadow: [
-                            BoxShadow(color: colorPalette.black.withAlpha(25), blurRadius: 20, offset: Offset(0, 10)),
-                          ],
+                      InkWell(
+                        onTap: () {
+                          logger.i('SplashScreen: onTap');
+                          authController.checkAuthStatus();
+                        },
+                        child: Container(
+                          width: 160,
+                          height: 160,
+                          decoration: BoxDecoration(
+                            color: colorPalette.white.withAlpha(50),
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(color: colorPalette.black.withAlpha(25), blurRadius: 20, offset: Offset(0, 10)),
+                            ],
+                          ),
+                          child: Icon(Icons.school_rounded, size: 80, color: Colors.white),
                         ),
-                        child: Icon(Icons.school_rounded, size: 80, color: Colors.white),
                       ),
                       SizedBox(height: 36),
                       // App Title

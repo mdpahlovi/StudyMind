@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/presentation/library/widgets/item_card.dart';
+import 'package:studymind/presentation/library/widgets/item_grid.dart';
 import 'package:studymind/presentation/library/widgets/item_empty.dart';
 import 'package:studymind/presentation/library/widgets/item_loader.dart';
 import 'package:studymind/widgets/notification_button.dart';
@@ -34,18 +34,7 @@ class LibraryScreenState extends State<LibraryScreen> {
             children: [
               TextField(decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search))),
               const SizedBox(height: 16),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                ),
-                itemCount: folderItems.length,
-                itemBuilder: (context, index) => ItemCard(item: folderItems[index]),
-              ),
+              ItemGrid(items: folderItems),
             ],
           );
         }),

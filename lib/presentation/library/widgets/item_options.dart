@@ -18,23 +18,42 @@ class ItemOptionsState extends State<ItemOptions> {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final TypeStyle typeStyle = ItemTypeStyle(type: widget.item.type).decoration;
+    final EdgeInsets paddings = MediaQuery.of(context).viewInsets;
 
     return Container(
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: colorPalette.background,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
       child: Column(
         children: [
-          Row(
-            children: [
-              CustomIcon(icon: typeStyle.icon, size: 24),
-              const SizedBox(width: 6),
-              Text(widget.item.name, style: textTheme.titleMedium),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                CustomIcon(icon: typeStyle.icon, size: 24),
+                const SizedBox(width: 6),
+                Text(widget.item.name, style: textTheme.headlineMedium),
+              ],
+            ),
           ),
-          Expanded(child: Center(child: Text('What is this?', style: textTheme.bodySmall))),
+          Divider(),
+          Flexible(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(left: 12, right: 12, bottom: paddings.bottom),
+              child: Column(
+                children: [
+                  const SizedBox(height: 12),
+                  Text('What is this?', style: textTheme.titleMedium),
+                  const SizedBox(height: 12),
+                  Text(
+                    'This is a ${widget.item.type.toString().split('.').last.toUpperCase()} item',
+                    style: textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
