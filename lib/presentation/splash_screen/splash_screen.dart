@@ -47,7 +47,7 @@ class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    final ColorPalette colorPalette = AppColors().palette;
+    final ColorPalette colorPalette = AppColors.dark;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -84,7 +84,10 @@ class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixi
                               BoxShadow(color: colorPalette.black.withAlpha(25), blurRadius: 20, offset: Offset(0, 10)),
                             ],
                           ),
-                          child: Icon(Icons.school_rounded, size: 80, color: Colors.white),
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Image.asset('assets/images/logo.png'),
+                          ),
                         ),
                       ),
                       SizedBox(height: 36),
@@ -154,7 +157,10 @@ class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixi
                     ),
                     SizedBox(height: 48),
                     // Bottom Brand Text
-                    Text('Powered by AI Technology', style: textTheme.bodySmall),
+                    Text(
+                      'Copyright© ${DateTime.now().year} StudyMind',
+                      style: textTheme.bodySmall?.copyWith(color: colorPalette.content),
+                    ),
                   ],
                 ),
               ),

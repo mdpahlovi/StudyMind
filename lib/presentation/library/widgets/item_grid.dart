@@ -45,25 +45,30 @@ class ItemCard extends StatelessWidget {
     final TypeStyle typeStyle = ItemTypeStyle(type: item.type).decoration;
 
     return Obx(() {
-      final isSelected = libraryController.selectedItems.contains(item);
+      final selectedItems = libraryController.selectedItems;
+      final isSelected = selectedItems.contains(item);
 
       return Card(
         color: isSelected ? colorPalette.content.withAlpha(26) : colorPalette.surface,
         child: InkWell(
           onTap: () {
-            switch (item.type) {
-              case ItemType.folder:
-                libraryController.navigateToFolder(item);
-                break;
-              default:
-                Get.snackbar(
-                  'Work in progress',
-                  "Item type '${item.type.toString().split('.').last.toUpperCase()}' is not supported",
-                );
-                break;
+            if (selectedItems.isEmpty) {
+              libraryController.navigateToFolder(item);
+            } else {
+              if (isSelected) {
+                selectedItems.remove(item);
+              } else {
+                selectedItems.add(item);
+              }
             }
           },
-          onLongPress: () => libraryController.selectedItems.add(item),
+          onLongPress: () {
+            if (isSelected) {
+              selectedItems.remove(item);
+            } else {
+              selectedItems.add(item);
+            }
+          },
           child: Padding(
             padding: const EdgeInsets.all(6),
             child: Column(
@@ -90,7 +95,7 @@ class ItemCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    isSelected
+                    selectedItems.isNotEmpty
                         ? Container(
                           margin: const EdgeInsets.all(6),
                           width: 24,
@@ -101,11 +106,12 @@ class ItemCard extends StatelessWidget {
                           ),
                           child: InkWell(
                             borderRadius: BorderRadius.circular(12),
-                            onTap: () => libraryController.selectedItems.remove(item),
-                            child: CustomIcon(icon: 'tick', size: 16),
+                            onTap: () => isSelected ? selectedItems.remove(item) : selectedItems.add(item),
+                            child: isSelected ? const CustomIcon(icon: 'tick', size: 16) : const SizedBox(),
                           ),
                         )
-                        : Container(
+                        : // Three dot menu button
+                        Container(
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(shape: BoxShape.circle),

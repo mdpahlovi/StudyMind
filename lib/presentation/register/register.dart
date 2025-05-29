@@ -47,7 +47,7 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorPalette colorPalette = AppColors().palette;
+    final ColorPalette colorPalette = AppColors.dark;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final EdgeInsets paddings = MediaQuery.of(context).padding;
     final Size size = MediaQuery.of(context).size;
@@ -58,7 +58,8 @@ class RegisterScreenState extends State<RegisterScreen> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [colorPalette.primary, colorPalette.secondary],
+            colors: [colorPalette.primary, colorPalette.secondary, colorPalette.tertiary],
+            stops: [0.0, 0.5, 1.0],
           ),
         ),
         child: SafeArea(

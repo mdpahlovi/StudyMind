@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
 class SocialButton extends StatelessWidget {
@@ -11,7 +10,6 @@ class SocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Container(
@@ -20,8 +18,9 @@ class SocialButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          side: BorderSide(color: colorPalette.border),
+          side: BorderSide(color: color.withAlpha(128)),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: color.withAlpha(26),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -16,9 +16,17 @@ PreferredSizeWidget buildItemAppBar() {
     leading: Obx(() {
       final selectedItems = libraryController.selectedItems;
 
-      return selectedItems.isEmpty
-          ? const CustomBackButton()
-          : IconButton(icon: const CustomIcon(icon: 'cancel', size: 28), onPressed: () => selectedItems.clear());
+      if (selectedItems.isEmpty) {
+        if (Get.currentRoute == AppRoutes.home) {
+          return SizedBox();
+        } else if (Get.currentRoute.contains('/item_by_type')) {
+          return CustomBackButton();
+        } else {
+          return CustomBackButton(onPressed: libraryController.navigateToBack);
+        }
+      } else {
+        return IconButton(icon: const CustomIcon(icon: 'cancel', size: 28), onPressed: () => selectedItems.clear());
+      }
     }),
     title: Obx(() {
       final breadcrumbs = libraryController.breadcrumbs;
@@ -33,14 +41,23 @@ PreferredSizeWidget buildItemAppBar() {
           return Text(breadcrumbs.last.name);
         }
       } else {
-        return Text('${selectedItems.length} Items');
+        return Text('${selectedItems.length}  items');
       }
     }),
     actions: [
       Obx(() {
         final selectedItems = libraryController.selectedItems;
+        final libraryItemByType = libraryController.libraryItems;
+        final libraryItemsByFolder = libraryController.folderItems;
 
         if (selectedItems.isEmpty) return NotificationButton();
+
+        final List<LibraryItem> libraryItems = [];
+        if (Get.currentRoute.contains('/item_by_type')) {
+          libraryItems.addAll(libraryItemByType);
+        } else {
+          libraryItems.addAll(libraryItemsByFolder);
+        }
 
         return Row(
           mainAxisSize: MainAxisSize.min,
@@ -53,7 +70,21 @@ PreferredSizeWidget buildItemAppBar() {
                   shape: BoxShape.circle,
                   border: Border.all(width: 2, color: colorPalette.content),
                 ),
-                child: CustomIcon(icon: 'tick', size: 16),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () {
+                    if (libraryItems.length == selectedItems.length) {
+                      selectedItems.clear();
+                    } else {
+                      selectedItems.clear();
+                      selectedItems.addAll(libraryItems);
+                    }
+                  },
+                  child:
+                      libraryItems.length == selectedItems.length
+                          ? const CustomIcon(icon: 'tick', size: 16)
+                          : const SizedBox(),
+                ),
               ),
               onPressed: () => Get.bottomSheet(ItemOptions()),
             ),

@@ -41,6 +41,7 @@ class CustomIcon extends StatelessWidget {
       'video': HugeIcons.strokeRoundedAiVideo,
       'image': HugeIcons.strokeRoundedAiImage,
       'tick': HugeIcons.strokeRoundedTick01,
+      'cancel': Icons.close,
     };
 
     if (iconMap.containsKey(icon)) {

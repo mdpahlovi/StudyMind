@@ -8,6 +8,8 @@ class CustomBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(icon: const CustomIcon(icon: 'arrowLeft', size: 28), onPressed: onPressed ?? () => Get.back());
+    return Center(
+      child: IconButton(icon: const CustomIcon(icon: 'arrowLeft', size: 28), onPressed: onPressed ?? () => Get.back()),
+    );
   }
 }
