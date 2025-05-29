@@ -40,6 +40,7 @@ class CustomIcon extends StatelessWidget {
       'audio': HugeIcons.strokeRoundedAiAudio,
       'video': HugeIcons.strokeRoundedAiVideo,
       'image': HugeIcons.strokeRoundedAiImage,
+      'tick': HugeIcons.strokeRoundedTick01,
     };
 
     if (iconMap.containsKey(icon)) {

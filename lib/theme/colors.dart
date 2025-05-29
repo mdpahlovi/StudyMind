@@ -7,6 +7,8 @@ class ColorPalette {
   final Map<int, Color> secondaryShades;
   final Color tertiary;
   final Map<int, Color> tertiaryShades;
+  final Color accent;
+  final Map<int, Color> accentShades;
 
   final Color white;
   final Color black;
@@ -28,6 +30,8 @@ class ColorPalette {
     required this.secondaryShades,
     required this.tertiary,
     required this.tertiaryShades,
+    required this.accent,
+    required this.accentShades,
     required this.white,
     required this.black,
     required this.success,
@@ -44,49 +48,64 @@ class ColorPalette {
 
 class AppColors {
   static const light = ColorPalette(
-    // Primary color (Electric Blue)
-    primary: Color(0xFF2563EB),
+    // Primary color
+    primary: Color(0xFF7D9B5F),
     primaryShades: {
-      50: Color(0xFFEFF6FF),
-      100: Color(0xFFDBEAFE),
-      200: Color(0xFFBFDBFE),
-      300: Color(0xFF93C5FD),
-      400: Color(0xFF60A5FA),
-      500: Color(0xFF3B82F6),
-      600: Color(0xFF2563EB), // Main primary color
-      700: Color(0xFF1D4ED8),
-      800: Color(0xFF1E40AF),
-      900: Color(0xFF1E3A8A),
+      50: Color(0xFFF6F8F3),
+      100: Color(0xFFEBF0E3),
+      200: Color(0xFFD6E1C7),
+      300: Color(0xFFB8CA9F),
+      400: Color(0xFF9BB377),
+      500: Color(0xFF7D9B5F), // Main primary color
+      600: Color(0xFF6B8350),
+      700: Color(0xFF596B42),
+      800: Color(0xFF475436),
+      900: Color(0xFF3A442C),
     },
 
-    // Secondary color (Vibrant Purple)
-    secondary: Color(0xFF7C3AED),
+    // Secondary color
+    secondary: Color(0xFFA8C686),
     secondaryShades: {
-      50: Color(0xFFF5F3FF),
-      100: Color(0xFFEDE9FE),
-      200: Color(0xFFDDD6FE),
-      300: Color(0xFFC4B5FD),
-      400: Color(0xFFA78BFA),
-      500: Color(0xFF8B5CF6),
-      600: Color(0xFF7C3AED), // Main secondary color
-      700: Color(0xFF6D28D9),
-      800: Color(0xFF5B21B6),
-      900: Color(0xFF4C1D95),
+      50: Color(0xFFF8FAF5),
+      100: Color(0xFFF0F4E9),
+      200: Color(0xFFE1E9D3),
+      300: Color(0xFFCDD8B8),
+      400: Color(0xFFB8CA9F),
+      500: Color(0xFFA8C686), // Main secondary color
+      600: Color(0xFF8FA872),
+      700: Color(0xFF76895E),
+      800: Color(0xFF5E6B4C),
+      900: Color(0xFF4C553C),
     },
 
-    // Tertiary color (Hot Pink/Magenta)
-    tertiary: Color(0xFFEC4899),
+    // Tertiary color
+    tertiary: Color(0xFFE6C79C),
     tertiaryShades: {
-      50: Color(0xFFFDF2F8),
-      100: Color(0xFFFCE7F3),
-      200: Color(0xFFFBCFE8),
-      300: Color(0xFFF9A8D4),
-      400: Color(0xFFF472B6),
-      500: Color(0xFFEC4899), // Main tertiary color
-      600: Color(0xFFDB2777),
-      700: Color(0xFFBE185D),
-      800: Color(0xFF9D174D),
-      900: Color(0xFF831843),
+      50: Color(0xFFFDF9F4),
+      100: Color(0xFFFAF2E7),
+      200: Color(0xFFF4E4CE),
+      300: Color(0xFFEDD5B5),
+      400: Color(0xFFE6C79C), // Main tertiary color
+      500: Color(0xFFDFB883),
+      600: Color(0xFFD8A96A),
+      700: Color(0xFFBF9456),
+      800: Color(0xFF9C7844),
+      900: Color(0xFF7A5C35),
+    },
+
+    // Accent color
+    accent: Color(0xFFF5F5DC),
+    accentShades: {
+      50: Color(0xFFFFFFFE),
+      100: Color(0xFFFEFEF8),
+      200: Color(0xFFFDFDF0),
+      300: Color(0xFFF9F9E8),
+      400: Color(0xFFF7F7E2),
+      500: Color(0xFFF5F5DC), // Main accent color
+      600: Color(0xFFEAEAC4),
+      700: Color(0xFFDFDFAC),
+      800: Color(0xFFD4D494),
+      900: Color(0xFFC9C97C),
     },
 
     // Utility colors
@@ -105,49 +124,64 @@ class AppColors {
   );
 
   static const dark = ColorPalette(
-    // Primary color (Brighter Blue for dark mode)
-    primary: Color(0xFF60A5FA),
+    // Primary color
+    primary: Color(0xFF9BB377),
     primaryShades: {
-      50: Color(0xFFEFF6FF),
-      100: Color(0xFFDBEAFE),
-      200: Color(0xFFBFDBFE),
-      300: Color(0xFF93C5FD),
-      400: Color(0xFF60A5FA), // Main primary for dark mode
-      500: Color(0xFF3B82F6),
-      600: Color(0xFF2563EB),
-      700: Color(0xFF1D4ED8),
-      800: Color(0xFF1E40AF),
-      900: Color(0xFF1E3A8A),
+      50: Color(0xFF3A442C),
+      100: Color(0xFF475436),
+      200: Color(0xFF596B42),
+      300: Color(0xFF6B8350),
+      400: Color(0xFF7D9B5F),
+      500: Color(0xFF9BB377), // Main primary for dark mode
+      600: Color(0xFFB8CA9F),
+      700: Color(0xFFD6E1C7),
+      800: Color(0xFFEBF0E3),
+      900: Color(0xFFF6F8F3),
     },
 
-    // Secondary color (Brighter Purple for dark mode)
-    secondary: Color(0xFFA78BFA),
+    // Secondary color
+    secondary: Color(0xFFB8CA9F),
     secondaryShades: {
-      50: Color(0xFFF5F3FF),
-      100: Color(0xFFEDE9FE),
-      200: Color(0xFFDDD6FE),
-      300: Color(0xFFC4B5FD),
-      400: Color(0xFFA78BFA), // Main secondary for dark mode
-      500: Color(0xFF8B5CF6),
-      600: Color(0xFF7C3AED),
-      700: Color(0xFF6D28D9),
-      800: Color(0xFF5B21B6),
-      900: Color(0xFF4C1D95),
+      50: Color(0xFF4C553C),
+      100: Color(0xFF5E6B4C),
+      200: Color(0xFF76895E),
+      300: Color(0xFF8FA872),
+      400: Color(0xFFA8C686),
+      500: Color(0xFFB8CA9F), // Main secondary for dark mode
+      600: Color(0xFFCDD8B8),
+      700: Color(0xFFE1E9D3),
+      800: Color(0xFFF0F4E9),
+      900: Color(0xFFF8FAF5),
     },
 
-    // Tertiary color (Softer Pink for dark mode)
-    tertiary: Color(0xFFF472B6),
+    // Tertiary color
+    tertiary: Color(0xFFDFB883),
     tertiaryShades: {
-      50: Color(0xFFFDF2F8),
-      100: Color(0xFFFCE7F3),
-      200: Color(0xFFFBCFE8),
-      300: Color(0xFFF9A8D4),
-      400: Color(0xFFF472B6), // Main tertiary for dark mode
-      500: Color(0xFFEC4899),
-      600: Color(0xFFDB2777),
-      700: Color(0xFFBE185D),
-      800: Color(0xFF9D174D),
-      900: Color(0xFF831843),
+      50: Color(0xFF7A5C35),
+      100: Color(0xFF9C7844),
+      200: Color(0xFFBF9456),
+      300: Color(0xFFD8A96A),
+      400: Color(0xFFE6C79C),
+      500: Color(0xFFDFB883), // Main tertiary for dark mode
+      600: Color(0xFFEDD5B5),
+      700: Color(0xFFF4E4CE),
+      800: Color(0xFFFAF2E7),
+      900: Color(0xFFFDF9F4),
+    },
+
+    // Accent color
+    accent: Color(0xFFEAEAC4),
+    accentShades: {
+      50: Color(0xFFC9C97C),
+      100: Color(0xFFD4D494),
+      200: Color(0xFFDFDFAC),
+      300: Color(0xFFEAEAC4),
+      400: Color(0xFFF5F5DC),
+      500: Color(0xFFEAEAC4),
+      600: Color(0xFFF7F7E2),
+      700: Color(0xFFF9F9E8),
+      800: Color(0xFFFDFDF0),
+      900: Color(0xFFFFFFFE),
     },
 
     // Utility colors

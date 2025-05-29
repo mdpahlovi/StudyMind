@@ -6,7 +6,7 @@ import 'package:studymind/presentation/library/widgets/item_grid.dart';
 import 'package:studymind/presentation/library/widgets/item_loader.dart';
 import 'package:studymind/widgets/create_library_items.dart';
 import 'package:studymind/widgets/custom_icon.dart';
-import 'package:studymind/widgets/notification_button.dart';
+import 'package:studymind/widgets/library/item_app_bar.dart';
 
 class ItemDetails extends StatefulWidget {
   const ItemDetails({super.key});
@@ -25,20 +25,7 @@ class ItemDetailsState extends State<ItemDetails> {
       child: RefreshIndicator(
         onRefresh: () async => libraryController.refreshData(),
         child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: CustomIcon(icon: 'arrowLeft', size: 28),
-              onPressed: () => libraryController.navigateToBack(),
-            ),
-            title: Obx(() {
-              if (libraryController.breadcrumbs.isEmpty) {
-                return const Text('');
-              } else {
-                return Text(libraryController.breadcrumbs.last.name);
-              }
-            }),
-            actions: [NotificationButton()],
-          ),
+          appBar: buildItemAppBar(),
           body: Obx(() {
             List<LibraryItem> folderItems = libraryController.folderItems.toList();
 

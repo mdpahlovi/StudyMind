@@ -95,7 +95,9 @@ class LibraryController extends GetxController {
   final RxList<LibraryItem> recentItems = <LibraryItem>[].obs; // To show in home screen
   final RxList<LibraryItem> libraryItems = <LibraryItem>[].obs; // To show in by type screen
   final RxList<LibraryItem> folderItems = <LibraryItem>[].obs; // To show in library and it's folder screen
-  final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs; // To show in library and it's folder screen
+  final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs; // To navigate between library and it's folder screen
+  final RxList<LibraryItem> selectedItems =
+      <LibraryItem>[].obs; // To handle selected items in library and it's folder screen
 
   @override
   void onInit() {
@@ -186,7 +188,7 @@ class LibraryController extends GetxController {
 
   void navigateToItemByType(String type) {
     if (type == '') {
-      Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', 'recent_activities'));
+      Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', 'recent_activity'));
       fetchLibraryItemsByType(type: '');
     } else {
       Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', type));
@@ -197,7 +199,7 @@ class LibraryController extends GetxController {
   void navigateToFolder(LibraryItem item) {
     breadcrumbs.add(item);
 
-    Get.toNamed(AppRoutes.library.replaceFirst(':uid', item.uid));
+    Get.toNamed(AppRoutes.itemByFolder.replaceFirst(':uid', item.uid));
     fetchLibraryItems(parentUid: item.uid);
   }
 

@@ -59,6 +59,9 @@ dependencies:
     # Logger: https://pub.dev/packages/logger
     logger: ^2.5.0
 
+    # Flutter Native Splash: https://pub.dev/packages/flutter_native_splash
+    flutter_native_splash: ^2.4.6
+
 dev_dependencies:
     flutter_test:
         sdk: flutter
@@ -109,3 +112,6 @@ flutter:
     #
     # For details regarding fonts from package dependencies,
     # see https://flutter.dev/to/font-from-package
+flutter_native_splash:
+    color: "#EAEAC4"
+    image: "assets/images/splash.png"

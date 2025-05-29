@@ -6,7 +6,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/library/widgets/item_grid.dart';
 import 'package:studymind/presentation/library/widgets/item_loader.dart';
-import 'package:studymind/widgets/custom_icon.dart';
+import 'package:studymind/widgets/library/item_app_bar.dart';
 
 class ItemByType extends StatefulWidget {
   const ItemByType({super.key});
@@ -26,12 +26,7 @@ class ItemByTypeState extends State<ItemByType> {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(icon: CustomIcon(icon: 'arrowLeft', size: 28), onPressed: () => Get.back()),
-        title: Text(
-          Get.parameters['type'] != null ? Get.parameters['type']!.split('_').map((e) => e.capitalize!).join(' ') : "",
-        ),
-      ),
+      appBar: buildItemAppBar(),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -96,7 +91,7 @@ class ItemByTypeState extends State<ItemByType> {
                 crossAxisSpacing: 12,
               ),
               itemCount: libraryItems.length,
-              itemBuilder: (context, index) => buildItemCard(context, libraryItems[index]),
+              itemBuilder: (context, index) => ItemCard(item: libraryItems[index]),
             );
           }),
         ],

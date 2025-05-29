@@ -25,84 +25,113 @@ class ItemGrid extends StatelessWidget {
             crossAxisSpacing: 12,
           ),
           itemCount: items.length,
-          itemBuilder: (context, index) => buildItemCard(context, items[index]),
+          itemBuilder: (context, index) => ItemCard(item: items[index]),
         ),
       ],
     );
   }
 }
 
-buildItemCard(BuildContext context, LibraryItem item) {
-  final LibraryController libraryController = Get.find<LibraryController>();
+class ItemCard extends StatelessWidget {
+  final LibraryItem item;
+  const ItemCard({super.key, required this.item});
 
-  final ColorPalette colorPalette = AppColors().palette;
-  final TextTheme textTheme = Theme.of(context).textTheme;
-  final TypeStyle typeStyle = ItemTypeStyle(type: item.type).decoration;
+  @override
+  Widget build(BuildContext context) {
+    final LibraryController libraryController = Get.find<LibraryController>();
 
-  return Card(
-    child: InkWell(
-      onTap: () {
-        switch (item.type) {
-          case ItemType.folder:
-            libraryController.navigateToFolder(item);
-            break;
-          default:
-            Get.snackbar(
-              'Work in progress',
-              "Item type '${item.type.toString().split('.').last.toUpperCase()}' is not supported",
-            );
-            break;
-        }
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+    final ColorPalette colorPalette = AppColors().palette;
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final TypeStyle typeStyle = ItemTypeStyle(type: item.type).decoration;
+
+    return Obx(() {
+      final isSelected = libraryController.selectedItems.contains(item);
+
+      return Card(
+        color: isSelected ? colorPalette.content.withAlpha(26) : colorPalette.surface,
+        child: InkWell(
+          onTap: () {
+            switch (item.type) {
+              case ItemType.folder:
+                libraryController.navigateToFolder(item);
+                break;
+              default:
+                Get.snackbar(
+                  'Work in progress',
+                  "Item type '${item.type.toString().split('.').last.toUpperCase()}' is not supported",
+                );
+                break;
+            }
+          },
+          onLongPress: () => libraryController.selectedItems.add(item),
+          child: Padding(
+            padding: const EdgeInsets.all(6),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: typeStyle.color.withAlpha(50),
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: CustomIcon(icon: typeStyle.icon, size: 16, color: typeStyle.color),
+                Row(
+                  children: [
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: typeStyle.color.withAlpha(50),
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: CustomIcon(icon: typeStyle.icon, size: 16, color: typeStyle.color),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        item.name,
+                        style: textTheme.labelMedium?.copyWith(height: 1.25),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    isSelected
+                        ? Container(
+                          margin: const EdgeInsets.all(6),
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(width: 2, color: colorPalette.content),
+                          ),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () => libraryController.selectedItems.remove(item),
+                            child: CustomIcon(icon: 'tick', size: 16),
+                          ),
+                        )
+                        : Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(shape: BoxShape.circle),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(18),
+                            onTap: () => Get.bottomSheet(ItemOptions(item: item)),
+                            child: const Icon(Icons.more_vert),
+                          ),
+                        ),
+                  ],
                 ),
-                const SizedBox(width: 6),
                 Expanded(
-                  child: Text(
-                    item.name,
-                    style: textTheme.labelMedium?.copyWith(height: 1.25),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                InkWell(
-                  borderRadius: BorderRadius.circular(14),
-                  onTap: () => Get.bottomSheet(ItemOptions(item: item)),
                   child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(shape: BoxShape.circle),
-                    child: CustomIcon(icon: 'menuDot', color: colorPalette.content),
+                    margin: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: colorPalette.contentDim.withAlpha(50),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(child: CustomIcon(icon: typeStyle.icon, size: 40)),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 6),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: colorPalette.contentDim.withAlpha(50),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(child: CustomIcon(icon: typeStyle.icon, size: 40)),
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
-    ),
-  );
+      );
+    });
+  }
 }

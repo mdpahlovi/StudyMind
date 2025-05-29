@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/presentation/library/widgets/item_grid.dart';
 import 'package:studymind/presentation/library/widgets/item_empty.dart';
+import 'package:studymind/presentation/library/widgets/item_grid.dart';
 import 'package:studymind/presentation/library/widgets/item_loader.dart';
-import 'package:studymind/widgets/notification_button.dart';
+import 'package:studymind/widgets/library/item_app_bar.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -21,7 +21,7 @@ class LibraryScreenState extends State<LibraryScreen> {
     return RefreshIndicator(
       onRefresh: () async => libraryController.refreshData(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Library'), actions: [NotificationButton()]),
+        appBar: buildItemAppBar(),
         body: Obx(() {
           List<LibraryItem> folderItems = libraryController.folderItems.toList();
 
