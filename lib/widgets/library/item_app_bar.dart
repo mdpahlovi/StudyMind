@@ -70,23 +70,19 @@ PreferredSizeWidget buildItemAppBar() {
                   shape: BoxShape.circle,
                   border: Border.all(width: 2, color: colorPalette.content),
                 ),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: () {
-                    if (libraryItems.length == selectedItems.length) {
-                      selectedItems.clear();
-                    } else {
-                      selectedItems.clear();
-                      selectedItems.addAll(libraryItems);
-                    }
-                  },
-                  child:
-                      libraryItems.length == selectedItems.length
-                          ? const CustomIcon(icon: 'tick', size: 16)
-                          : const SizedBox(),
-                ),
+                child:
+                    libraryItems.length == selectedItems.length
+                        ? const CustomIcon(icon: 'tick', size: 16)
+                        : const SizedBox(),
               ),
-              onPressed: () => Get.bottomSheet(ItemOptions()),
+              onPressed: () {
+                if (libraryItems.length == selectedItems.length) {
+                  selectedItems.clear();
+                } else {
+                  selectedItems.clear();
+                  selectedItems.addAll(libraryItems);
+                }
+              },
             ),
             IconButton(icon: const Icon(Icons.more_vert), onPressed: () => Get.bottomSheet(ItemOptions())),
           ],
