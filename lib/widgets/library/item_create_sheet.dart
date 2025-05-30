@@ -4,14 +4,14 @@ import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
-class CreateLibraryItems extends StatefulWidget {
-  const CreateLibraryItems({super.key});
+class ItemCreateSheet extends StatefulWidget {
+  const ItemCreateSheet({super.key});
 
   @override
-  State<CreateLibraryItems> createState() => CreateLibraryItemsState();
+  State<ItemCreateSheet> createState() => ItemCreateSheetState();
 }
 
-class CreateLibraryItemsState extends State<CreateLibraryItems> {
+class ItemCreateSheetState extends State<ItemCreateSheet> {
   @override
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;

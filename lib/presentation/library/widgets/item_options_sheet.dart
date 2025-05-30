@@ -5,15 +5,15 @@ import 'package:studymind/presentation/library/widgets/item_type_style.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
-class ItemOptions extends StatefulWidget {
+class ItemOptionsSheet extends StatefulWidget {
   final LibraryItem? item;
-  const ItemOptions({super.key, this.item});
+  const ItemOptionsSheet({super.key, this.item});
 
   @override
-  State<ItemOptions> createState() => ItemOptionsState();
+  State<ItemOptionsSheet> createState() => ItemOptionsSheetState();
 }
 
-class ItemOptionsState extends State<ItemOptions> {
+class ItemOptionsSheetState extends State<ItemOptionsSheet> {
   @override
   Widget build(BuildContext context) {
     final LibraryController libraryController = Get.find<LibraryController>();

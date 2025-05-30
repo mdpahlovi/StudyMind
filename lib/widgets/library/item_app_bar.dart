@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/presentation/library/widgets/item_options.dart';
+import 'package:studymind/presentation/library/widgets/item_options_sheet.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_back_button.dart';
@@ -84,7 +84,7 @@ PreferredSizeWidget buildItemAppBar() {
                 }
               },
             ),
-            IconButton(icon: const Icon(Icons.more_vert), onPressed: () => Get.bottomSheet(ItemOptions())),
+            IconButton(icon: const Icon(Icons.more_vert), onPressed: () => Get.bottomSheet(ItemOptionsSheet())),
           ],
         );
       }),

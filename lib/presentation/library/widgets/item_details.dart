@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/core/logger.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_back_button.dart';
 
@@ -15,8 +14,6 @@ class ItemDetails extends StatelessWidget {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    logger.d(Get.previousRoute);
-
     return PopScope(
       canPop: false,
       child: RefreshIndicator(
@@ -24,7 +21,10 @@ class ItemDetails extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             leading: CustomBackButton(onPressed: libraryController.backFromDetail),
-            title: Obx(() => Text(libraryController.breadcrumbs.last.name)),
+            title: Obx(() {
+              final breadcrumbs = libraryController.breadcrumbs;
+              return breadcrumbs.isEmpty ? const Text('') : Text(breadcrumbs.last.name);
+            }),
           ),
           body: Obx(() {
             if (libraryController.isLoadingItem.value) return const Center(child: CircularProgressIndicator());

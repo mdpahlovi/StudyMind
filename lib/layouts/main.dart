@@ -4,7 +4,7 @@ import 'package:studymind/presentation/community/community.dart';
 import 'package:studymind/presentation/home/home.dart';
 import 'package:studymind/presentation/library/library.dart';
 import 'package:studymind/presentation/profile/profile.dart';
-import 'package:studymind/widgets/create_library_items.dart';
+import 'package:studymind/widgets/library/item_create_sheet.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
 class MainLayout extends StatefulWidget {
@@ -34,7 +34,7 @@ class MainLayoutState extends State<MainLayout> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.bottomSheet(CreateLibraryItems()),
+        onPressed: () => Get.bottomSheet(ItemCreateSheet()),
         child: CustomIcon(icon: 'add', size: 24),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

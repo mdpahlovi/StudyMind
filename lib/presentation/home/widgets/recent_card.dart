@@ -29,13 +29,15 @@ class RecentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LibraryController libraryController = Get.find<LibraryController>();
+
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final TypeStyle typeStyle = ItemTypeStyle(type: item.type).decoration;
 
     return Card(
       child: InkWell(
-        // onTap: () => Get.toNamed(AppRoutes.library.replaceFirst(':uid', item.uid)),
+        onTap: () => libraryController.navigateToItem(item),
         child: Padding(
           padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 10),
           child: Row(

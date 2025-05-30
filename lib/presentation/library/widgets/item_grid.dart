@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/presentation/library/widgets/item_options.dart';
+import 'package:studymind/presentation/library/widgets/item_options_sheet.dart';
 import 'package:studymind/presentation/library/widgets/item_type_style.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
@@ -107,7 +107,7 @@ class ItemCard extends StatelessWidget {
                           decoration: BoxDecoration(shape: BoxShape.circle),
                           child: InkWell(
                             borderRadius: BorderRadius.circular(18),
-                            onTap: () => Get.bottomSheet(ItemOptions(item: item)),
+                            onTap: () => Get.bottomSheet(ItemOptionsSheet(item: item)),
                             child: const Icon(Icons.more_vert),
                           ),
                         ),

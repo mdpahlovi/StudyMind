@@ -4,7 +4,7 @@ import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/library/widgets/item_empty.dart';
 import 'package:studymind/presentation/library/widgets/item_grid.dart';
 import 'package:studymind/presentation/library/widgets/item_loader.dart';
-import 'package:studymind/widgets/create_library_items.dart';
+import 'package:studymind/widgets/library/item_create_sheet.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/library/item_app_bar.dart';
 
@@ -36,7 +36,7 @@ class ItemByFolderState extends State<ItemByFolder> {
             return ItemGrid(items: folderItems);
           }),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => Get.bottomSheet(CreateLibraryItems()),
+            onPressed: () => Get.bottomSheet(ItemCreateSheet()),
             child: CustomIcon(icon: 'add', size: 24),
           ),
         ),
