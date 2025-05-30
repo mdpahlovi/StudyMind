@@ -25,33 +25,64 @@ class ItemByTypeState extends State<ItemByType> {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      appBar: buildItemAppBar(),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          TextField(
-            onChanged:
-                (value) => setState(() {
-                  searchQuery = value;
-                  if (debounce?.isActive ?? false) debounce?.cancel();
-                  debounce = Timer(const Duration(milliseconds: 500), () {
-                    final type = Get.parameters['type'];
+    return RefreshIndicator(
+      onRefresh: () async => libraryController.refreshByType(),
+      child: Scaffold(
+        appBar: buildItemAppBar(),
+        body: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            TextField(
+              onChanged:
+                  (value) => setState(() {
+                    searchQuery = value;
+                    if (debounce?.isActive ?? false) debounce?.cancel();
+                    debounce = Timer(const Duration(milliseconds: 500), () {
+                      final type = Get.parameters['type'];
 
-                    if (type == 'recent_activities') {
-                      libraryController.fetchLibraryItemsByType(search: searchQuery, type: '');
-                    } else if (type != null) {
-                      libraryController.fetchLibraryItemsByType(search: searchQuery, type: type);
-                    }
-                  });
-                }),
-            decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search)),
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            final List<LibraryItem> libraryItems = libraryController.libraryItems;
+                      if (type == 'recent_activities') {
+                        libraryController.fetchLibraryItemsByType(search: searchQuery, type: '');
+                      } else if (type != null) {
+                        libraryController.fetchLibraryItemsByType(search: searchQuery, type: type);
+                      }
+                    });
+                  }),
+              decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search)),
+            ),
+            const SizedBox(height: 16),
+            Obx(() {
+              final List<LibraryItem> libraryItems = libraryController.libraryItems;
 
-            if (libraryController.isLoadingType.value) {
+              if (libraryController.isLoadingType.value) {
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                  ),
+                  itemCount: 8,
+                  itemBuilder: (context, index) => const ItemLoaderCard(),
+                );
+              }
+
+              if (libraryItems.isEmpty) {
+                return SizedBox(
+                  height: size.height * 0.6,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(HugeIcons.strokeRoundedSadDizzy, size: 64),
+                      const SizedBox(height: 16),
+                      Text('Oops! No items found', style: textTheme.bodyMedium),
+                    ],
+                  ),
+                );
+              }
+              ;
+
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -61,40 +92,12 @@ class ItemByTypeState extends State<ItemByType> {
                   mainAxisSpacing: 12,
                   crossAxisSpacing: 12,
                 ),
-                itemCount: 8,
-                itemBuilder: (context, index) => const ItemLoaderCard(),
+                itemCount: libraryItems.length,
+                itemBuilder: (context, index) => ItemCard(item: libraryItems[index]),
               );
-            }
-
-            if (libraryItems.isEmpty) {
-              return SizedBox(
-                height: size.height * 0.6,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(HugeIcons.strokeRoundedSadDizzy, size: 64),
-                    const SizedBox(height: 16),
-                    Text('Oops! No items found', style: textTheme.bodyMedium),
-                  ],
-                ),
-              );
-            }
-            ;
-
-            return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-              ),
-              itemCount: libraryItems.length,
-              itemBuilder: (context, index) => ItemCard(item: libraryItems[index]),
-            );
-          }),
-        ],
+            }),
+          ],
+        ),
       ),
     );
   }

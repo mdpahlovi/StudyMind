@@ -22,7 +22,7 @@ class StudyMind extends StatelessWidget {
       theme: AppTheme(mode: "light").theme,
       darkTheme: AppTheme(mode: "dark").theme,
       initialRoute: AppRoutes.splashScreen,
-      getPages: AppRoutes().routes,
+      getPages: AppRoutes.routes,
     );
   }
 }

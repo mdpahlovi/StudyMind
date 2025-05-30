@@ -177,7 +177,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     CustomButton(
                                       text: 'Send Reset Link',
                                       isLoading: isLoading,
-                                      onPressed: () => Notification().success('Currently working on it'),
+                                      onPressed: () => Notification.success('Currently working on it'),
                                     ),
                                     const SizedBox(height: 16),
                                   ],

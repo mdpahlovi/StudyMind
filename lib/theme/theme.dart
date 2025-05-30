@@ -135,6 +135,7 @@ class AppTheme {
         height: 1.4,
       ),
     ),
+    navigationBarTheme: NavigationBarThemeData(indicatorColor: colorPalette.primary),
     appBarTheme: AppBarTheme(
       color: colorPalette.surface,
       foregroundColor: colorPalette.content,

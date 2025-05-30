@@ -53,22 +53,12 @@ class ItemCard extends StatelessWidget {
         child: InkWell(
           onTap: () {
             if (selectedItems.isEmpty) {
-              libraryController.navigateToFolder(item);
+              libraryController.navigateToItem(item);
             } else {
-              if (isSelected) {
-                selectedItems.remove(item);
-              } else {
-                selectedItems.add(item);
-              }
+              isSelected ? selectedItems.remove(item) : selectedItems.add(item);
             }
           },
-          onLongPress: () {
-            if (isSelected) {
-              selectedItems.remove(item);
-            } else {
-              selectedItems.add(item);
-            }
-          },
+          onLongPress: () => isSelected ? selectedItems.remove(item) : selectedItems.add(item),
           child: Padding(
             padding: const EdgeInsets.all(6),
             child: Column(

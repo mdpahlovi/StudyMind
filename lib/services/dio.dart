@@ -55,9 +55,9 @@ class DioService {
       handleUnauthorize();
     } else {
       if (error.response != null) {
-        Notification().error(error.response?.data['message'] ?? 'Something went wrong');
+        Notification.error(error.response?.data['message'] ?? 'Something went wrong');
       } else {
-        Notification().error(error.message ?? 'Something went wrong');
+        Notification.error(error.message ?? 'Something went wrong');
       }
     }
 

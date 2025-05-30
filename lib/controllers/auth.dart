@@ -126,10 +126,10 @@ class AuthController extends GetxController {
         storageService.set(StorageKey.accessToken, authResponse.accessToken);
         storageService.set(StorageKey.refreshToken, authResponse.refreshToken);
 
-        Notification().success("Welcome back '${authResponse.user.name}'");
+        Notification.success("Welcome back '${authResponse.user.name}'");
         Get.offAllNamed(AppRoutes.home);
       } else {
-        Notification().error(response.message);
+        Notification.error(response.message);
       }
 
       isLogging.value = false;
@@ -152,10 +152,10 @@ class AuthController extends GetxController {
         storageService.set(StorageKey.accessToken, authResponse.accessToken);
         storageService.set(StorageKey.refreshToken, authResponse.refreshToken);
 
-        Notification().success("Welcome '${authResponse.user.name}'");
+        Notification.success("Welcome '${authResponse.user.name}'");
         Get.offAllNamed(AppRoutes.home);
       } else {
-        Notification().error(response.message);
+        Notification.error(response.message);
       }
 
       isRegistering.value = false;

@@ -2,9 +2,9 @@ import 'package:get/get.dart';
 import 'package:studymind/theme/colors.dart';
 
 class Notification {
-  final ColorPalette colorPalette = AppColors().palette;
+  static final ColorPalette colorPalette = AppColors().palette;
 
-  void success(String message) {
+  static void success(String message) {
     Get.snackbar(
       'Success',
       message,
@@ -14,7 +14,7 @@ class Notification {
     );
   }
 
-  void error(String message) {
+  static void error(String message) {
     Get.snackbar(
       'Error',
       message,
@@ -24,7 +24,7 @@ class Notification {
     );
   }
 
-  void info(String message) {
+  static void info(String message) {
     Get.snackbar(
       'Info',
       message,
@@ -34,7 +34,7 @@ class Notification {
     );
   }
 
-  void warning(String message) {
+  static void warning(String message) {
     Get.snackbar(
       'Warning',
       message,

@@ -7,6 +7,7 @@ import 'package:studymind/presentation/flashcard/flashcard.dart';
 import 'package:studymind/presentation/forgot_password/forgot_password.dart';
 import 'package:studymind/presentation/library/widgets/item_by_folder.dart';
 import 'package:studymind/presentation/library/widgets/item_by_type.dart';
+import 'package:studymind/presentation/library/widgets/item_details.dart';
 import 'package:studymind/presentation/login/login.dart';
 import 'package:studymind/presentation/media/media.dart';
 import 'package:studymind/presentation/note/note.dart';
@@ -27,8 +28,9 @@ class AppRoutes {
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
   static const String notification = '/notification';
+  static const String itemDetails = '/item_details/:uid';
 
-  List<GetPage<dynamic>> routes = [
+  static List<GetPage<dynamic>> routes = [
     GetPage(
       name: splashScreen,
       page: () => const SplashScreen(),
@@ -69,7 +71,7 @@ class AppRoutes {
     ),
     GetPage(
       name: itemByFolder,
-      page: () => const ItemDetails(),
+      page: () => const ItemByFolder(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
@@ -100,6 +102,12 @@ class AppRoutes {
     GetPage(
       name: notification,
       page: () => const NotificationScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: itemDetails,
+      page: () => const ItemDetails(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),

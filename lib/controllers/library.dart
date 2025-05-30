@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/models/library.dart';
-import 'package:studymind/routes/routes.dart' show AppRoutes;
+import 'package:studymind/routes/routes.dart';
 import 'package:studymind/services/library.dart';
 
 enum ItemType { folder, note, document, flashcard, audio, video, image }
@@ -14,7 +14,6 @@ class LibraryItem {
   final ItemType type;
   final int? parentId;
   final int userId;
-  final String path;
   final Map<String, dynamic>? metadata;
   final int sortOrder;
   final DateTime createdAt;
@@ -28,7 +27,6 @@ class LibraryItem {
     required this.type,
     this.parentId,
     required this.userId,
-    required this.path,
     this.metadata,
     this.sortOrder = 0,
     required this.createdAt,
@@ -44,7 +42,6 @@ class LibraryItem {
       type: ItemType.values.firstWhere((e) => e.toString().split('.').last == json['type'].toLowerCase()),
       parentId: json['parentId'],
       userId: json['userId'],
-      path: json['path'],
       metadata: json['metadata'],
       sortOrder: json['sortOrder'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),
@@ -61,7 +58,6 @@ class LibraryItem {
       'type': type.toString().split('.').last.toUpperCase(),
       'parentId': parentId,
       'userId': userId,
-      'path': path,
       'metadata': metadata,
       'sortOrder': sortOrder,
       'createdAt': createdAt.toIso8601String(),
@@ -129,7 +125,7 @@ class LibraryController extends GetxController {
         final libraryResponse = LibraryResponse.fromJson(response.data);
         folderItems.value = libraryResponse.libraryItems;
       } else {
-        Notification().error(response.message);
+        Notification.error(response.message);
         Get.back();
       }
 
@@ -145,7 +141,7 @@ class LibraryController extends GetxController {
         final libraryResponse = LibraryResponse.fromJson(response.data);
         recentItems.value = libraryResponse.libraryItems;
       } else {
-        Notification().error(response.message);
+        Notification.error(response.message);
         Get.back();
       }
 
@@ -162,7 +158,7 @@ class LibraryController extends GetxController {
         final libraryResponse = LibraryResponse.fromJson(response.data);
         libraryItems.value = libraryResponse.libraryItems;
       } else {
-        Notification().error(response.message);
+        Notification.error(response.message);
         Get.back();
       }
 
@@ -178,7 +174,7 @@ class LibraryController extends GetxController {
         final fetchedItem = LibraryItem.fromJson(response.data);
         libraryItem.value = fetchedItem;
       } else {
-        Notification().error(response.message);
+        Notification.error(response.message);
         Get.back();
       }
 
@@ -196,11 +192,16 @@ class LibraryController extends GetxController {
     }
   }
 
-  void navigateToFolder(LibraryItem item) {
+  void navigateToItem(LibraryItem item) {
     breadcrumbs.add(item);
 
-    Get.toNamed(AppRoutes.itemByFolder.replaceFirst(':uid', item.uid));
-    fetchLibraryItems(parentUid: item.uid);
+    if (item.type == ItemType.folder) {
+      Get.toNamed(AppRoutes.itemByFolder.replaceFirst(':uid', item.uid));
+      fetchLibraryItems(parentUid: item.uid);
+    } else {
+      Get.toNamed(AppRoutes.itemDetails.replaceFirst(':uid', item.uid));
+      fetchLibraryItemByUid(item.uid);
+    }
   }
 
   void navigateToBack() {
@@ -216,8 +217,27 @@ class LibraryController extends GetxController {
     }
   }
 
+  void backFromDetail() {
+    if (breadcrumbs.isNotEmpty) {
+      breadcrumbs.removeLast();
+
+      Get.back();
+    }
+  }
+
+  // Refresh data for by type screen
+  void refreshByType() {
+    final type = Get.parameters['type'];
+
+    if (type == 'recent_activity') {
+      fetchLibraryItemsByType(type: '');
+    } else if (type != null) {
+      fetchLibraryItemsByType(type: type);
+    }
+  }
+
   // Refresh data for library and folder screen
-  void refreshData() {
+  void refreshByFolder() {
     final parentUid = Get.parameters['uid'];
 
     if (Get.currentRoute == AppRoutes.home) {
@@ -225,6 +245,13 @@ class LibraryController extends GetxController {
     } else {
       fetchLibraryItems(parentUid: parentUid);
     }
+  }
+
+  // Refresh data for item details screen
+  void refreshItemDetails() {
+    final uid = Get.parameters['uid'];
+
+    if (uid != null) fetchLibraryItemByUid(uid);
   }
 
   Map<String, int> getFolderStats() {

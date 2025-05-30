@@ -19,7 +19,7 @@ class LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async => libraryController.refreshData(),
+      onRefresh: () async => libraryController.refreshByFolder(),
       child: Scaffold(
         appBar: buildItemAppBar(),
         body: Obx(() {

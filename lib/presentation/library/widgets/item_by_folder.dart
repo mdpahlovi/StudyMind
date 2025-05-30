@@ -8,14 +8,14 @@ import 'package:studymind/widgets/create_library_items.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/library/item_app_bar.dart';
 
-class ItemDetails extends StatefulWidget {
-  const ItemDetails({super.key});
+class ItemByFolder extends StatefulWidget {
+  const ItemByFolder({super.key});
 
   @override
-  State<ItemDetails> createState() => ItemDetailsState();
+  State<ItemByFolder> createState() => ItemByFolderState();
 }
 
-class ItemDetailsState extends State<ItemDetails> {
+class ItemByFolderState extends State<ItemByFolder> {
   final LibraryController libraryController = Get.find<LibraryController>();
 
   @override
@@ -23,7 +23,7 @@ class ItemDetailsState extends State<ItemDetails> {
     return PopScope(
       canPop: false,
       child: RefreshIndicator(
-        onRefresh: () async => libraryController.refreshData(),
+        onRefresh: () async => libraryController.refreshByFolder(),
         child: Scaffold(
           appBar: buildItemAppBar(),
           body: Obx(() {
