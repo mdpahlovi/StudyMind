@@ -22,6 +22,15 @@ class ItemByFolderState extends State<ItemByFolder> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) return;
+
+        if (libraryController.selectedItems.isEmpty) {
+          libraryController.navigateToBack();
+        } else {
+          libraryController.selectedItems.clear();
+        }
+      },
       child: RefreshIndicator(
         onRefresh: () async => libraryController.refreshByFolder(),
         child: Scaffold(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
@@ -27,7 +28,19 @@ class ItemCreateSheetState extends State<ItemCreateSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Fixed header
-          Padding(padding: const EdgeInsets.all(16), child: Text("Create New", style: textTheme.headlineMedium)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                Text("Create New", style: textTheme.headlineMedium),
+                const Spacer(),
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: CustomIcon(icon: 'cancel', color: colorPalette.content, size: 24),
+                ),
+              ],
+            ),
+          ),
           Divider(),
 
           // Scrollable content
@@ -35,38 +48,11 @@ class ItemCreateSheetState extends State<ItemCreateSheet> {
             child: SingleChildScrollView(
               padding: EdgeInsets.only(left: 12, right: 12, bottom: paddings.bottom),
               child: Column(
-                children: [
-                  const SizedBox(height: 12),
-                  CreateOption(onTap: () {}, title: "New Folder", icon: "folder", color: Color(0xFFA8C686)),
-                  const SizedBox(height: 12),
-                  CreateOption(
-                    onTap: () => Get.toNamed(AppRoutes.note),
-                    title: "New Note",
-                    icon: "noteEdit",
-                    color: Color(0xFF7D9B5F),
-                  ),
-                  const SizedBox(height: 12),
-                  CreateOption(
-                    onTap: () => Get.toNamed(AppRoutes.document),
-                    title: "Scan Document",
-                    icon: "documentScanner",
-                    color: Color(0xFFF5F5DC),
-                  ),
-                  const SizedBox(height: 12),
-                  CreateOption(
-                    onTap: () => Get.toNamed(AppRoutes.flashcard),
-                    title: "Create Flashcard",
-                    icon: "flashcard",
-                    color: Color(0xFF8FBC8F),
-                  ),
-                  const SizedBox(height: 12),
-                  CreateOption(
-                    onTap: () => Get.toNamed(AppRoutes.media),
-                    title: "Upload Media",
-                    icon: "upload",
-                    color: Color(0xFFE6C79C),
-                  ),
-                ],
+                children:
+                    ItemTypeStyle.options
+                        .map<List<Widget>>((option) => [const SizedBox(height: 12), CreateOption(option: option)])
+                        .expand((widget) => widget)
+                        .toList(),
               ),
             ),
           ),
@@ -77,12 +63,9 @@ class ItemCreateSheetState extends State<ItemCreateSheet> {
 }
 
 class CreateOption extends StatelessWidget {
-  const CreateOption({super.key, this.onTap, required this.title, required this.icon, required this.color});
+  final TypeOption option;
 
-  final void Function()? onTap;
-  final String title;
-  final String icon;
-  final Color color;
+  const CreateOption({super.key, required this.option});
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +74,7 @@ class CreateOption extends StatelessWidget {
 
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onTap: onTap,
+      onTap: () => Get.toNamed(AppRoutes.itemCreate, arguments: option),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -99,11 +82,17 @@ class CreateOption extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(color: color.withAlpha(50), borderRadius: BorderRadius.circular(8)),
-                child: CustomIcon(icon: icon, color: color, size: 24),
+                decoration: BoxDecoration(color: option.color.withAlpha(50), borderRadius: BorderRadius.circular(8)),
+                child: CustomIcon(icon: option.icon, color: option.color, size: 24),
               ),
               const SizedBox(width: 16),
-              Text(title, style: textTheme.titleMedium),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(option.title, style: textTheme.titleMedium),
+                  Text(option.description, style: textTheme.bodySmall),
+                ],
+              ),
               const Spacer(),
               CustomIcon(icon: 'arrowRight', color: colorPalette.content, size: 24),
             ],

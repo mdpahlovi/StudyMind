@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/library/widgets/item_options_sheet.dart';
-import 'package:studymind/presentation/library/widgets/item_type_style.dart';
+import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
@@ -42,7 +42,7 @@ class ItemCard extends StatelessWidget {
 
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final TypeStyle typeStyle = ItemTypeStyle(type: item.type).decoration;
+    final TypeStyle typeStyle = ItemTypeStyle.getStyle(item.type);
 
     return Obx(() {
       final selectedItems = libraryController.selectedItems;

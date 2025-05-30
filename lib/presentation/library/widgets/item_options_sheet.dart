@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/presentation/library/widgets/item_type_style.dart';
+import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
@@ -29,7 +29,7 @@ class ItemOptionsSheetState extends State<ItemOptionsSheet> {
 Widget buildItemOptionsContainer({required BuildContext context, required List<LibraryItem> selectedItems}) {
   final ColorPalette colorPalette = AppColors().palette;
   final TextTheme textTheme = Theme.of(context).textTheme;
-  final TypeStyle typeStyle = ItemTypeStyle(type: selectedItems.first.type).decoration;
+  final TypeStyle typeStyle = ItemTypeStyle.getStyle(selectedItems.first.type);
   final EdgeInsets paddings = MediaQuery.of(context).viewInsets;
 
   return Container(
@@ -40,7 +40,7 @@ Widget buildItemOptionsContainer({required BuildContext context, required List<L
     child: Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
               selectedItems.length == 1 ? CustomIcon(icon: typeStyle.icon, size: 24) : SizedBox(),
@@ -48,6 +48,11 @@ Widget buildItemOptionsContainer({required BuildContext context, required List<L
               selectedItems.length == 1
                   ? Text(selectedItems.first.name, style: textTheme.headlineMedium)
                   : Text('${selectedItems.length} items selected', style: textTheme.headlineMedium),
+              const Spacer(),
+              IconButton(
+                onPressed: () => Get.back(),
+                icon: CustomIcon(icon: 'cancel', color: colorPalette.content, size: 24),
+              ),
             ],
           ),
         ),

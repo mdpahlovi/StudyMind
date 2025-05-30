@@ -5,8 +5,8 @@ import 'package:studymind/controllers/library.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_back_button.dart';
 
-class ItemDetails extends StatelessWidget {
-  const ItemDetails({super.key});
+class ItemDetailsScreen extends StatelessWidget {
+  const ItemDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +16,10 @@ class ItemDetails extends StatelessWidget {
 
     return PopScope(
       canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) return;
+        libraryController.backFromDetail();
+      },
       child: RefreshIndicator(
         onRefresh: () async => libraryController.refreshItemDetails(),
         child: Scaffold(

@@ -5,6 +5,7 @@ import 'package:get/get.dart' hide Response;
 import 'package:studymind/core/logger.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/routes/routes.dart';
+import 'package:studymind/services/error.dart';
 import 'package:studymind/services/storage.dart';
 
 class DioService {
@@ -54,11 +55,7 @@ class DioService {
     if (error.response?.statusCode == 401) {
       handleUnauthorize();
     } else {
-      if (error.response != null) {
-        Notification.error(error.response?.data['message'] ?? 'Something went wrong');
-      } else {
-        Notification.error(error.message ?? 'Something went wrong');
-      }
+      Notification.error(ErrorService.message(error));
     }
 
     handler.reject(error);

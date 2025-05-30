@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:studymind/services/dio.dart';
+import 'package:studymind/services/error.dart';
 
 class ApiResponse {
   final bool success;
@@ -26,17 +27,9 @@ class ApiService {
 
       return ApiResponse.fromJson(response.data);
     } catch (error) {
-      late String? message;
+      final message = ErrorService.message(error as DioException);
 
-      if (error is DioException) {
-        if (error.response != null) {
-          message = error.response?.data['message'];
-        } else {
-          message = error.message;
-        }
-      }
-
-      return ApiResponse(success: false, message: message ?? 'Something went wrong', data: null);
+      return ApiResponse(success: false, message: message, data: null);
     }
   }
 
@@ -46,16 +39,9 @@ class ApiService {
 
       return ApiResponse.fromJson(response.data);
     } catch (error) {
-      late String? message;
+      final message = ErrorService.message(error as DioException);
 
-      if (error is DioException) {
-        if (error.response != null) {
-          message = error.response?.data['message'];
-        } else {
-          message = error.message;
-        }
-      }
-      return ApiResponse(success: false, message: message ?? 'Something went wrong', data: null);
+      return ApiResponse(success: false, message: message, data: null);
     }
   }
 
@@ -65,16 +51,9 @@ class ApiService {
 
       return ApiResponse.fromJson(response.data);
     } catch (error) {
-      late String? message;
+      final message = ErrorService.message(error as DioException);
 
-      if (error is DioException) {
-        if (error.response != null) {
-          message = error.response?.data['message'];
-        } else {
-          message = error.message;
-        }
-      }
-      return ApiResponse(success: false, message: message ?? 'Something went wrong', data: null);
+      return ApiResponse(success: false, message: message, data: null);
     }
   }
 }

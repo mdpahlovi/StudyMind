@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/home/widgets/action_button.dart';
 import 'package:studymind/presentation/home/widgets/article_card.dart';
@@ -18,12 +19,13 @@ class HomeScreen extends StatelessWidget {
 
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
+    TypeStyle getStyle(ItemType type) => ItemTypeStyle.getStyle(type);
 
     final List<Map<String, dynamic>> actionButtons = [
-      {'title': "Notes", 'icon': "note", 'color': Color(0xFF7D9B5F), 'type': 'note'},
-      {'title': "Documents", 'icon': "document", 'color': Color(0xFFF5F5DC), 'type': 'document'},
-      {'title': "Flashcards", 'icon': "flashcard", 'color': Color(0xFF8FBC8F), 'type': 'flashcard'},
-      {'title': "Medias", 'icon': "media", 'color': Color(0xFFE6C79C), 'type': 'media'},
+      {'title': "Notes", 'icon': "note", 'color': getStyle(ItemType.note).color, 'type': 'note'},
+      {'title': "Documents", 'icon': "document", 'color': getStyle(ItemType.document).color, 'type': 'document'},
+      {'title': "Flashcards", 'icon': "flashcard", 'color': getStyle(ItemType.flashcard).color, 'type': 'flashcard'},
+      {'title': "Medias", 'icon': "media", 'color': getStyle(ItemType.audio).color, 'type': 'media'},
     ];
 
     final List<Map<String, dynamic>> suggestedContent = [
