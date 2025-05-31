@@ -27,7 +27,7 @@ class ProfileScreenState extends State<ProfileScreen> {
       {'title': 'Study History', 'icon': HugeIcons.strokeRoundedClock04, 'onTap': () {}},
       {'title': 'Achievements', 'icon': HugeIcons.strokeRoundedSaveEnergy01, 'onTap': () {}},
       {'title': 'Saved Items', 'icon': HugeIcons.strokeRoundedBookmark01, 'onTap': () {}},
-      {'title': 'Logout', 'icon': HugeIcons.strokeRoundedLogout01, 'onTap': () {}},
+      {'title': 'Logout', 'icon': HugeIcons.strokeRoundedLogout01, 'onTap': authController.logout},
     ];
 
     return Scaffold(
@@ -36,13 +36,13 @@ class ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.all(16),
         children: [
           Obx(() {
-            final imageUrl = authController.user.value!.photo;
+            final imageUrl = authController.user.value?.photo ?? "";
             return Center(
               child: Container(
                 width: 96,
                 height: 96,
                 decoration: BoxDecoration(shape: BoxShape.circle),
-                child: ClipOval(child: CustomImage(imageUrl: imageUrl!, fit: BoxFit.cover)),
+                child: ClipOval(child: CustomImage(imageUrl: imageUrl, fit: BoxFit.cover)),
               ),
             );
           }),

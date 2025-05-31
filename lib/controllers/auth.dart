@@ -161,4 +161,15 @@ class AuthController extends GetxController {
       isRegistering.value = false;
     });
   }
+
+  Future<void> logout() async {
+    storageService.remove(StorageKey.accessToken);
+    storageService.remove(StorageKey.refreshToken);
+    storageService.remove(StorageKey.user);
+
+    user.value = null;
+    isLoggedIn.value = false;
+
+    Get.offAllNamed(AppRoutes.login);
+  }
 }
