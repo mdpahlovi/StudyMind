@@ -23,7 +23,7 @@ class CustomTextField extends StatefulWidget {
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
     this.validator,
-    this.maxLines,
+    this.maxLines = 1,
     this.maxLength,
     this.suffixIcon,
   });
@@ -58,6 +58,7 @@ class CustomTextFieldState extends State<CustomTextField> {
                   onPressed: () => setState(() => obscureText = !obscureText),
                 )
                 : widget.suffixIcon,
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
       ),
     );
   }

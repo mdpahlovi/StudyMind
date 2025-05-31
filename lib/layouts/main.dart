@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:studymind/controllers/main.dart';
+import 'package:studymind/presentation/community/community.dart';
+import 'package:studymind/presentation/home/home.dart';
+import 'package:studymind/presentation/library/library.dart';
+import 'package:studymind/presentation/profile/profile.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/library/item_create_sheet.dart';
 
@@ -12,15 +15,19 @@ class MainLayout extends StatefulWidget {
 }
 
 class MainLayoutState extends State<MainLayout> {
+  int selectedIndex = 0;
+
+  void onDestinationSelected(int index) {
+    setState(() => selectedIndex = index);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final MainController mainController = Get.find<MainController>();
-
     return Scaffold(
-      body: mainController.getScreen(),
+      body: [HomeScreen(), LibraryScreen(), SizedBox(), CommunityScreen(), ProfileScreen()][selectedIndex],
       bottomNavigationBar: NavigationBar(
-        selectedIndex: mainController.selectedIndex.value,
-        onDestinationSelected: (index) => setState(() => mainController.selectedIndex.value = index),
+        selectedIndex: selectedIndex,
+        onDestinationSelected: onDestinationSelected,
         destinations: [
           NavigationDestination(icon: CustomIcon(icon: 'home'), label: 'Home'),
           NavigationDestination(icon: CustomIcon(icon: 'library'), label: 'Library'),
