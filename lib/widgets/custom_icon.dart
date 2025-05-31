@@ -42,6 +42,8 @@ class CustomIcon extends StatelessWidget {
       'image': HugeIcons.strokeRoundedAiImage,
       'tick': HugeIcons.strokeRoundedTick01,
       'cancel': Icons.close,
+      'arrowDown': HugeIcons.strokeRoundedArrowDown01,
+      'tickCircle': HugeIcons.strokeRoundedCheckmarkCircle03,
     };
 
     if (iconMap.containsKey(icon)) {

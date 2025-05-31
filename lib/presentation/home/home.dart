@@ -51,145 +51,138 @@ class HomeScreen extends StatelessWidget {
       body: RefreshIndicator(
         onRefresh: () async => libraryController.fetchLibraryItemsByRecent(),
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 16),
           physics: const AlwaysScrollableScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Quick Actions
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('Quick Actions', style: textTheme.headlineMedium),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Quick Actions
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text('Quick Actions', style: textTheme.headlineMedium),
+              ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children:
+                      actionButtons.map((button) {
+                        return ActionButton(
+                          title: button['title'],
+                          icon: button['icon'],
+                          color: button['color'],
+                          onTap: () => libraryController.navigateToItemByType(button['type']),
+                        );
+                      }).toList(),
                 ),
-                const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:
-                        actionButtons.map((button) {
-                          return ActionButton(
-                            title: button['title'],
-                            icon: button['icon'],
-                            color: button['color'],
-                            onTap: () => libraryController.navigateToItemByType(button['type']),
-                          );
-                        }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 16),
+              ),
+              const SizedBox(height: 16),
 
-                // Recent Activity
-                Obx(() {
-                  final List<LibraryItem> recentItems = libraryController.recentItems;
+              // Recent Activity
+              Obx(() {
+                final List<LibraryItem> recentItems = libraryController.recentItems;
 
-                  if (libraryController.isLoadingRecent.value || recentItems.isNotEmpty) {
-                    return Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Recent Activity', style: textTheme.headlineMedium),
-                              GestureDetector(
-                                onTap: () => libraryController.navigateToItemByType(''),
-                                child: Text(
-                                  'View All',
-                                  style: textTheme.labelMedium?.copyWith(color: colorPalette.primary),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          itemCount: recentItems.isEmpty ? 6 : recentItems.length,
-                          itemBuilder: (context, index) {
-                            final item = recentItems.isEmpty ? null : recentItems[index];
-                            if (item == null) {
-                              return const RecentLoader();
-                            } else {
-                              return RecentCard(item: item);
-                            }
-                          },
-                          separatorBuilder: (context, index) => const SizedBox(height: 12),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    );
-                  } else {
-                    return const SizedBox();
-                  }
-                }),
-
-                // Study Stats
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                if (libraryController.isLoadingRecent.value || recentItems.isNotEmpty) {
+                  return Column(
                     children: [
-                      Text('Study Stats', style: textTheme.headlineMedium),
-                      Text('Details', style: textTheme.labelMedium?.copyWith(color: colorPalette.primary)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Recent Activity', style: textTheme.headlineMedium),
+                            GestureDetector(
+                              onTap: () => libraryController.navigateToItemByType(''),
+                              child: Text(
+                                'View All',
+                                style: textTheme.labelMedium?.copyWith(color: colorPalette.primary),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: recentItems.isEmpty ? 6 : recentItems.length,
+                        itemBuilder: (context, index) {
+                          final item = recentItems.isEmpty ? null : recentItems[index];
+                          if (item == null) {
+                            return const RecentLoader();
+                          } else {
+                            return RecentCard(item: item);
+                          }
+                        },
+                        separatorBuilder: (context, index) => const SizedBox(height: 12),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              }),
+
+              // Study Stats
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Study Stats', style: textTheme.headlineMedium),
+                    Text('Details', style: textTheme.labelMedium?.copyWith(color: colorPalette.primary)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: StatItem(value: '4.5+', label: 'Hours', subLabel: 'Today', color: colorPalette.primary),
+                      ),
+                      Expanded(
+                        child: StatItem(value: '12+', label: 'Notes', subLabel: 'Created', color: colorPalette.info),
+                      ),
+                      Expanded(
+                        child: StatItem(
+                          value: '85%',
+                          label: 'Flashcards',
+                          subLabel: 'Mastered',
+                          color: colorPalette.warning,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 12),
-                Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: StatItem(
-                            value: '4.5+',
-                            label: 'Hours',
-                            subLabel: 'Today',
-                            color: colorPalette.primary,
-                          ),
-                        ),
-                        Expanded(
-                          child: StatItem(value: '12+', label: 'Notes', subLabel: 'Created', color: colorPalette.info),
-                        ),
-                        Expanded(
-                          child: StatItem(
-                            value: '85%',
-                            label: 'Flashcards',
-                            subLabel: 'Mastered',
-                            color: colorPalette.warning,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
+              ),
+              const SizedBox(height: 16),
 
-                // Suggested Content
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('Suggested For You', style: textTheme.headlineMedium),
+              // Suggested Content
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text('Suggested For You', style: textTheme.headlineMedium),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 194,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  itemCount: suggestedContent.length,
+                  itemBuilder: (context, index) {
+                    final content = suggestedContent[index];
+                    return ArticleCard(title: content['title'], type: content['type'], imageUrl: content['imageUrl']);
+                  },
+                  separatorBuilder: (context, index) => const SizedBox(width: 12),
                 ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 194,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    itemCount: suggestedContent.length,
-                    itemBuilder: (context, index) {
-                      final content = suggestedContent[index];
-                      return ArticleCard(title: content['title'], type: content['type'], imageUrl: content['imageUrl']);
-                    },
-                    separatorBuilder: (context, index) => const SizedBox(width: 12),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

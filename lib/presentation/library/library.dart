@@ -18,19 +18,31 @@ class LibraryScreenState extends State<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async => libraryController.refreshByFolder(),
-      child: Scaffold(
-        appBar: buildItemAppBar(),
-        body: Obx(() {
-          List<LibraryItem> folderItems = libraryController.folderItems.toList();
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) return;
 
-          if (libraryController.isLoadingFolder.value) return const ItemLoader();
+        if (libraryController.selectedItems.isEmpty) {
+          Get.back();
+        } else {
+          libraryController.selectedItems.clear();
+        }
+      },
+      child: RefreshIndicator(
+        onRefresh: () async => libraryController.refreshByFolder(),
+        child: Scaffold(
+          appBar: buildItemAppBar(),
+          body: Obx(() {
+            List<LibraryItem> folderItems = libraryController.folderItems.toList();
 
-          if (folderItems.isEmpty) return const ItemEmpty();
+            if (libraryController.isLoadingFolder.value) return const ItemLoader();
 
-          return ItemGrid(items: folderItems);
-        }),
+            if (folderItems.isEmpty) return const ItemEmpty();
+
+            return ItemGrid(items: folderItems);
+          }),
+        ),
       ),
     );
   }

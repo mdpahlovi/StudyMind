@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
+import 'package:studymind/controllers/main.dart';
 import 'package:studymind/presentation/library/widgets/item_options_sheet.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
@@ -9,6 +10,7 @@ import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/notification_button.dart';
 
 PreferredSizeWidget buildItemAppBar() {
+  final MainController mainController = Get.find<MainController>();
   final LibraryController libraryController = Get.find<LibraryController>();
   final ColorPalette colorPalette = AppColors().palette;
 
@@ -18,7 +20,7 @@ PreferredSizeWidget buildItemAppBar() {
 
       if (selectedItems.isEmpty) {
         if (Get.currentRoute == AppRoutes.home) {
-          return SizedBox();
+          return CustomBackButton(onPressed: mainController.onBack);
         } else if (Get.currentRoute.contains('/item_by_type')) {
           return CustomBackButton();
         } else {

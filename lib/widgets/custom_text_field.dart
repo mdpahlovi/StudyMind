@@ -4,21 +4,27 @@ import 'package:studymind/widgets/custom_icon.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
-  final String label;
-  final String prefixIcon;
+  final String? label;
+  final String? placeholder;
+  final String? prefixIcon;
   final bool isPassword;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
+  final int? maxLines;
+  final int? maxLength;
   final Widget? suffixIcon;
 
   const CustomTextField({
     super.key,
     required this.controller,
-    required this.label,
-    required this.prefixIcon,
+    this.label,
+    this.placeholder,
+    this.prefixIcon,
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
     this.validator,
+    this.maxLines,
+    this.maxLength,
     this.suffixIcon,
   });
 
@@ -38,10 +44,13 @@ class CustomTextFieldState extends State<CustomTextField> {
       obscureText: widget.isPassword ? obscureText : false,
       keyboardType: widget.keyboardType,
       validator: widget.validator,
+      maxLines: widget.maxLines,
+      maxLength: widget.maxLength,
       style: textTheme.bodyMedium?.copyWith(color: colorPalette.content),
       decoration: InputDecoration(
         labelText: widget.label,
-        prefixIcon: CustomIcon(icon: widget.prefixIcon),
+        hintText: widget.placeholder,
+        prefixIcon: widget.prefixIcon != null ? CustomIcon(icon: widget.prefixIcon!) : null,
         suffixIcon:
             widget.isPassword
                 ? IconButton(
