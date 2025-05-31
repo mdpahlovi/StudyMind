@@ -4,9 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:studymind/theme/colors.dart';
 
 class CreateNote extends StatefulWidget {
-  final GlobalKey<FormState> formKey;
-
-  const CreateNote({super.key, required this.formKey});
+  const CreateNote({super.key});
 
   @override
   CreateNoteState createState() => CreateNoteState();

@@ -23,30 +23,27 @@ class GetLibraryItemsByTypeQuery {
   Map<String, dynamic> toJson() => {'search': search, 'type': type.toUpperCase(), 'page': page, 'limit': limit};
 }
 
+class GetLibraryItemsWithPathQuery {
+  final String type;
+
+  GetLibraryItemsWithPathQuery({this.type = 'FOLDER'});
+
+  Map<String, dynamic> toJson() => {'type': type};
+}
+
 class CreateLibraryItem {
   final String name;
   final ItemType type;
   final int? parentId;
-  final String path;
   final Map<String, dynamic>? metadata;
-  final int sortOrder;
 
-  CreateLibraryItem({
-    required this.name,
-    required this.type,
-    this.parentId,
-    required this.path,
-    this.metadata,
-    this.sortOrder = 0,
-  });
+  CreateLibraryItem({required this.name, required this.type, this.parentId, this.metadata});
 
   Map<String, dynamic> toJson() => {
     'name': name,
     'type': type.toString().split('.').last.toUpperCase(),
     'parentId': parentId,
-    'path': path,
     'metadata': jsonEncode(metadata),
-    'sortOrder': sortOrder,
   };
 }
 
@@ -56,9 +53,7 @@ class UpdateLibraryItem {
   final String name;
   final ItemType type;
   final int? parentId;
-  final String path;
   final Map<String, dynamic>? metadata;
-  final int sortOrder;
 
   UpdateLibraryItem({
     required this.uid,
@@ -66,9 +61,7 @@ class UpdateLibraryItem {
     required this.name,
     required this.type,
     this.parentId,
-    required this.path,
     this.metadata,
-    this.sortOrder = 0,
   });
 
   Map<String, dynamic> toJson() => {
@@ -76,8 +69,6 @@ class UpdateLibraryItem {
     'name': name,
     'type': type.toString().split('.').last.toUpperCase(),
     'parentId': parentId,
-    'path': path,
     'metadata': jsonEncode(metadata),
-    'sortOrder': sortOrder,
   };
 }

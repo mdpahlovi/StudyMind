@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:studymind/theme/colors.dart';
 
 class CreateImage extends StatefulWidget {
-  final GlobalKey<FormState> formKey;
-  const CreateImage({super.key, required this.formKey});
+  const CreateImage({super.key});
 
   @override
   State<CreateImage> createState() => CreateImageState();
@@ -23,6 +22,7 @@ class CreateImageState extends State<CreateImage> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;

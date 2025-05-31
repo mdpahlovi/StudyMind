@@ -74,7 +74,7 @@ class CreateOption extends StatelessWidget {
 
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onTap: () => Get.toNamed(AppRoutes.itemCreate, arguments: option),
+      onTap: () => Get.toNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase())),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(12),

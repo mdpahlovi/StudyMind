@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:studymind/theme/colors.dart';
 
 class CreateDocument extends StatefulWidget {
-  final GlobalKey<FormState> formKey;
-  const CreateDocument({super.key, required this.formKey});
+  const CreateDocument({super.key});
 
   @override
   State<CreateDocument> createState() => CreateDocumentState();

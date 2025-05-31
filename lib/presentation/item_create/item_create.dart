@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:studymind/constants/item_type.dart';
+import 'package:studymind/controllers/item_create.dart';
+import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/logger.dart';
 import 'package:studymind/core/validators.dart';
 import 'package:studymind/presentation/item_create/widgets/create_audio.dart';
@@ -23,6 +24,9 @@ class ItemCreateScreen extends StatefulWidget {
 }
 
 class ItemCreateScreenState extends State<ItemCreateScreen> {
+  final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
+
+  final ItemType type = ItemType.values.firstWhere((e) => e.toString().split('.').last == Get.parameters['type']);
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -39,54 +43,28 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
     super.dispose();
   }
 
+  // Folder Metadata
+  String folderColor = '#A8C686';
+  String folderIcon = 'folder';
+
+  Future<void> handleCreate() async {
+    if (formKey.currentState!.validate()) {
+      final String name = nameController.text.trim();
+      final String description = descriptionController.text.trim();
+
+      logger.d('Name: $name');
+      logger.d('Description: $description');
+
+      itemCreateController.createLibraryItem(type, name, description);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TypeOption option = Get.arguments;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    Widget itemCreateWidget() {
-      switch (option.title) {
-        case 'Folder':
-          return CreateFolder(formKey: formKey);
-        case 'Note':
-          return CreateNote(formKey: formKey);
-        case 'Document':
-          return CreateDocument(formKey: formKey);
-        case 'Flashcard':
-          return CreateFlashcard(formKey: formKey);
-        case 'Audio':
-          return CreateAudio(formKey: formKey);
-        case 'Video':
-          return CreateVideo(formKey: formKey);
-        case 'Image':
-          return CreateImage(formKey: formKey);
-        default:
-          return const SizedBox();
-      }
-    }
-
-    final List<ItemFolder> folders = [
-      ItemFolder(id: null, name: "Root Folder", path: "/"),
-      ItemFolder(id: 1, name: "Mathematics", path: "/Mathematics"),
-      ItemFolder(id: 2, name: "Physics", path: "/Physics"),
-      ItemFolder(id: 3, name: "Chemistry", path: "/Chemistry"),
-      ItemFolder(id: 4, name: "Biology", path: "/Biology"),
-      ItemFolder(id: 5, name: "Computer Science", path: "/Computer Science"),
-      ItemFolder(id: 6, name: "History", path: "/History"),
-      ItemFolder(id: 7, name: "Geography", path: "/Geography"),
-      ItemFolder(id: 8, name: "English", path: "/English"),
-      ItemFolder(id: 9, name: "Arabic", path: "/Arabic"),
-      ItemFolder(id: 10, name: "French", path: "/French"),
-    ];
-
-    Future<void> handleCreate() async {
-      if (formKey.currentState!.validate()) {
-        logger.d('Creating ${option.title} with name: ${nameController.text}');
-      }
-    }
-
     return Scaffold(
-      appBar: AppBar(leading: CustomBackButton(icon: 'cancel'), title: Text('Create ${option.title}')),
+      appBar: AppBar(leading: CustomBackButton(icon: 'cancel'), title: Text('Create ${type.name.capitalize}')),
       body: Form(
         key: formKey,
         child: SingleChildScrollView(
@@ -107,34 +85,62 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               // Item-specific content
-              itemCreateWidget(),
-              const SizedBox(height: 24),
+              buildItemCreateWidget(type),
+              const SizedBox(height: 16),
               // Parent Folder Selector
-              ParentFolderSelector(folders: folders, value: 10, onChanged: (folderId) {}),
-              const SizedBox(height: 24),
+              ParentFolderSelector(),
+              const SizedBox(height: 16),
               // Description Input Section
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Description', style: textTheme.labelLarge),
-                  SizedBox(height: 8),
-                  CustomTextField(
-                    controller: descriptionController,
-                    placeholder: 'Add a brief description (optional)',
-                    maxLines: 3,
-                    maxLength: 200,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
+              type != ItemType.folder
+                  ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Description', style: textTheme.labelLarge),
+                      SizedBox(height: 8),
+                      CustomTextField(
+                        controller: descriptionController,
+                        placeholder: 'Add a brief description (optional)',
+                        maxLines: 3,
+                        maxLength: 200,
+                      ),
+                    ],
+                  )
+                  : SizedBox(),
+              type != ItemType.folder ? const SizedBox(height: 16) : SizedBox(),
               // Create Button
-              CustomButton(text: 'Create ${option.title}', onPressed: handleCreate),
+              const SizedBox(height: 8),
+              Obx(
+                () => CustomButton(
+                  text: 'Create ${type.name.capitalize}',
+                  onPressed: handleCreate,
+                  isLoading: itemCreateController.isCreating.value,
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+Widget buildItemCreateWidget(ItemType type) {
+  switch (type) {
+    case ItemType.folder:
+      return CreateFolder();
+    case ItemType.note:
+      return CreateNote();
+    case ItemType.document:
+      return CreateDocument();
+    case ItemType.flashcard:
+      return CreateFlashcard();
+    case ItemType.audio:
+      return CreateAudio();
+    case ItemType.video:
+      return CreateVideo();
+    case ItemType.image:
+      return CreateImage();
   }
 }

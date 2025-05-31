@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:studymind/theme/colors.dart';
 
 class CreateVideo extends StatefulWidget {
-  final GlobalKey<FormState> formKey;
-  const CreateVideo({super.key, required this.formKey});
+  const CreateVideo({super.key});
 
   @override
   State<CreateVideo> createState() => CreateVideoState();
@@ -23,6 +22,7 @@ class CreateVideoState extends State<CreateVideo> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;

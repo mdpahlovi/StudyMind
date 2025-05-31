@@ -44,6 +44,15 @@ class CustomIcon extends StatelessWidget {
       'cancel': Icons.close,
       'arrowDown': HugeIcons.strokeRoundedArrowDown01,
       'tickCircle': HugeIcons.strokeRoundedCheckmarkCircle03,
+      'book': HugeIcons.strokeRoundedBook02,
+      'physics': HugeIcons.strokeRoundedPhysics,
+      'chemistry': HugeIcons.strokeRoundedAtom02,
+      'math': HugeIcons.strokeRoundedMath,
+      'history': HugeIcons.strokeRoundedGlobal,
+      'artificialIntelligence': HugeIcons.strokeRoundedArtificialIntelligence01,
+      'statistics': HugeIcons.strokeRoundedPieChart02,
+      'botany': HugeIcons.strokeRoundedBioEnergy,
+      'factory': HugeIcons.strokeRoundedFactory,
     };
 
     if (iconMap.containsKey(icon)) {

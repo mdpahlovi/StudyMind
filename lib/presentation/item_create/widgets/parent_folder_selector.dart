@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:studymind/controllers/item_create.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
-class ItemFolder {
-  final int? id;
-  final String name;
-  final String path;
-
-  ItemFolder({this.id, required this.name, required this.path});
-}
-
 class ParentFolderSelector extends StatelessWidget {
-  final List<ItemFolder> folders;
-  final int? value;
-  final Function(int?) onChanged;
-
-  const ParentFolderSelector({super.key, required this.folders, this.value, required this.onChanged});
+  const ParentFolderSelector({super.key});
 
   Widget buildFolderSelectorSheet(BuildContext context) {
+    final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
+
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
@@ -47,55 +39,73 @@ class ParentFolderSelector extends StatelessWidget {
           Divider(),
           // Folder list
           Expanded(
-            child: ListView.separated(
-              itemCount: folders.length,
-              itemBuilder: (context, index) {
-                final folder = folders[index];
-                final isSelected = value == folder.id;
-                final isRoot = folder.id == null;
-                return ListTile(
-                  onTap: () {
-                    onChanged(folder.id);
-                    Get.back();
-                  },
-                  leading: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: isRoot ? colorPalette.primary.withAlpha(50) : colorPalette.content.withAlpha(50),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: CustomIcon(
-                      icon: isRoot ? 'home' : 'folder',
-                      color: isRoot ? colorPalette.primary : colorPalette.content,
-                    ),
+            child: Obx(() {
+              final List<Folder> folders = itemCreateController.folders;
+
+              if (itemCreateController.isLoadingFolder.value) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [CircularProgressIndicator(), const SizedBox(height: 16), Text('Fetching folders...')],
                   ),
-                  title: Text(folder.name, style: textTheme.titleMedium),
-                  subtitle: Text(isRoot ? 'Main directory' : folder.path, style: textTheme.bodySmall),
-                  trailing: isSelected ? CustomIcon(icon: 'tickCircle', color: colorPalette.primary) : null,
                 );
-              },
-              separatorBuilder: (context, index) => const Divider(),
-            ),
+              }
+
+              if (folders.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(HugeIcons.strokeRoundedSadDizzy, size: 44),
+                      const SizedBox(height: 16),
+                      Text('No other folders found'),
+                    ],
+                  ),
+                );
+              }
+
+              return ListView.separated(
+                itemCount: folders.length,
+                itemBuilder: (context, index) {
+                  final folder = folders[index];
+                  final isSelected = itemCreateController.selectedFolder.value?.id == folder.id;
+                  final isRoot = folder.id == null;
+                  return ListTile(
+                    onTap: () {
+                      itemCreateController.selectedFolder.value = folder;
+                      Get.back();
+                    },
+                    leading: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: isRoot ? colorPalette.primary.withAlpha(50) : colorPalette.content.withAlpha(50),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: CustomIcon(
+                        icon: isRoot ? 'home' : 'folder',
+                        color: isRoot ? colorPalette.primary : colorPalette.content,
+                      ),
+                    ),
+                    title: Text(folder.name, style: textTheme.titleMedium),
+                    subtitle: Text(isRoot ? 'Main directory' : folder.path, style: textTheme.bodySmall),
+                    trailing: isSelected ? CustomIcon(icon: 'tickCircle', color: colorPalette.primary) : null,
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(),
+              );
+            }),
           ),
         ],
       ),
     );
   }
 
-  ItemFolder getSelectedFolder() {
-    return folders.firstWhere(
-      (folder) => folder.id == value,
-      orElse: () => folders.isNotEmpty ? folders[0] : ItemFolder(id: null, name: 'Root Folder', path: '/'),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
+
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
-
-    final selectedFolder = getSelectedFolder();
-    final isRoot = selectedFolder.id == null;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,32 +121,37 @@ class ParentFolderSelector extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: colorPalette.border),
             ),
-            child: Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: isRoot ? colorPalette.primary.withAlpha(50) : colorPalette.content.withAlpha(50),
-                    borderRadius: BorderRadius.circular(8),
+            child: Obx(() {
+              final folder = itemCreateController.selectedFolder.value;
+              final isRoot = folder?.id == null;
+
+              return Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: isRoot ? colorPalette.primary.withAlpha(50) : colorPalette.content.withAlpha(50),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: CustomIcon(
+                      icon: isRoot ? 'home' : 'folder',
+                      color: isRoot ? colorPalette.primary : colorPalette.content,
+                    ),
                   ),
-                  child: CustomIcon(
-                    icon: isRoot ? 'home' : 'folder',
-                    color: isRoot ? colorPalette.primary : colorPalette.content,
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(folder?.name ?? 'Root Folder', style: textTheme.titleMedium),
+                        Text(isRoot ? 'Main directory' : folder?.path ?? '/', style: textTheme.bodySmall),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(selectedFolder.name, style: textTheme.titleMedium),
-                      Text(isRoot ? 'Main directory' : selectedFolder.path, style: textTheme.bodySmall),
-                    ],
-                  ),
-                ),
-                CustomIcon(icon: 'arrowDown', color: colorPalette.content, size: 24),
-              ],
-            ),
+                  CustomIcon(icon: 'arrowDown', color: colorPalette.content, size: 24),
+                ],
+              );
+            }),
           ),
         ),
       ],

@@ -12,15 +12,19 @@ class LibraryService {
     return await apiService.get('/library/by-type', queryParameters: query.toJson());
   }
 
+  Future<ApiResponse> getLibraryItemsWithPath(GetLibraryItemsWithPathQuery query) async {
+    return await apiService.get('/library/with-path', queryParameters: query.toJson());
+  }
+
   Future<ApiResponse> getLibraryItemByUid(String uid) async {
     return await apiService.get('/library/$uid');
   }
 
-  Future<ApiResponse> createLibraryItem(CreateLibraryItem request) async {
-    return await apiService.post('/library', data: request.toJson());
+  Future<ApiResponse> createLibraryItem(CreateLibraryItem data) async {
+    return await apiService.post('/library', data: data.toJson());
   }
 
-  Future<ApiResponse> updateLibraryItem(UpdateLibraryItem request) async {
-    return await apiService.patch('/library/${request.uid}', data: request.toJson());
+  Future<ApiResponse> updateLibraryItem(UpdateLibraryItem data) async {
+    return await apiService.patch('/library/${data.uid}', data: data.toJson());
   }
 }

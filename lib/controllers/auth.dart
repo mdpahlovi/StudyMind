@@ -171,5 +171,6 @@ class AuthController extends GetxController {
     isLoggedIn.value = false;
 
     Get.offAllNamed(AppRoutes.login);
+    Notification.success('Logged out. Thank you for visiting.');
   }
 }

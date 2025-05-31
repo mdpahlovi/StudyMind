@@ -59,7 +59,6 @@ class LibraryItem {
       'parentId': parentId,
       'userId': userId,
       'metadata': metadata,
-      'sortOrder': sortOrder,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };

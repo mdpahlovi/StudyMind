@@ -30,7 +30,7 @@ class AppRoutes {
   static const String forgotPassword = '/forgot-password';
   static const String notification = '/notification';
   static const String itemDetails = '/item_details/:uid';
-  static const String itemCreate = '/item_create';
+  static const String itemCreate = '/item_create/:type';
 
   static List<GetPage<dynamic>> routes = [
     GetPage(

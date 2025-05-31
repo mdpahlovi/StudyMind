@@ -48,10 +48,17 @@ class ProfileScreenState extends State<ProfileScreen> {
           }),
           const SizedBox(height: 20),
           Obx(
-            () => Text(authController.user.value!.name, textAlign: TextAlign.center, style: textTheme.headlineMedium),
+            () => Text(
+              authController.user.value?.name ?? "",
+              textAlign: TextAlign.center,
+              style: textTheme.headlineMedium,
+            ),
           ),
           const SizedBox(height: 4),
-          Obx(() => Text(authController.user.value!.email, textAlign: TextAlign.center, style: textTheme.bodyMedium)),
+          Obx(
+            () =>
+                Text(authController.user.value?.email ?? "", textAlign: TextAlign.center, style: textTheme.bodyMedium),
+          ),
           const SizedBox(height: 12),
           ...profileSections.map((section) {
             return Card(

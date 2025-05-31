@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:studymind/core/logger.dart';
-import 'package:studymind/core/notification.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/services/error.dart';
 import 'package:studymind/services/storage.dart';
@@ -50,12 +49,10 @@ class DioService {
   }
 
   Future<void> onError(DioException error, ErrorInterceptorHandler handler) async {
-    loggerSimp.e('ERROR: ${error.response?.data}');
+    loggerSimp.e('ERROR: ${ErrorService.message(error)}');
 
     if (error.response?.statusCode == 401) {
       handleUnauthorize();
-    } else {
-      Notification.error(ErrorService.message(error));
     }
 
     handler.reject(error);

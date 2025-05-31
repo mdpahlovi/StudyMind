@@ -3,8 +3,7 @@ import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_text_field.dart';
 
 class CreateFlashcard extends StatefulWidget {
-  final GlobalKey<FormState> formKey;
-  const CreateFlashcard({super.key, required this.formKey});
+  const CreateFlashcard({super.key});
 
   @override
   State<CreateFlashcard> createState() => CreateFlashcardState();
