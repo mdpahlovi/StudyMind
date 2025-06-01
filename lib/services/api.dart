@@ -27,7 +27,7 @@ class ApiService {
 
       return ApiResponse.fromJson(response.data);
     } catch (error) {
-      final message = ErrorService.message(error as DioException);
+      final message = Error.message(error as DioException);
 
       return ApiResponse(success: false, message: message, data: null);
     }
@@ -39,7 +39,7 @@ class ApiService {
 
       return ApiResponse.fromJson(response.data);
     } catch (error) {
-      final message = ErrorService.message(error as DioException);
+      final message = Error.message(error as DioException);
 
       return ApiResponse(success: false, message: message, data: null);
     }
@@ -51,7 +51,7 @@ class ApiService {
 
       return ApiResponse.fromJson(response.data);
     } catch (error) {
-      final message = ErrorService.message(error as DioException);
+      final message = Error.message(error as DioException);
 
       return ApiResponse(success: false, message: message, data: null);
     }

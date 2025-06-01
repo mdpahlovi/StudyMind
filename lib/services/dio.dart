@@ -14,18 +14,18 @@ class DioService {
   DioService() {
     initializeDio();
   }
-
   void initializeDio() {
     dio.options.baseUrl = 'https://studymind.onrender.com/api/v1';
     dio.options.connectTimeout = const Duration(seconds: 60);
     dio.options.receiveTimeout = const Duration(seconds: 60);
+    dio.options.sendTimeout = const Duration(seconds: 60);
 
     dio.interceptors.add(InterceptorsWrapper(onRequest: onRequest, onResponse: onResponse, onError: onError));
   }
 
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final accessToken = await storage.get(StorageKey.accessToken);
-    final refreshToken = await storage.get(StorageKey.refreshToken);
+    final accessToken = storage.get(StorageKey.accessToken);
+    final refreshToken = storage.get(StorageKey.refreshToken);
 
     options.headers.putIfAbsent("Content-Type", () => "application/json");
 
@@ -44,33 +44,48 @@ class DioService {
     loggerSimp.t(response.data);
 
     // Update access token if new access token is available
-    updateAccessToken(response);
+    await updateAccessToken(response);
     handler.next(response);
   }
 
   Future<void> onError(DioException error, ErrorInterceptorHandler handler) async {
-    loggerSimp.e('ERROR: ${ErrorService.message(error)}');
+    loggerSimp.e('ERROR: ${Error.message(error)}');
 
     if (error.response?.statusCode == 401) {
-      handleUnauthorize();
+      await handleUnauthorized();
     }
 
     handler.reject(error);
   }
 
-  void updateAccessToken(Response<dynamic>? response) {
-    final newAccessToken = response?.headers['x-access-token'];
-    final currentAccessToken = storage.get(StorageKey.accessToken);
+  Future<void> updateAccessToken(Response<dynamic>? response) async {
+    try {
+      final newAccessToken = response?.headers.value('x-access-token');
 
-    if (newAccessToken != null && currentAccessToken != newAccessToken) {
-      storage.set(StorageKey.accessToken, newAccessToken);
+      if (newAccessToken != null) {
+        final currentAccessToken = storage.get(StorageKey.accessToken);
+
+        if (currentAccessToken != newAccessToken) {
+          await storage.set(StorageKey.accessToken, newAccessToken);
+          loggerSimp.d('Access token has been updated');
+        }
+      }
+    } catch (e) {
+      loggerSimp.e('Failed to update access token: $e');
     }
   }
 
-  void handleUnauthorize() {
-    storage.remove(StorageKey.accessToken);
-    storage.remove(StorageKey.refreshToken);
+  Future<void> handleUnauthorized() async {
+    try {
+      loggerSimp.w('Handling unauthorized access - clearing tokens');
 
-    Get.offAllNamed(AppRoutes.login);
+      await storage.remove(StorageKey.accessToken);
+      await storage.remove(StorageKey.refreshToken);
+      await storage.remove(StorageKey.user);
+
+      Get.offAllNamed(AppRoutes.login);
+    } catch (e) {
+      loggerSimp.e('Failed to handle unauthorized: $e');
+    }
   }
 }

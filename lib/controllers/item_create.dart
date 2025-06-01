@@ -6,24 +6,27 @@ import 'package:studymind/services/library.dart';
 
 class Folder {
   final int? id;
+  final String? uid;
   final String name;
   final String path;
 
-  Folder({this.id, required this.name, required this.path});
+  Folder({this.id, this.uid, required this.name, required this.path});
 
-  factory Folder.fromJson(Map<String, dynamic> json) => Folder(id: json['id'], name: json['name'], path: json['path']);
+  factory Folder.fromJson(Map<String, dynamic> json) =>
+      Folder(id: json['id'], uid: json['uid'], name: json['name'], path: json['path']);
 }
 
 class ItemCreateController extends GetxController {
   final libraryService = LibraryService();
+  final LibraryController libraryController = Get.find<LibraryController>();
 
   final RxBool isCreating = false.obs;
   final RxBool isLoadingFolder = true.obs;
   final RxList<Folder> folders = <Folder>[].obs;
   final Rxn<Folder> selectedFolder = Rxn<Folder>();
 
-  void setSelectedFolder(int? id) {
-    selectedFolder.value = folders.firstWhere((folder) => folder.id == id);
+  void setSelectedFolder(String? uid) {
+    selectedFolder.value = folders.firstWhere((folder) => folder.uid == uid);
   }
 
   // Folder Metadata
@@ -50,7 +53,7 @@ class ItemCreateController extends GetxController {
     libraryService.getLibraryItemsWithPath(GetLibraryItemsWithPathQuery(type: 'FOLDER')).then((response) {
       if (response.success && response.data != null) {
         final folderResponse = response.data.map((x) => Folder.fromJson(x));
-        folders.value = [Folder(id: null, name: "Root Folder", path: "/"), ...folderResponse];
+        folders.value = [Folder(id: null, uid: null, name: "Root Folder", path: "/"), ...folderResponse];
         selectedFolder.value = folders.first;
       } else {
         Notification.error(response.message);
@@ -96,6 +99,7 @@ class ItemCreateController extends GetxController {
 
     libraryService.createLibraryItem(createLibraryItemData).then((response) {
       if (response.success && response.data != null) {
+        libraryController.fetchLibraryItems(parentUid: selectedFolder.value?.uid);
         Notification.success(response.message);
         Get.back();
       } else {

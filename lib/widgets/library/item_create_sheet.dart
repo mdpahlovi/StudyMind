@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/constants/item_type.dart';
+import 'package:studymind/controllers/item_create.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
@@ -69,12 +70,17 @@ class CreateOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
+
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onTap: () => Get.toNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase())),
+      onTap: () {
+        itemCreateController.setSelectedFolder(Get.parameters['uid']);
+        Get.toNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
+      },
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(12),

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-class ErrorService {
+class Error {
   static String message(DioException error) {
     if (error.response != null) {
       return error.response?.data['message'] ?? 'Something went wrong';

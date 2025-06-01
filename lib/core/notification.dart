@@ -1,15 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:studymind/theme/colors.dart';
 
 class Notification {
-  static final ColorPalette colorPalette = AppColors().palette;
-
   static void success(String message) {
     Get.snackbar(
       'Success',
       message,
-      backgroundColor: colorPalette.success,
-      colorText: colorPalette.white,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
       snackPosition: SnackPosition.TOP,
     );
   }
@@ -18,8 +16,8 @@ class Notification {
     Get.snackbar(
       'Error',
       message,
-      backgroundColor: colorPalette.error,
-      colorText: colorPalette.white,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
       snackPosition: SnackPosition.TOP,
     );
   }
@@ -28,8 +26,8 @@ class Notification {
     Get.snackbar(
       'Info',
       message,
-      backgroundColor: colorPalette.info,
-      colorText: colorPalette.white,
+      backgroundColor: Colors.blue,
+      colorText: Colors.white,
       snackPosition: SnackPosition.TOP,
     );
   }
@@ -38,8 +36,8 @@ class Notification {
     Get.snackbar(
       'Warning',
       message,
-      backgroundColor: colorPalette.warning,
-      colorText: colorPalette.white,
+      backgroundColor: Colors.yellow,
+      colorText: Colors.white,
       snackPosition: SnackPosition.TOP,
     );
   }
