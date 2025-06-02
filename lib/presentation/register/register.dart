@@ -159,7 +159,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             Obx(
                               () => CustomButton(
                                 text: 'Register',
-                                isLoading: authController.isLogging.value,
+                                isLoading: authController.isRegistering.value,
                                 onPressed: handleRegister,
                               ),
                             ),

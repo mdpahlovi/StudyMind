@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/core/logger.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/models/library.dart';
 import 'package:studymind/services/library.dart';
+import 'package:studymind/widgets/dialog/success.dart';
 
 class Folder {
   final int? id;
@@ -100,11 +100,13 @@ class ItemCreateController extends GetxController {
 
     libraryService.createLibraryItem(createLibraryItemData).then((response) {
       if (response.success && response.data != null) {
-        libraryController.fetchLibraryItems(parentUid: selectedFolder.value?.uid);
-        logger.d('Logging 1: ${response.data} ${response.message}');
-        Notification.success(response.message);
-        logger.d('Logging 2: ${response.data} ${response.message}');
-        Get.back();
+        final itemResponse = LibraryItem.fromJson(response.data);
+        Get.dialog(
+          SuccessDialog(
+            message: '${itemResponse.name} ${itemResponse.type.name} has been created. Do you want to open it?',
+            onConfirmed: () => libraryController.navigateToItem(itemResponse, isReplace: true),
+          ),
+        );
       } else {
         Notification.error(response.message);
       }

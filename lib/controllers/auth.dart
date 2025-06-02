@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/models/auth.dart';
@@ -100,7 +98,8 @@ class AuthController extends GetxController {
     final currentUser = storageService.get(StorageKey.user);
 
     if (accessToken != null && refreshToken != null && currentUser != null) {
-      user.value = User.fromJson(jsonDecode(currentUser));
+      user.value = User.fromJson(currentUser);
+      isLoggedIn.value = true;
 
       Get.offAllNamed(AppRoutes.home);
     } else {
@@ -122,7 +121,7 @@ class AuthController extends GetxController {
         isLoggedIn.value = true;
 
         // Save user data and token
-        storageService.set(StorageKey.user, jsonEncode(authResponse.user));
+        storageService.set(StorageKey.user, authResponse.user);
         storageService.set(StorageKey.accessToken, authResponse.accessToken);
         storageService.set(StorageKey.refreshToken, authResponse.refreshToken);
 
@@ -148,7 +147,7 @@ class AuthController extends GetxController {
         isLoggedIn.value = true;
 
         // Save user data and token
-        storageService.set(StorageKey.user, jsonEncode(authResponse.user));
+        storageService.set(StorageKey.user, authResponse.user);
         storageService.set(StorageKey.accessToken, authResponse.accessToken);
         storageService.set(StorageKey.refreshToken, authResponse.refreshToken);
 

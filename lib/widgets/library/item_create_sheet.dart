@@ -79,7 +79,7 @@ class CreateOption extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       onTap: () {
         itemCreateController.setSelectedFolder(Get.parameters['uid']);
-        Get.toNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
+        Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
       },
       child: Card(
         child: Padding(

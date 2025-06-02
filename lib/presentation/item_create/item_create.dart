@@ -15,6 +15,7 @@ import 'package:studymind/presentation/item_create/widgets/parent_folder_selecto
 import 'package:studymind/widgets/custom_back_button.dart';
 import 'package:studymind/widgets/custom_button.dart';
 import 'package:studymind/widgets/custom_text_field.dart';
+import 'package:studymind/widgets/dialog/confirm.dart';
 
 class ItemCreateScreen extends StatefulWidget {
   const ItemCreateScreen({super.key});
@@ -114,7 +115,7 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
               Obx(
                 () => CustomButton(
                   text: 'Create ${type.name.capitalize}',
-                  onPressed: handleCreate,
+                  onPressed: () => Get.dialog(ConfirmDialog(onConfirmed: () => handleCreate())),
                   isLoading: itemCreateController.isCreating.value,
                 ),
               ),

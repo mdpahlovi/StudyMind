@@ -191,14 +191,18 @@ class LibraryController extends GetxController {
     }
   }
 
-  void navigateToItem(LibraryItem item) {
+  void navigateToItem(LibraryItem item, {bool isReplace = false}) {
     breadcrumbs.add(item);
 
     if (item.type == ItemType.folder) {
-      Get.toNamed(AppRoutes.itemByFolder.replaceFirst(':uid', item.uid));
+      final page = AppRoutes.itemByFolder.replaceFirst(':uid', item.uid);
+      !isReplace ? Get.toNamed(page) : Get.offNamed(page);
+
       fetchLibraryItems(parentUid: item.uid);
     } else {
-      Get.toNamed(AppRoutes.itemDetails.replaceFirst(':uid', item.uid));
+      final page = AppRoutes.itemDetails.replaceFirst(':uid', item.uid);
+      !isReplace ? Get.toNamed(page) : Get.offNamed(page);
+
       fetchLibraryItemByUid(item.uid);
     }
   }

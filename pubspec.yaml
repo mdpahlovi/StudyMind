@@ -72,6 +72,9 @@ dependencies:
     # Flutter SVG:     # Flutter SVG: https://pub.dev/packages/flutter_svg
     flutter_svg: ^2.1.0
 
+    # Connectivity Plus:  https://pub.dev/packages/connectivity_plus
+    connectivity_plus: ^6.1.4
+
 dev_dependencies:
     flutter_test:
         sdk: flutter
