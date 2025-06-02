@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
+import 'package:studymind/core/logger.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/models/library.dart';
 import 'package:studymind/services/library.dart';
@@ -100,7 +101,9 @@ class ItemCreateController extends GetxController {
     libraryService.createLibraryItem(createLibraryItemData).then((response) {
       if (response.success && response.data != null) {
         libraryController.fetchLibraryItems(parentUid: selectedFolder.value?.uid);
+        logger.d('Logging 1: ${response.data} ${response.message}');
         Notification.success(response.message);
+        logger.d('Logging 2: ${response.data} ${response.message}');
         Get.back();
       } else {
         Notification.error(response.message);
