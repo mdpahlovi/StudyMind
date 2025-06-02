@@ -9,16 +9,15 @@ import 'package:studymind/theme/theme.dart';
 import 'package:studymind/widgets/custom_error.dart';
 
 void main() async {
-  await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
+
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return CustomError(errorDetails: details);
   };
-  Future.wait([
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
-  ]).then((value) {
-    runApp(const StudyMind());
-  });
+
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(const StudyMind());
 }
 
 class StudyMind extends StatelessWidget {
