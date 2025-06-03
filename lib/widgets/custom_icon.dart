@@ -16,7 +16,7 @@ class CustomIcon extends StatelessWidget {
     final Map<String, IconData> iconMap = {
       'home': HugeIcons.strokeRoundedHome12,
       'library': HugeIcons.strokeRoundedLibrary,
-      'community': HugeIcons.strokeRoundedUserGroup,
+      'chatbot': HugeIcons.strokeRoundedChatBot,
       'profile': HugeIcons.strokeRoundedUser03,
       'add': HugeIcons.strokeRoundedAdd01,
       'arrowRight': HugeIcons.strokeRoundedArrowRight01,
@@ -54,6 +54,8 @@ class CustomIcon extends StatelessWidget {
       'botany': HugeIcons.strokeRoundedBioEnergy,
       'factory': HugeIcons.strokeRoundedFactory,
       'tap': HugeIcons.strokeRoundedTap05,
+      'sent': HugeIcons.strokeRoundedSent02,
+      'message': HugeIcons.strokeRoundedMessageMultiple01,
     };
 
     if (iconMap.containsKey(icon)) {

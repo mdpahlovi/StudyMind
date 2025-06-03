@@ -7,9 +7,9 @@ StudyMind is an AI powered education assistant app.
 lib/
 ├── core/
 ├── presentation/
-│ ├──community/
+│ ├── ai_agent/
 │ │ ├── widgets/
-│ │ └── community.dart
+│ │ └── ai_agent.dart
 │ ├── home/
 │ │ ├── widgets/
 │ │ └── home.dart

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:studymind/presentation/community/community.dart';
+import 'package:studymind/presentation/chatbot/chatbot.dart';
 import 'package:studymind/presentation/home/home.dart';
 import 'package:studymind/presentation/library/library.dart';
 import 'package:studymind/presentation/profile/profile.dart';
@@ -24,7 +24,7 @@ class MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: [HomeScreen(), LibraryScreen(), SizedBox(), CommunityScreen(), ProfileScreen()][selectedIndex],
+      body: [HomeScreen(), LibraryScreen(), SizedBox(), ChatbotScreen(), ProfileScreen()][selectedIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
         onDestinationSelected: onDestinationSelected,
@@ -32,7 +32,7 @@ class MainLayoutState extends State<MainLayout> {
           NavigationDestination(icon: CustomIcon(icon: 'home'), label: 'Home'),
           NavigationDestination(icon: CustomIcon(icon: 'library'), label: 'Library'),
           SizedBox(),
-          NavigationDestination(icon: CustomIcon(icon: 'community'), label: 'Community'),
+          NavigationDestination(icon: CustomIcon(icon: 'chatbot'), label: 'Chatbot'),
           NavigationDestination(icon: CustomIcon(icon: 'profile'), label: 'Profile'),
         ],
       ),
