@@ -40,9 +40,6 @@ class Validators {
     if (value.length < 2) {
       return 'Name must be at least 2 characters';
     }
-    if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
-      return 'Name can only contain letters and spaces';
-    }
     return null;
   }
 
@@ -58,7 +55,7 @@ class Validators {
   }
 
   // Required field validation
-  static String? validateRequired(String? value, {String fieldName = 'Field'}) {
+  static String? validateRequired(String? value, {String fieldName = ''}) {
     if (value == null || value.isEmpty) {
       return '$fieldName is required';
     }

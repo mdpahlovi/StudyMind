@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/item_create.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/core/logger.dart';
 import 'package:studymind/core/validators.dart';
 import 'package:studymind/presentation/item_create/widgets/create_audio.dart';
 import 'package:studymind/presentation/item_create/widgets/create_document.dart';
@@ -44,20 +43,13 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
     super.dispose();
   }
 
-  // Folder Metadata
-  String folderColor = '#A8C686';
-  String folderIcon = 'folder';
-
   Future<void> handleCreate() async {
-    if (formKey.currentState!.validate()) {
-      final String name = nameController.text.trim();
-      final String description = descriptionController.text.trim();
+    final String name = nameController.text.trim();
+    final String description = descriptionController.text.trim();
 
-      logger.d('Name: $name');
-      logger.d('Description: $description');
-
-      itemCreateController.createLibraryItem(type, name, description);
-    }
+    itemCreateController.createLibraryItem(type, name, description);
+    nameController.clear();
+    descriptionController.clear();
   }
 
   @override
@@ -88,7 +80,7 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
               ),
               const SizedBox(height: 16),
               // Item-specific content
-              buildItemCreateWidget(type),
+              buildItemCreateWidget(type, formKey),
               const SizedBox(height: 16),
               // Parent Folder Selector
               ParentFolderSelector(),
@@ -115,7 +107,11 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
               Obx(
                 () => CustomButton(
                   text: 'Create ${type.name.capitalize}',
-                  onPressed: () => Get.dialog(ConfirmDialog(onConfirmed: () => handleCreate())),
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      Get.dialog(ConfirmDialog(onConfirmed: () => handleCreate()));
+                    }
+                  },
                   isLoading: itemCreateController.isCreating.value,
                 ),
               ),
@@ -127,7 +123,7 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
   }
 }
 
-Widget buildItemCreateWidget(ItemType type) {
+Widget buildItemCreateWidget(ItemType type, GlobalKey<FormState> formKey) {
   switch (type) {
     case ItemType.folder:
       return CreateFolder();
@@ -136,7 +132,7 @@ Widget buildItemCreateWidget(ItemType type) {
     case ItemType.document:
       return CreateDocument();
     case ItemType.flashcard:
-      return CreateFlashcard();
+      return CreateFlashcard(formKey: formKey);
     case ItemType.audio:
       return CreateAudio();
     case ItemType.video:

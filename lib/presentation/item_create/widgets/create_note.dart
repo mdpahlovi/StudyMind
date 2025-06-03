@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
+import 'package:studymind/controllers/item_create.dart';
 import 'package:studymind/theme/colors.dart';
 
 class CreateNote extends StatefulWidget {
@@ -11,7 +12,7 @@ class CreateNote extends StatefulWidget {
 }
 
 class CreateNoteState extends State<CreateNote> {
-  final QuillController noteController = QuillController.basic();
+  final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
 
   @override
   void initState() {
@@ -20,7 +21,7 @@ class CreateNoteState extends State<CreateNote> {
 
   @override
   void dispose() {
-    noteController.dispose();
+    itemCreateController.noteController.dispose();
     super.dispose();
   }
 
@@ -42,20 +43,16 @@ class CreateNoteState extends State<CreateNote> {
           ),
           child: Column(
             children: [
-              QuillSimpleToolbar(controller: noteController, config: const QuillSimpleToolbarConfig()),
+              QuillSimpleToolbar(
+                controller: itemCreateController.noteController,
+                config: const QuillSimpleToolbarConfig(),
+              ),
               Divider(),
               QuillEditor.basic(
-                controller: noteController,
+                controller: itemCreateController.noteController,
                 config: QuillEditorConfig(
                   padding: const EdgeInsets.all(16),
                   minHeight: 480,
-                  customStyleBuilder: (attribute) {
-                    return GoogleFonts.plusJakartaSans(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: colorPalette.contentDim,
-                    );
-                  },
                   placeholder: 'Start writing your note...',
                 ),
               ),

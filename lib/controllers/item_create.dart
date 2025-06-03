@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/notification.dart';
@@ -17,6 +20,18 @@ class Folder {
       Folder(id: json['id'], uid: json['uid'], name: json['name'], path: json['path']);
 }
 
+class Flashcard {
+  final String question;
+  final String answer;
+
+  Flashcard({required this.question, required this.answer});
+
+  factory Flashcard.fromJson(Map<String, dynamic> json) =>
+      Flashcard(question: json['question'], answer: json['answer']);
+
+  Map<String, String> toJson() => {'question': question, 'answer': answer};
+}
+
 class ItemCreateController extends GetxController {
   final libraryService = LibraryService();
   final LibraryController libraryController = Get.find<LibraryController>();
@@ -34,6 +49,12 @@ class ItemCreateController extends GetxController {
   final RxString folderColor = '#A8C686'.obs;
   final RxString folderIcon = 'folder'.obs;
 
+  // Note Metadata
+  final QuillController noteController = QuillController.basic();
+
+  // Flashcard Metadata
+  final RxList<Flashcard> flashcards = <Flashcard>[].obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -46,6 +67,17 @@ class ItemCreateController extends GetxController {
     isCreating.value = false;
     isLoadingFolder.value = true;
     folders.clear();
+    selectedFolder.value = null;
+
+    // Folder Metadata
+    folderColor.value = '#A8C686';
+    folderIcon.value = 'folder';
+
+    // Note Metadata
+    noteController.dispose();
+
+    // Flashcard Metadata
+    flashcards.clear();
   }
 
   void fetchFolders() {
@@ -79,13 +111,26 @@ class ItemCreateController extends GetxController {
         );
         break;
       case ItemType.note:
-        createLibraryItemData = CreateLibraryItem(name: name, type: ItemType.note);
+        createLibraryItemData = CreateLibraryItem(
+          name: name,
+          type: ItemType.note,
+          parentId: selectedFolder.value?.id,
+          metadata: {'content': noteController.document.toDelta().toJson(), 'description': description},
+        );
         break;
       case ItemType.document:
         createLibraryItemData = CreateLibraryItem(name: name, type: ItemType.document);
         break;
       case ItemType.flashcard:
-        createLibraryItemData = CreateLibraryItem(name: name, type: ItemType.flashcard);
+        createLibraryItemData = CreateLibraryItem(
+          name: name,
+          type: ItemType.flashcard,
+          parentId: selectedFolder.value?.id,
+          metadata: {
+            'content': jsonEncode(flashcards.map((flashcard) => flashcard.toJson()).toList()),
+            'description': description,
+          },
+        );
         break;
       case ItemType.audio:
         createLibraryItemData = CreateLibraryItem(name: name, type: ItemType.audio);
@@ -100,7 +145,14 @@ class ItemCreateController extends GetxController {
 
     libraryService.createLibraryItem(createLibraryItemData).then((response) {
       if (response.success && response.data != null) {
+        // Reset Metadata
+        folderColor.value = '#A8C686';
+        folderIcon.value = 'folder';
+        noteController.clear();
+        flashcards.clear();
+
         final itemResponse = LibraryItem.fromJson(response.data);
+        if (itemResponse.type != ItemType.folder) libraryController.fetchLibraryItemsByRecent();
         Get.dialog(
           SuccessDialog(
             message: '${itemResponse.name} ${itemResponse.type.name} has been created. Do you want to open it?',

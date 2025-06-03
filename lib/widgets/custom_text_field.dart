@@ -59,6 +59,7 @@ class CustomTextFieldState extends State<CustomTextField> {
                 )
                 : widget.suffixIcon,
         floatingLabelBehavior: FloatingLabelBehavior.auto,
+        alignLabelWithHint: true,
       ),
     );
   }

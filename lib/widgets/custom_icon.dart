@@ -53,6 +53,7 @@ class CustomIcon extends StatelessWidget {
       'statistics': HugeIcons.strokeRoundedPieChart02,
       'botany': HugeIcons.strokeRoundedBioEnergy,
       'factory': HugeIcons.strokeRoundedFactory,
+      'tap': HugeIcons.strokeRoundedTap05,
     };
 
     if (iconMap.containsKey(icon)) {
