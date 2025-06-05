@@ -75,6 +75,9 @@ dependencies:
     # Connectivity Plus:  https://pub.dev/packages/connectivity_plus
     connectivity_plus: ^6.1.4
 
+    # Firebase Core: https://pub.dev/packages/firebase_core
+    firebase_core: ^3.13.1
+
 dev_dependencies:
     flutter_test:
         sdk: flutter

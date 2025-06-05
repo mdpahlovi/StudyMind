@@ -1,0 +1,25 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "studymind-ai",
+                    "appId": "1:337887949979:android:9ae41e43c52d763412423e",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "studymind-ai",
+                    "configurations": {
+                        "android": "1:337887949979:android:9ae41e43c52d763412423e",
+                        "ios": "1:337887949979:ios:31f7aa25fca904f812423e",
+                        "macos": "1:337887949979:ios:31f7aa25fca904f812423e",
+                        "web": "1:337887949979:web:5e3ae85bb2aae2e012423e",
+                        "windows": "1:337887949979:web:769a2fee0252714112423e"
+                    }
+                }
+            }
+        }
+    }
+}

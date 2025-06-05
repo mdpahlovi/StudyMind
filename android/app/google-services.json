@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "337887949979",
+    "project_id": "studymind-ai",
+    "storage_bucket": "studymind-ai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337887949979:android:9ae41e43c52d763412423e",
+        "android_client_info": {
+          "package_name": "com.example.studymind"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDleLFO8RzsAd6-y_Lw1OM7S_XiwHWk9GQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
