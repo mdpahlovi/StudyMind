@@ -9,7 +9,6 @@ class CreateDocument extends StatefulWidget {
 }
 
 class CreateDocumentState extends State<CreateDocument> {
-  String uploadMethod = 'file';
   bool isUploading = false;
 
   void handleUpload() {
@@ -51,25 +50,11 @@ class CreateDocumentState extends State<CreateDocument> {
                   if (isUploading) ...[
                     CircularProgressIndicator(color: colorPalette.contentDim),
                     const SizedBox(height: 16),
-                    Text(
-                      'Uploading document...\nPlease wait a moment',
-                      textAlign: TextAlign.center,
-                      style: textTheme.bodySmall,
-                    ),
+                    Text('Uploading content...', textAlign: TextAlign.center, style: textTheme.bodySmall),
                   ] else ...[
-                    Icon(
-                      uploadMethod == 'file' ? Icons.cloud_upload : Icons.camera_alt,
-                      size: 48,
-                      color: colorPalette.contentDim,
-                    ),
+                    Icon(Icons.cloud_upload, size: 48, color: colorPalette.contentDim),
                     const SizedBox(height: 8),
-                    Text(
-                      uploadMethod == 'file'
-                          ? 'Tap to select files\nPDF, DOC, DOCX, TXT'
-                          : 'Tap to scan document\nAuto-detect text with OCR',
-                      textAlign: TextAlign.center,
-                      style: textTheme.bodySmall,
-                    ),
+                    Text('Tap to select files', textAlign: TextAlign.center, style: textTheme.bodySmall),
                   ],
                 ],
               ),
@@ -87,9 +72,7 @@ class CreateDocumentState extends State<CreateDocument> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  uploadMethod == 'file'
-                      ? 'Supported: PDF, Word documents, PowerPoint, and text files'
-                      : 'AI-powered text recognition for handwritten and printed documents',
+                  'Supported: PDF, DOC, DOCX, TXT',
                   style: TextStyle(fontSize: 12, color: colorPalette.warning),
                 ),
               ),

@@ -58,64 +58,66 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
 
     return Scaffold(
       appBar: AppBar(leading: CustomBackButton(icon: 'cancel'), title: Text('Create ${type.name.capitalize}')),
-      body: Form(
-        key: formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Name Input Section
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Name *', style: textTheme.labelLarge),
-                  SizedBox(height: 8),
-                  CustomTextField(
-                    controller: nameController,
-                    placeholder: 'Enter Name',
-                    validator: Validators.validateName,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              // Item-specific content
-              buildItemCreateWidget(type),
-              const SizedBox(height: 16),
-              // Parent Folder Selector
-              ParentFolderSelector(),
-              const SizedBox(height: 16),
-              // Description Input Section
-              type != ItemType.folder
-                  ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Description', style: textTheme.labelLarge),
-                      SizedBox(height: 8),
-                      CustomTextField(
-                        controller: descriptionController,
-                        placeholder: 'Add a brief description (optional)',
-                        maxLines: 3,
-                        maxLength: 200,
-                      ),
-                    ],
-                  )
-                  : SizedBox(),
-              type != ItemType.folder ? const SizedBox(height: 16) : SizedBox(),
-              // Create Button
-              const SizedBox(height: 8),
-              Obx(
-                () => CustomButton(
-                  text: 'Create ${type.name.capitalize}',
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      Get.dialog(ConfirmDialog(onConfirmed: () => handleCreate()));
-                    }
-                  },
-                  isLoading: itemCreateController.isCreating.value,
+      body: SafeArea(
+        child: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Name Input Section
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Name *', style: textTheme.labelLarge),
+                    SizedBox(height: 8),
+                    CustomTextField(
+                      controller: nameController,
+                      placeholder: 'Enter Name',
+                      validator: Validators.validateName,
+                    ),
+                  ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                // Item-specific content
+                buildItemCreateWidget(type),
+                const SizedBox(height: 16),
+                // Parent Folder Selector
+                ParentFolderSelector(),
+                const SizedBox(height: 16),
+                // Description Input Section
+                type != ItemType.folder
+                    ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Description', style: textTheme.labelLarge),
+                        SizedBox(height: 8),
+                        CustomTextField(
+                          controller: descriptionController,
+                          placeholder: 'Add a brief description (optional)',
+                          maxLines: 3,
+                          maxLength: 200,
+                        ),
+                      ],
+                    )
+                    : SizedBox(),
+                type != ItemType.folder ? const SizedBox(height: 16) : SizedBox(),
+                // Create Button
+                const SizedBox(height: 8),
+                Obx(
+                  () => CustomButton(
+                    text: 'Create ${type.name.capitalize}',
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        Get.dialog(ConfirmDialog(onConfirmed: () => handleCreate()));
+                      }
+                    },
+                    isLoading: itemCreateController.isCreating.value,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

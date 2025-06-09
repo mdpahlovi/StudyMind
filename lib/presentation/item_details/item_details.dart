@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/controllers/library.dart';
+import 'package:studymind/presentation/item_details/widgets/view_audio.dart';
+import 'package:studymind/presentation/item_details/widgets/view_document.dart';
+import 'package:studymind/presentation/item_details/widgets/view_flashcard.dart';
+import 'package:studymind/presentation/item_details/widgets/view_image.dart';
+import 'package:studymind/presentation/item_details/widgets/view_note.dart';
+import 'package:studymind/presentation/item_details/widgets/view_video.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_back_button.dart';
 
@@ -31,9 +37,11 @@ class ItemDetailsScreen extends StatelessWidget {
             }),
           ),
           body: Obx(() {
+            final LibraryItem? item = libraryController.libraryItem.value;
+
             if (libraryController.isLoadingItem.value) return const Center(child: CircularProgressIndicator());
 
-            if (libraryController.libraryItem.value == null) {
+            if (item == null) {
               return SizedBox(
                 width: double.infinity,
                 height: double.infinity,
@@ -50,21 +58,21 @@ class ItemDetailsScreen extends StatelessWidget {
               );
             }
 
-            switch (libraryController.libraryItem.value!.type) {
+            switch (item.type) {
               case ItemType.folder:
                 return const Center(child: Text('Folder Details'));
               case ItemType.note:
-                return const Center(child: Text('Note Details'));
+                return ViewNote(item: item);
               case ItemType.document:
-                return const Center(child: Text('Document Details'));
+                return ViewDocument(item: item);
               case ItemType.flashcard:
-                return const Center(child: Text('Flashcard Details'));
+                return ViewFlashcard(item: item);
               case ItemType.audio:
-                return const Center(child: Text('Audio Details'));
+                return ViewAudio(item: item);
               case ItemType.video:
-                return const Center(child: Text('Video Details'));
+                return ViewVideo(item: item);
               case ItemType.image:
-                return const Center(child: Text('Image Details'));
+                return ViewImage(item: item);
             }
           }),
         ),
