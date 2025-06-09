@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/item_create.dart';
-import 'package:studymind/core/logger.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_button.dart';
+import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/custom_text_field.dart';
 import 'package:studymind/widgets/library/flashcard_preview.dart';
 
 class CreateFlashcard extends StatefulWidget {
-  final GlobalKey<FormState> formKey;
-
-  const CreateFlashcard({super.key, required this.formKey});
+  const CreateFlashcard({super.key});
 
   @override
   State<CreateFlashcard> createState() => CreateFlashcardState();
@@ -21,22 +19,43 @@ class CreateFlashcardState extends State<CreateFlashcard> {
 
   final TextEditingController questionController = TextEditingController();
   final TextEditingController answerController = TextEditingController();
+  final PageController pageController = PageController();
+
+  int selectedIndex = 0;
+
+  void nextPage() {
+    pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+  }
+
+  void prevPage() {
+    pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+  }
 
   void handleAddFlashcard() {
-    if (widget.formKey.currentState!.validate()) {
+    if (questionController.text.isNotEmpty && answerController.text.isNotEmpty) {
+      // Jump to the last page
+      if (itemCreateController.flashcards.isNotEmpty) {
+        pageController.jumpToPage(itemCreateController.flashcards.length);
+        setState(() => selectedIndex = itemCreateController.flashcards.length);
+      }
+
+      // Add flashcard
       itemCreateController.flashcards.add(Flashcard(question: questionController.text, answer: answerController.text));
       questionController.clear();
       answerController.clear();
-
-      logger.t(itemCreateController.flashcards);
     }
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final Size size = MediaQuery.of(context).size;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,9 +79,51 @@ class CreateFlashcardState extends State<CreateFlashcard> {
         ),
         const SizedBox(height: 16),
         CustomButton(text: "Add Flashcard", prefixIcon: 'add', onPressed: () => handleAddFlashcard()),
-        const SizedBox(height: 16),
-        Text('Preview', style: textTheme.labelLarge),
-        const SizedBox(height: 8),
+        const SizedBox(height: 14),
+        Obx(() {
+          final flashcards = itemCreateController.flashcards;
+
+          if (flashcards.isEmpty) return Text('Preview', style: textTheme.titleMedium);
+
+          return Row(
+            children: [
+              Text('Preview (${selectedIndex + 1}/${flashcards.length})', style: textTheme.titleMedium),
+              const Spacer(),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    questionController.text = flashcards[selectedIndex].question;
+                    answerController.text = flashcards[selectedIndex].answer;
+
+                    flashcards.removeAt(selectedIndex);
+                    if (selectedIndex > 0) selectedIndex--;
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(color: colorPalette.warning, shape: BoxShape.circle),
+                  child: CustomIcon(icon: 'fileEdit', size: 16),
+                ),
+              ),
+              SizedBox(width: 4),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    flashcards.removeAt(selectedIndex);
+                    if (selectedIndex > 0) selectedIndex--;
+                  });
+                },
+                borderRadius: BorderRadius.circular(14),
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(color: colorPalette.error, shape: BoxShape.circle),
+                  child: CustomIcon(icon: 'cancel', size: 16),
+                ),
+              ),
+            ],
+          );
+        }),
+        const SizedBox(height: 4),
         Obx(() {
           final flashcards = itemCreateController.flashcards;
 
@@ -75,15 +136,41 @@ class CreateFlashcardState extends State<CreateFlashcard> {
 
           return SizedBox(
             height: 224,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: flashcards.length,
-              itemBuilder: (context, index) {
-                final flashcard = flashcards[index];
-                return SizedBox(width: size.width - 32, child: FlashcardPreview(flashcard: flashcard));
-              },
+            child: Stack(
+              children: [
+                PageView.builder(
+                  controller: pageController,
+                  onPageChanged: (index) => setState(() => selectedIndex = index),
+                  itemCount: flashcards.length,
+                  itemBuilder: (context, index) {
+                    final flashcard = flashcards[index];
+                    return FlashcardPreview(flashcard: flashcard);
+                  },
+                ),
+                if (flashcards.length > 1) ...[
+                  Positioned(
+                    left: 8.5,
+                    top: 8.5,
+                    child: IconButton.filled(
+                      onPressed: selectedIndex > 0 ? prevPage : null,
+                      icon: CustomIcon(icon: 'arrowLeft', size: 24),
+                      color: selectedIndex > 0 ? colorPalette.white : colorPalette.contentDim,
+                    ),
+                  ),
+                  Positioned(
+                    right: 8.5,
+                    top: 8.5,
+                    child: IconButton.filled(
+                      onPressed: selectedIndex < flashcards.length - 1 ? nextPage : null,
+                      icon: CustomIcon(
+                        icon: 'arrowRight',
+                        size: 24,
+                        color: selectedIndex < flashcards.length - 1 ? colorPalette.white : colorPalette.contentDim,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ),
           );
         }),

@@ -80,7 +80,7 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
               ),
               const SizedBox(height: 16),
               // Item-specific content
-              buildItemCreateWidget(type, formKey),
+              buildItemCreateWidget(type),
               const SizedBox(height: 16),
               // Parent Folder Selector
               ParentFolderSelector(),
@@ -123,7 +123,7 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
   }
 }
 
-Widget buildItemCreateWidget(ItemType type, GlobalKey<FormState> formKey) {
+Widget buildItemCreateWidget(ItemType type) {
   switch (type) {
     case ItemType.folder:
       return CreateFolder();
@@ -132,7 +132,7 @@ Widget buildItemCreateWidget(ItemType type, GlobalKey<FormState> formKey) {
     case ItemType.document:
       return CreateDocument();
     case ItemType.flashcard:
-      return CreateFlashcard(formKey: formKey);
+      return CreateFlashcard();
     case ItemType.audio:
       return CreateAudio();
     case ItemType.video:

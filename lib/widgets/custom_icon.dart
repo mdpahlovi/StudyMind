@@ -56,6 +56,7 @@ class CustomIcon extends StatelessWidget {
       'tap': HugeIcons.strokeRoundedTap05,
       'sent': HugeIcons.strokeRoundedSent02,
       'message': HugeIcons.strokeRoundedMessageMultiple01,
+      'fileEdit': HugeIcons.strokeRoundedFileEdit,
     };
 
     if (iconMap.containsKey(icon)) {

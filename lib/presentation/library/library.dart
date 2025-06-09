@@ -4,7 +4,9 @@ import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/library/widgets/item_empty.dart';
 import 'package:studymind/presentation/library/widgets/item_grid.dart';
 import 'package:studymind/presentation/library/widgets/item_loader.dart';
+import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/library/item_app_bar.dart';
+import 'package:studymind/widgets/library/item_create_sheet.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -42,6 +44,10 @@ class LibraryScreenState extends State<LibraryScreen> {
 
             return ItemGrid(items: folderItems);
           }),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => Get.bottomSheet(ItemCreateSheet()),
+            child: CustomIcon(icon: 'add', size: 24),
+          ),
         ),
       ),
     );
