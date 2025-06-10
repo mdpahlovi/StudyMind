@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
@@ -55,6 +56,9 @@ class ItemCreateController extends GetxController {
   // Flashcard Metadata
   final RxList<Flashcard> flashcards = <Flashcard>[].obs;
 
+  // Document, Audio, Video, Image Metadata
+  final Rxn<PlatformFile> selectedFile = Rxn<PlatformFile>();
+
   @override
   void onInit() {
     super.onInit();
@@ -78,6 +82,9 @@ class ItemCreateController extends GetxController {
 
     // Flashcard Metadata
     flashcards.clear();
+
+    // Document, Audio, Video, Image Metadata
+    selectedFile.value = null;
   }
 
   void fetchFolders() {

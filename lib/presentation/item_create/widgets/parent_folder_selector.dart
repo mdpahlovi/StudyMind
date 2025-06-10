@@ -112,46 +112,47 @@ class ParentFolderSelector extends StatelessWidget {
       children: [
         Text('Parent Folder', style: textTheme.labelLarge),
         SizedBox(height: 8),
-        InkWell(
-          onTap: () => Get.bottomSheet(buildFolderSelectorSheet(context)),
-          child: Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: colorPalette.surface,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: colorPalette.border),
-            ),
-            child: Obx(() {
-              final folder = itemCreateController.selectedFolder.value;
-              final isRoot = folder?.id == null;
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: colorPalette.border),
+          ),
+          child: InkWell(
+            onTap: () => Get.bottomSheet(buildFolderSelectorSheet(context)),
+            child: Padding(
+              padding: EdgeInsets.all(12),
+              child: Obx(() {
+                final folder = itemCreateController.selectedFolder.value;
+                final isRoot = folder?.id == null;
 
-              return Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: isRoot ? colorPalette.primary.withAlpha(50) : colorPalette.content.withAlpha(50),
-                      borderRadius: BorderRadius.circular(8),
+                return Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: isRoot ? colorPalette.primary.withAlpha(50) : colorPalette.content.withAlpha(50),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: CustomIcon(
+                        icon: isRoot ? 'home' : 'folder',
+                        color: isRoot ? colorPalette.primary : colorPalette.content,
+                      ),
                     ),
-                    child: CustomIcon(
-                      icon: isRoot ? 'home' : 'folder',
-                      color: isRoot ? colorPalette.primary : colorPalette.content,
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(folder?.name ?? 'Root Folder', style: textTheme.titleMedium),
+                          Text(isRoot ? 'Main directory' : folder?.path ?? '/', style: textTheme.bodySmall),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(folder?.name ?? 'Root Folder', style: textTheme.titleMedium),
-                        Text(isRoot ? 'Main directory' : folder?.path ?? '/', style: textTheme.bodySmall),
-                      ],
-                    ),
-                  ),
-                  CustomIcon(icon: 'arrowDown', color: colorPalette.content, size: 24),
-                ],
-              );
-            }),
+                    CustomIcon(icon: 'arrowDown', color: colorPalette.content, size: 24),
+                  ],
+                );
+              }),
+            ),
           ),
         ),
       ],

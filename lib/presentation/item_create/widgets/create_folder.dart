@@ -51,23 +51,27 @@ class CreateFolder extends StatelessWidget {
           runSpacing: 8,
           children:
               folderColors.map((color) {
-                return GestureDetector(
-                  onTap: () => itemCreateController.folderColor.value = color,
-                  child: Obx(() {
-                    final selectedColor = itemCreateController.folderColor.value;
+                return Obx(() {
+                  final selectedColor = itemCreateController.folderColor.value;
 
-                    return Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Color(int.parse(color.replaceFirst('#', '0xFF'))),
-                        borderRadius: BorderRadius.circular(12),
-                        border: selectedColor == color ? Border.all(color: Colors.white, width: 2) : null,
-                      ),
-                      child: selectedColor == color ? const CustomIcon(icon: 'tick', color: Colors.white) : null,
-                    );
-                  }),
-                );
+                  return Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Color(int.parse(color.replaceFirst('#', '0xFF'))),
+                      borderRadius: BorderRadius.circular(12),
+                      border: selectedColor == color ? Border.all(color: Colors.white, width: 2) : null,
+                    ),
+                    child: InkWell(
+                      onTap: () => itemCreateController.folderColor.value = color,
+                      borderRadius: BorderRadius.circular(12),
+                      child:
+                          selectedColor == color
+                              ? const Center(child: CustomIcon(icon: 'tick', color: Colors.white))
+                              : const SizedBox.expand(),
+                    ),
+                  );
+                });
               }).toList(),
         ),
         const SizedBox(height: 16),
@@ -79,33 +83,36 @@ class CreateFolder extends StatelessWidget {
           runSpacing: 8,
           children:
               folderIcons.map((icon) {
-                return GestureDetector(
-                  onTap: () => itemCreateController.folderIcon.value = icon,
-                  child: Obx(() {
-                    final selectedIcon = itemCreateController.folderIcon.value;
+                return Obx(() {
+                  final selectedIcon = itemCreateController.folderIcon.value;
 
-                    return Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color:
-                            selectedIcon == icon
-                                ? colorPalette.primary.withAlpha(50)
-                                : colorPalette.content.withAlpha(50),
-                        borderRadius: BorderRadius.circular(12),
-                        border:
-                            selectedIcon == icon
-                                ? Border.all(color: colorPalette.primary, width: 2)
-                                : Border.all(color: colorPalette.content, width: 1),
+                  return Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color:
+                          selectedIcon == icon
+                              ? colorPalette.primary.withAlpha(50)
+                              : colorPalette.content.withAlpha(25),
+                      borderRadius: BorderRadius.circular(12),
+                      border:
+                          selectedIcon == icon
+                              ? Border.all(color: colorPalette.primary, width: 2)
+                              : Border.all(color: colorPalette.content, width: 1),
+                    ),
+                    child: InkWell(
+                      onTap: () => itemCreateController.folderIcon.value = icon,
+                      borderRadius: BorderRadius.circular(12),
+                      child: Center(
+                        child: CustomIcon(
+                          icon: icon,
+                          color: selectedIcon == icon ? colorPalette.primary : colorPalette.content,
+                          size: 24,
+                        ),
                       ),
-                      child: CustomIcon(
-                        icon: icon,
-                        color: selectedIcon == icon ? colorPalette.primary : colorPalette.content,
-                        size: 24,
-                      ),
-                    );
-                  }),
-                );
+                    ),
+                  );
+                });
               }).toList(),
         ),
       ],

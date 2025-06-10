@@ -70,7 +70,7 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Name *', style: textTheme.labelLarge),
+                    Text('Name', style: textTheme.labelLarge),
                     SizedBox(height: 8),
                     CustomTextField(
                       controller: nameController,

@@ -75,13 +75,12 @@ class CreateOption extends StatelessWidget {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: () {
-        itemCreateController.setSelectedFolder(Get.parameters['uid']);
-        Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
-      },
-      child: Card(
+    return Card(
+      child: InkWell(
+        onTap: () {
+          itemCreateController.setSelectedFolder(Get.parameters['uid']);
+          Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
+        },
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(

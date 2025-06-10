@@ -74,22 +74,19 @@ class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixi
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                          onTap: () => authController.checkAuthStatus(),
-                          child: Container(
-                            width: 160,
-                            height: 160,
-                            decoration: BoxDecoration(
-                              color: colorPalette.white.withAlpha(50),
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: colorPalette.black.withAlpha(25),
-                                  blurRadius: 20,
-                                  offset: Offset(0, 10),
-                                ),
-                              ],
-                            ),
+                        Container(
+                          width: 160,
+                          height: 160,
+                          decoration: BoxDecoration(
+                            color: colorPalette.white.withAlpha(50),
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(color: colorPalette.black.withAlpha(25), blurRadius: 20, offset: Offset(0, 10)),
+                            ],
+                          ),
+                          child: InkWell(
+                            onTap: () => authController.checkAuthStatus(),
+                            borderRadius: BorderRadius.circular(30),
                             child: Padding(
                               padding: const EdgeInsets.all(24),
                               child: Image.asset('assets/images/logo.png'),

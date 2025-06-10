@@ -33,7 +33,7 @@ class CreateNoteState extends State<CreateNote> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Note Content *', style: textTheme.labelLarge),
+        Text('Note Content', style: textTheme.labelLarge),
         SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(

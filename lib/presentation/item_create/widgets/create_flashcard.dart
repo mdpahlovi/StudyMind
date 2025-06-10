@@ -60,7 +60,7 @@ class CreateFlashcardState extends State<CreateFlashcard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Flashcard Content *', style: textTheme.labelLarge),
+        Text('Flashcard Content', style: textTheme.labelLarge),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.all(16),
@@ -79,51 +79,62 @@ class CreateFlashcardState extends State<CreateFlashcard> {
         ),
         const SizedBox(height: 16),
         CustomButton(text: "Add Flashcard", prefixIcon: 'add', onPressed: () => handleAddFlashcard()),
-        const SizedBox(height: 14),
         Obx(() {
           final flashcards = itemCreateController.flashcards;
 
-          if (flashcards.isEmpty) return Text('Preview', style: textTheme.titleMedium);
+          if (flashcards.isEmpty) {
+            return Column(
+              children: [
+                const SizedBox(height: 16),
+                Text('Preview', style: textTheme.titleMedium),
+                const SizedBox(height: 8),
+              ],
+            );
+          } else {
+            return Column(
+              children: [
+                const SizedBox(height: 14),
+                Row(
+                  children: [
+                    Text('Preview (${selectedIndex + 1}/${flashcards.length})', style: textTheme.titleMedium),
+                    const Spacer(),
+                    Container(
+                      decoration: BoxDecoration(color: colorPalette.warning, shape: BoxShape.circle),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            questionController.text = flashcards[selectedIndex].question;
+                            answerController.text = flashcards[selectedIndex].answer;
 
-          return Row(
-            children: [
-              Text('Preview (${selectedIndex + 1}/${flashcards.length})', style: textTheme.titleMedium),
-              const Spacer(),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    questionController.text = flashcards[selectedIndex].question;
-                    answerController.text = flashcards[selectedIndex].answer;
-
-                    flashcards.removeAt(selectedIndex);
-                    if (selectedIndex > 0) selectedIndex--;
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(color: colorPalette.warning, shape: BoxShape.circle),
-                  child: CustomIcon(icon: 'fileEdit', size: 16),
+                            flashcards.removeAt(selectedIndex);
+                            if (selectedIndex > 0) selectedIndex--;
+                          });
+                        },
+                        borderRadius: BorderRadius.circular(14), // Match the circular shape
+                        child: Padding(padding: const EdgeInsets.all(6), child: CustomIcon(icon: 'fileEdit', size: 16)),
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Container(
+                      decoration: BoxDecoration(color: colorPalette.error, shape: BoxShape.circle),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            flashcards.removeAt(selectedIndex);
+                            if (selectedIndex > 0) selectedIndex--;
+                          });
+                        },
+                        borderRadius: BorderRadius.circular(14), // Match the circular shape
+                        child: Padding(padding: const EdgeInsets.all(6), child: CustomIcon(icon: 'cancel', size: 16)),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(width: 4),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    flashcards.removeAt(selectedIndex);
-                    if (selectedIndex > 0) selectedIndex--;
-                  });
-                },
-                borderRadius: BorderRadius.circular(14),
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(color: colorPalette.error, shape: BoxShape.circle),
-                  child: CustomIcon(icon: 'cancel', size: 16),
-                ),
-              ),
-            ],
-          );
+                const SizedBox(height: 4),
+              ],
+            );
+          }
         }),
-        const SizedBox(height: 4),
         Obx(() {
           final flashcards = itemCreateController.flashcards;
 
@@ -132,47 +143,47 @@ class CreateFlashcardState extends State<CreateFlashcard> {
               height: 224,
               child: FlashcardPreview(flashcard: Flashcard(question: 'Question goes here', answer: 'Answer goes here')),
             );
-          }
-
-          return SizedBox(
-            height: 224,
-            child: Stack(
-              children: [
-                PageView.builder(
-                  controller: pageController,
-                  onPageChanged: (index) => setState(() => selectedIndex = index),
-                  itemCount: flashcards.length,
-                  itemBuilder: (context, index) {
-                    final flashcard = flashcards[index];
-                    return FlashcardPreview(flashcard: flashcard);
-                  },
-                ),
-                if (flashcards.length > 1) ...[
-                  Positioned(
-                    left: 8.5,
-                    top: 8.5,
-                    child: IconButton.filled(
-                      onPressed: selectedIndex > 0 ? prevPage : null,
-                      icon: CustomIcon(icon: 'arrowLeft', size: 24),
-                      color: selectedIndex > 0 ? colorPalette.white : colorPalette.contentDim,
-                    ),
+          } else {
+            return SizedBox(
+              height: 224,
+              child: Stack(
+                children: [
+                  PageView.builder(
+                    controller: pageController,
+                    onPageChanged: (index) => setState(() => selectedIndex = index),
+                    itemCount: flashcards.length,
+                    itemBuilder: (context, index) {
+                      final flashcard = flashcards[index];
+                      return FlashcardPreview(flashcard: flashcard);
+                    },
                   ),
-                  Positioned(
-                    right: 8.5,
-                    top: 8.5,
-                    child: IconButton.filled(
-                      onPressed: selectedIndex < flashcards.length - 1 ? nextPage : null,
-                      icon: CustomIcon(
-                        icon: 'arrowRight',
-                        size: 24,
-                        color: selectedIndex < flashcards.length - 1 ? colorPalette.white : colorPalette.contentDim,
+                  if (flashcards.length > 1) ...[
+                    Positioned(
+                      left: 8.5,
+                      top: 8.5,
+                      child: IconButton.filled(
+                        onPressed: selectedIndex > 0 ? prevPage : null,
+                        icon: CustomIcon(icon: 'arrowLeft', size: 24),
+                        color: selectedIndex > 0 ? colorPalette.white : colorPalette.contentDim,
                       ),
                     ),
-                  ),
+                    Positioned(
+                      right: 8.5,
+                      top: 8.5,
+                      child: IconButton.filled(
+                        onPressed: selectedIndex < flashcards.length - 1 ? nextPage : null,
+                        icon: CustomIcon(
+                          icon: 'arrowRight',
+                          size: 24,
+                          color: selectedIndex < flashcards.length - 1 ? colorPalette.white : colorPalette.contentDim,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
-              ],
-            ),
-          );
+              ),
+            );
+          }
         }),
       ],
     );
