@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/constants/item_type.dart';
+import 'package:studymind/controllers/auth.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/home/widgets/action_button.dart';
 import 'package:studymind/presentation/home/widgets/article_card.dart';
@@ -8,6 +9,7 @@ import 'package:studymind/presentation/home/widgets/recent_card.dart';
 import 'package:studymind/presentation/home/widgets/recent_loader.dart';
 import 'package:studymind/presentation/home/widgets/stat_item.dart';
 import 'package:studymind/theme/colors.dart';
+import 'package:studymind/widgets/custom_image.dart';
 import 'package:studymind/widgets/notification_button.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -15,10 +17,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthController authController = Get.find<AuthController>();
     final LibraryController libraryController = Get.find<LibraryController>();
 
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final EdgeInsets paddings = MediaQuery.of(context).padding;
     TypeStyle getStyle(ItemType type) => ItemTypeStyle.getStyle(type);
 
     final List<Map<String, dynamic>> actionButtons = [
@@ -47,7 +51,6 @@ class HomeScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('StudyMind'), actions: [NotificationButton()]),
       body: RefreshIndicator(
         onRefresh: () async => libraryController.fetchLibraryItemsByRecent(),
         child: SingleChildScrollView(
@@ -56,12 +59,51 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Welcome Section
+              Padding(
+                padding: EdgeInsets.only(top: paddings.top, left: 16, right: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Obx(() {
+                      final imageUrl = authController.user.value?.photo ?? "";
+
+                      return Center(
+                        child: Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(width: 2, color: colorPalette.content),
+                          ),
+                          child: ClipOval(child: CustomImage(imageUrl: imageUrl, fit: BoxFit.cover)),
+                        ),
+                      );
+                    }),
+                    const SizedBox(width: 12),
+                    Obx(() {
+                      final name = authController.user.value?.name ?? "";
+                      return Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Hi, $name', style: textTheme.titleMedium, overflow: TextOverflow.ellipsis),
+                            Text('Welcome to StudyMind', style: textTheme.bodySmall),
+                          ],
+                        ),
+                      );
+                    }),
+                    NotificationButton(),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
               // Quick Actions
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text('Quick Actions', style: textTheme.headlineMedium),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(

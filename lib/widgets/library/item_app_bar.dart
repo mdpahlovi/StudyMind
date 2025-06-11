@@ -34,7 +34,12 @@ PreferredSizeWidget buildItemAppBar() {
 
       if (selectedItems.isEmpty) {
         if (Get.currentRoute.contains('/item_by_type')) {
-          return Text(Get.parameters['type']!.split('_').map((e) => e.capitalize!).join(' '));
+          switch (Get.parameters['type']) {
+            case 'recent_activity':
+              return Text('Recent Activity');
+            default:
+              return Text(Get.parameters['type']?.capitalize ?? '');
+          }
         } else {
           return Text(breadcrumbs.isEmpty ? 'Library' : breadcrumbs.last.name);
         }

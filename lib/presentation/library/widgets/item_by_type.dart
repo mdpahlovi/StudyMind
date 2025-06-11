@@ -51,7 +51,7 @@ class ItemByTypeState extends State<ItemByType> {
                       debounce = Timer(const Duration(milliseconds: 500), () {
                         final type = Get.parameters['type'];
 
-                        if (type == 'recent_activities') {
+                        if (type == 'recent_activity') {
                           libraryController.fetchLibraryItemsByType(search: searchQuery, type: '');
                         } else if (type != null) {
                           libraryController.fetchLibraryItemsByType(search: searchQuery, type: type);
