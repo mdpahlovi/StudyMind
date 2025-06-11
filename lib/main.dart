@@ -6,15 +6,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/theme.dart';
-import 'package:studymind/widgets/custom_error.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    return CustomError(errorDetails: details);
-  };
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const StudyMind());

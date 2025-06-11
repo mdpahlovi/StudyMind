@@ -21,7 +21,7 @@ class CreateNoteState extends State<CreateNote> {
 
   @override
   void dispose() {
-    itemCreateController.noteController.dispose();
+    itemCreateController.noteController.clear();
     super.dispose();
   }
 

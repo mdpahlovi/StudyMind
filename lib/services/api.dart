@@ -33,9 +33,9 @@ class ApiService {
     }
   }
 
-  Future<ApiResponse> post(String url, {data}) async {
+  Future<ApiResponse> post(String url, {Object? data, Options? options}) async {
     try {
-      final response = await dioService.dio.post(url, data: data);
+      final response = await dioService.dio.post(url, data: data, options: options);
 
       return ApiResponse.fromJson(response.data);
     } catch (error) {

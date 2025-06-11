@@ -18,12 +18,9 @@ class CustomError extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
+        child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(HugeIcons.strokeRoundedSadDizzy, size: 64, color: const Color(0xFFD32F2F)),
               const SizedBox(height: 16),

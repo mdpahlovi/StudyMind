@@ -1,37 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:studymind/constants/folder_metadata.dart';
 import 'package:studymind/controllers/item_create.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
-class CreateFolder extends StatelessWidget {
+class CreateFolder extends StatefulWidget {
   const CreateFolder({super.key});
 
-  static List<String> folderColors = [
-    '#A8C686',
-    '#2196F3',
-    '#4CAF50',
-    '#FF9800',
-    '#9C27B0',
-    '#F44336',
-    '#009688',
-    '#3F51B5',
-    '#E91E63',
-    '#FFCDD2',
-  ];
+  @override
+  State<CreateFolder> createState() => CreateFolderState();
+}
 
-  static List<String> folderIcons = [
-    'folder',
-    'book',
-    'physics',
-    'chemistry',
-    'math',
-    'history',
-    'artificialIntelligence',
-    'statistics',
-    'botany',
-    'factory',
-  ];
+class CreateFolderState extends State<CreateFolder> {
+  final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    itemCreateController.noteController.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +43,7 @@ class CreateFolder extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children:
-              folderColors.map((color) {
+              FolderMetadata.color.map((color) {
                 return Obx(() {
                   final selectedColor = itemCreateController.folderColor.value;
 
@@ -82,7 +75,7 @@ class CreateFolder extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children:
-              folderIcons.map((icon) {
+              FolderMetadata.icons.map((icon) {
                 return Obx(() {
                   final selectedIcon = itemCreateController.folderIcon.value;
 

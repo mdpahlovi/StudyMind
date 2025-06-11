@@ -48,6 +48,9 @@ class CreateFlashcardState extends State<CreateFlashcard> {
 
   @override
   void dispose() {
+    itemCreateController.flashcards.clear();
+    questionController.dispose();
+    answerController.dispose();
     pageController.dispose();
     super.dispose();
   }

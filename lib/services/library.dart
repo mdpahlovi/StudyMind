@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:studymind/models/library.dart';
 import 'package:studymind/services/api.dart';
 
@@ -21,7 +22,12 @@ class LibraryService {
   }
 
   Future<ApiResponse> createLibraryItem(CreateLibraryItem data) async {
-    return await apiService.post('/library', data: data.toJson());
+    return await apiService.post(
+      '/library',
+      data: data.file != null ? await data.toFormData() : data.toJson(),
+      options:
+          data.file != null ? Options(contentType: 'multipart/form-data') : Options(contentType: 'application/json'),
+    );
   }
 
   Future<ApiResponse> updateLibraryItem(UpdateLibraryItem data) async {

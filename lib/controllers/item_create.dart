@@ -125,9 +125,7 @@ class ItemCreateController extends GetxController {
           metadata: {'content': noteController.document.toDelta().toJson(), 'description': description},
         );
         break;
-      case ItemType.document:
-        createLibraryItemData = CreateLibraryItem(name: name, type: ItemType.document);
-        break;
+
       case ItemType.flashcard:
         createLibraryItemData = CreateLibraryItem(
           name: name,
@@ -139,14 +137,17 @@ class ItemCreateController extends GetxController {
           },
         );
         break;
+      case ItemType.document:
       case ItemType.audio:
-        createLibraryItemData = CreateLibraryItem(name: name, type: ItemType.audio);
-        break;
       case ItemType.video:
-        createLibraryItemData = CreateLibraryItem(name: name, type: ItemType.video);
-        break;
       case ItemType.image:
-        createLibraryItemData = CreateLibraryItem(name: name, type: ItemType.image);
+        createLibraryItemData = CreateLibraryItem(
+          name: name,
+          type: type,
+          parentId: selectedFolder.value?.id,
+          metadata: {'description': description},
+          file: selectedFile.value,
+        );
         break;
     }
 
@@ -159,7 +160,8 @@ class ItemCreateController extends GetxController {
         flashcards.clear();
 
         final itemResponse = LibraryItem.fromJson(response.data);
-        if (itemResponse.type != ItemType.folder) libraryController.fetchLibraryItemsByRecent();
+        libraryController.fetchLibraryItems(parentUid: selectedFolder.value?.uid);
+        libraryController.fetchLibraryItemsByRecent();
         Get.dialog(
           SuccessDialog(
             message: '${itemResponse.name} ${itemResponse.type.name} has been created. Do you want to open it?',

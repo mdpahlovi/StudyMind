@@ -36,6 +36,12 @@ class CreateDocumentState extends State<CreateDocument> {
   }
 
   @override
+  void dispose() {
+    itemCreateController.selectedFile.value = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;

@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:studymind/core/logger.dart';
 import 'package:studymind/routes/routes.dart';
-import 'package:studymind/services/error.dart';
 import 'package:studymind/services/storage.dart';
 
 class DioService {
@@ -33,8 +30,8 @@ class DioService {
           }
 
           loggerSimp.d('REQUEST => ${options.method} to ${options.path}');
-          loggerSimp.d('BODY => ${jsonEncode(options.data)}');
-          loggerSimp.d('QUERY => ${jsonEncode(options.queryParameters)}');
+          loggerSimp.d('BODY => ${options.data}');
+          loggerSimp.d('QUERY => ${options.queryParameters}');
 
           return handler.next(options);
         },
@@ -46,7 +43,7 @@ class DioService {
           return handler.next(response);
         },
         onError: (DioException error, ErrorInterceptorHandler handler) async {
-          loggerSimp.e('ERROR: ${Error.message(error)}');
+          loggerSimp.e('ERROR: $error');
 
           if (error.response?.statusCode == 401) {
             await handleUnauthorized();

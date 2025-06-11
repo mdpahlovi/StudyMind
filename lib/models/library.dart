@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:studymind/controllers/library.dart';
 
 class GetLibraryItemsQuery {
@@ -36,8 +38,9 @@ class CreateLibraryItem {
   final ItemType type;
   final int? parentId;
   final Map<String, dynamic>? metadata;
+  final PlatformFile? file;
 
-  CreateLibraryItem({required this.name, required this.type, this.parentId, this.metadata});
+  CreateLibraryItem({required this.name, required this.type, this.parentId, this.metadata, this.file});
 
   Map<String, dynamic> toJson() => {
     'name': name,
@@ -45,6 +48,18 @@ class CreateLibraryItem {
     'parentId': parentId,
     'metadata': jsonEncode(metadata),
   };
+
+  Future<FormData> toFormData() async {
+    final map = <String, dynamic>{};
+
+    map['name'] = name;
+    map['type'] = type.toString().split('.').last.toUpperCase();
+    if (parentId != null) map['parentId'] = parentId.toString();
+    if (metadata != null) map['metadata'] = jsonEncode(metadata);
+    if (file != null) map['file'] = await MultipartFile.fromFile(file!.path!, filename: file!.name);
+
+    return FormData.fromMap(map);
+  }
 }
 
 class UpdateLibraryItem {

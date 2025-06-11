@@ -33,12 +33,10 @@ PreferredSizeWidget buildItemAppBar() {
       final selectedItems = libraryController.selectedItems;
 
       if (selectedItems.isEmpty) {
-        if (Get.currentRoute == AppRoutes.home) {
-          return Text("Library");
-        } else if (Get.currentRoute.contains('/item_by_type')) {
+        if (Get.currentRoute.contains('/item_by_type')) {
           return Text(Get.parameters['type']!.split('_').map((e) => e.capitalize!).join(' '));
         } else {
-          return Text(breadcrumbs.last.name);
+          return Text(breadcrumbs.isEmpty ? 'Library' : breadcrumbs.last.name);
         }
       } else {
         return Text('${selectedItems.length}  items');

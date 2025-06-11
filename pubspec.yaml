@@ -80,6 +80,7 @@ dependencies:
 
     # File Picker:  Picker: URL_ADDRESS.dev/packages/file_picker
     file_picker: ^10.1.9
+    supabase_flutter: ^2.9.0
 
 dev_dependencies:
     flutter_test:
