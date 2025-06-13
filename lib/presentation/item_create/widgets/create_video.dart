@@ -148,7 +148,7 @@ class VideoState extends State<CreateVideo> {
   }
 
   IconData getFileIcon(String extension) {
-    switch (extension.toLowerCase()) {
+    switch (extension) {
       case 'mp4':
         return HugeIcons.strokeRoundedMpFour02;
       case 'webm':

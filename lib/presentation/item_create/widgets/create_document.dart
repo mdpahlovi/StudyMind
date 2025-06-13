@@ -148,7 +148,7 @@ class CreateDocumentState extends State<CreateDocument> {
   }
 
   IconData getFileIcon(String extension) {
-    switch (extension.toLowerCase()) {
+    switch (extension) {
       case 'pdf':
         return HugeIcons.strokeRoundedPdf02;
       case 'doc':

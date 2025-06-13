@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart' hide Notification;
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/notification.dart';
@@ -46,6 +47,9 @@ class ItemCreateController extends GetxController {
     selectedFolder.value = folders.firstWhere((folder) => folder.uid == uid);
   }
 
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+
   // Folder Metadata
   final RxString folderColor = '#A8C686'.obs;
   final RxString folderIcon = 'folder'.obs;
@@ -72,6 +76,10 @@ class ItemCreateController extends GetxController {
     isLoadingFolder.value = true;
     folders.clear();
     selectedFolder.value = null;
+
+    // Item Common Data
+    nameController.dispose();
+    descriptionController.dispose();
 
     // Folder Metadata
     folderColor.value = '#A8C686';
@@ -104,14 +112,14 @@ class ItemCreateController extends GetxController {
     });
   }
 
-  void createLibraryItem(ItemType type, String name, String? description) {
+  void createLibraryItem(ItemType type) {
     isCreating.value = true;
     final CreateLibraryItem createLibraryItemData;
 
     switch (type) {
       case ItemType.folder:
         createLibraryItemData = CreateLibraryItem(
-          name: name,
+          name: nameController.text,
           type: ItemType.folder,
           parentId: selectedFolder.value?.id,
           metadata: {'color': folderColor.value, 'icon': folderIcon.value},
@@ -119,21 +127,22 @@ class ItemCreateController extends GetxController {
         break;
       case ItemType.note:
         createLibraryItemData = CreateLibraryItem(
-          name: name,
+          name: nameController.text,
           type: ItemType.note,
           parentId: selectedFolder.value?.id,
-          metadata: {'content': noteEditorState.document.toJson(), 'description': description},
+          metadata: {'content': noteEditorState.document.toJson(), 'description': descriptionController.text},
         );
         break;
 
       case ItemType.flashcard:
         createLibraryItemData = CreateLibraryItem(
-          name: name,
+          name: nameController.text,
           type: ItemType.flashcard,
           parentId: selectedFolder.value?.id,
           metadata: {
             'content': jsonEncode(flashcards.map((flashcard) => flashcard.toJson()).toList()),
-            'description': description,
+            'cardCount': flashcards.length,
+            'description': descriptionController.text,
           },
         );
         break;
@@ -142,10 +151,10 @@ class ItemCreateController extends GetxController {
       case ItemType.video:
       case ItemType.image:
         createLibraryItemData = CreateLibraryItem(
-          name: name,
+          name: nameController.text,
           type: type,
           parentId: selectedFolder.value?.id,
-          metadata: {'description': description},
+          metadata: {'description': descriptionController.text, 'fileType': selectedFile.value?.extension},
           file: selectedFile.value,
         );
         break;
@@ -154,6 +163,8 @@ class ItemCreateController extends GetxController {
     libraryService.createLibraryItem(createLibraryItemData).then((response) {
       if (response.success && response.data != null) {
         // Reset Metadata
+        nameController.clear();
+        descriptionController.clear();
         folderColor.value = '#A8C686';
         folderIcon.value = 'folder';
         noteEditorState = EditorState.blank(withInitialText: true);
@@ -161,8 +172,12 @@ class ItemCreateController extends GetxController {
         selectedFile.value = null;
 
         final itemResponse = LibraryItem.fromJson(response.data);
+
+        // Refetch
         libraryController.fetchLibraryItems(parentUid: selectedFolder.value?.uid);
         libraryController.fetchLibraryItemsByRecent();
+
+        // Show Success Dialog
         Get.dialog(
           SuccessDialog(
             message: '${itemResponse.name} ${itemResponse.type.name} has been created. Do you want to open it?',

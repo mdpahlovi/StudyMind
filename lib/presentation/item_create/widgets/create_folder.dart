@@ -16,11 +16,6 @@ class CreateFolderState extends State<CreateFolder> {
   final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     itemCreateController.folderColor.value = '#A8C686';
     itemCreateController.folderIcon.value = 'folder';

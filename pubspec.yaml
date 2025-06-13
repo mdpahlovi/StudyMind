@@ -74,6 +74,12 @@ dependencies:
     # Supabase Flutter: https://pub.dev/packages/supabase_flutter
     supabase_flutter: ^2.9.1
 
+    #    # Flutter HTML: https://pub.dev/packages/flutter_html
+    flutter_html: ^3.0.0
+
+    # Flutter HTML Iframe: https://pub.dev/packages/flutter_html_iframe
+    flutter_html_iframe: ^3.0.0
+
 dev_dependencies:
     flutter_test:
         sdk: flutter

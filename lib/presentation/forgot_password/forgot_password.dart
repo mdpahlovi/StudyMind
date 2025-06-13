@@ -23,11 +23,6 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   bool emailSent = false;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     emailController.dispose();
     super.dispose();
@@ -123,65 +118,64 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           color: colorPalette.background,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child:
-                            emailSent
-                                ? Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.check_circle_outline, size: 80, color: Colors.green[400]),
-                                    const SizedBox(height: 20),
-                                    const Text(
-                                      'Email Sent Successfully!',
-                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      'Please check your inbox and follow the instructions to reset your password.',
-                                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 30),
-                                    CustomButton(text: 'Back to Login', onPressed: () => Get.toNamed(AppRoutes.login)),
-                                    const SizedBox(height: 10),
-                                    TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          emailSent = false;
-                                          emailController.clear();
-                                        });
-                                      },
-                                      child: Text(
-                                        'Try Different Email',
-                                        style: textTheme.bodyMedium?.copyWith(
-                                          color: colorPalette.primary,
-                                          decoration: TextDecoration.underline,
-                                        ),
+                        child: emailSent
+                            ? Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.check_circle_outline, size: 80, color: Colors.green[400]),
+                                  const SizedBox(height: 20),
+                                  const Text(
+                                    'Email Sent Successfully!',
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    'Please check your inbox and follow the instructions to reset your password.',
+                                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 30),
+                                  CustomButton(text: 'Back to Login', onPressed: () => Get.toNamed(AppRoutes.login)),
+                                  const SizedBox(height: 10),
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        emailSent = false;
+                                        emailController.clear();
+                                      });
+                                    },
+                                    child: Text(
+                                      'Try Different Email',
+                                      style: textTheme.bodyMedium?.copyWith(
+                                        color: colorPalette.primary,
+                                        decoration: TextDecoration.underline,
                                       ),
                                     ),
-                                  ],
-                                )
-                                : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // Email Field
-                                    CustomTextField(
-                                      controller: emailController,
-                                      label: 'Email Address',
-                                      prefixIcon: 'mail',
-                                      keyboardType: TextInputType.emailAddress,
-                                      validator: Validators.validateEmail,
-                                    ),
-                                    const SizedBox(height: 24),
-                                    // Reset Button
-                                    CustomButton(
-                                      text: 'Send Reset Link',
-                                      isLoading: isLoading,
-                                      onPressed: () => Notification.success('Currently working on it'),
-                                    ),
-                                    const SizedBox(height: 16),
-                                  ],
-                                ),
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Email Field
+                                  CustomTextField(
+                                    controller: emailController,
+                                    label: 'Email Address',
+                                    prefixIcon: 'mail',
+                                    keyboardType: TextInputType.emailAddress,
+                                    validator: Validators.validateEmail,
+                                  ),
+                                  const SizedBox(height: 24),
+                                  // Reset Button
+                                  CustomButton(
+                                    text: 'Send Reset Link',
+                                    isLoading: isLoading,
+                                    onPressed: () => Notification.success('Currently working on it'),
+                                  ),
+                                  const SizedBox(height: 16),
+                                ],
+                              ),
                       ),
                     ],
                   ),

@@ -26,11 +26,6 @@ class RegisterScreenState extends State<RegisterScreen> {
   final confirmPasswordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     nameController.dispose();
     emailController.dispose();

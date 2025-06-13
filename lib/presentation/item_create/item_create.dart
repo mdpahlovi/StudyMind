@@ -29,8 +29,6 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
 
   final ItemType type = ItemType.values.firstWhere((e) => e.toString().split('.').last == Get.parameters['type']);
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
 
   final FocusNode focusNode = FocusNode();
   bool hasFocused = false;
@@ -47,20 +45,11 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
 
   @override
   void dispose() {
-    nameController.dispose();
-    descriptionController.dispose();
+    itemCreateController.nameController.clear();
+    itemCreateController.descriptionController.clear();
     focusNode.removeListener(onFocusChange);
     focusNode.dispose();
     super.dispose();
-  }
-
-  Future<void> handleCreate() async {
-    final String name = nameController.text.trim();
-    final String description = descriptionController.text.trim();
-
-    itemCreateController.createLibraryItem(type, name, description);
-    nameController.clear();
-    descriptionController.clear();
   }
 
   @override
@@ -75,10 +64,10 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
       body: Stack(
         children: [
           SafeArea(
-            child: Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Form(
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -89,7 +78,7 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
                         Text('Name', style: textTheme.labelLarge),
                         SizedBox(height: 8),
                         CustomTextField(
-                          controller: nameController,
+                          controller: itemCreateController.nameController,
                           placeholder: 'Enter Name',
                           validator: Validators.validateName,
                         ),
@@ -110,7 +99,7 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
                               Text('Description', style: textTheme.labelLarge),
                               SizedBox(height: 8),
                               CustomTextField(
-                                controller: descriptionController,
+                                controller: itemCreateController.descriptionController,
                                 placeholder: 'Add a brief description (optional)',
                                 maxLines: 3,
                                 maxLength: 200,
@@ -126,7 +115,7 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
                         text: 'Create ${type.name.capitalize}',
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
-                            Get.dialog(ConfirmDialog(onConfirmed: () => handleCreate()));
+                            Get.dialog(ConfirmDialog(onConfirmed: () => itemCreateController.createLibraryItem(type)));
                           }
                         },
                         isLoading: itemCreateController.isCreating.value,

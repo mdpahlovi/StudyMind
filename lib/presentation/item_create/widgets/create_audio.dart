@@ -145,7 +145,7 @@ class CreateAudioState extends State<CreateAudio> {
   }
 
   IconData getFileIcon(String extension) {
-    switch (extension.toLowerCase()) {
+    switch (extension) {
       case 'mp3':
         return HugeIcons.strokeRoundedMpThree02;
       case 'wav':

@@ -148,7 +148,7 @@ class CreateImageState extends State<CreateImage> {
   }
 
   IconData getFileIcon(String extension) {
-    switch (extension.toLowerCase()) {
+    switch (extension) {
       case 'jpg':
       case 'jpeg':
         return HugeIcons.strokeRoundedJpg02;

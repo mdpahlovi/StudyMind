@@ -25,11 +25,6 @@ class LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
