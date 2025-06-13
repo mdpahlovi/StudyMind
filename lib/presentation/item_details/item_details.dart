@@ -4,7 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/controllers/library.dart';
-import 'package:studymind/core/utiles.dart';
+import 'package:studymind/core/utils.dart';
 import 'package:studymind/presentation/item_details/widgets/view_audio.dart';
 import 'package:studymind/presentation/item_details/widgets/view_document.dart';
 import 'package:studymind/presentation/item_details/widgets/view_flashcard.dart';
@@ -180,7 +180,7 @@ Widget buildPropertiesGrid(LibraryItem item, ColorPalette colorPalette, TextThem
       break;
 
     case ItemType.flashcard:
-      if (metadata?['cardCount'] != null) {
+      if (metadata?['cardCount'] != null && metadata?['cardCount'] != '') {
         properties.add({
           'icon': HugeIcons.strokeRoundedNote,
           'label': 'Cards',
@@ -191,20 +191,36 @@ Widget buildPropertiesGrid(LibraryItem item, ColorPalette colorPalette, TextThem
 
     case ItemType.audio:
     case ItemType.video:
-      if (metadata?['duration'] != null) {
-        properties.add({'icon': 'schedule', 'label': 'Duration', 'value': metadata!['duration']});
+      if (metadata?['duration'] != null && metadata?['duration'] != '') {
+        properties.add({
+          'icon': HugeIcons.strokeRoundedClock01,
+          'label': 'Duration',
+          'value': secToMin(metadata?['duration']),
+        });
       }
-      if (metadata?['fileSize'] != null) {
-        properties.add({'icon': 'storage', 'label': 'File Size', 'value': metadata!['fileSize']});
+      if (metadata?['fileSize'] != null && metadata?['fileSize'] != '') {
+        properties.add({
+          'icon': HugeIcons.strokeRoundedDatabase01,
+          'label': 'File Size',
+          'value': '${bytesToMB(metadata?['fileSize'])} MB',
+        });
       }
       break;
 
     case ItemType.image:
-      if (metadata?['resolution'] != null) {
-        properties.add({'icon': 'photo_size_select_actual', 'label': 'Resolution', 'value': metadata!['resolution']});
+      if (metadata?['resolution'] != null && metadata?['resolution'] != '') {
+        properties.add({
+          'icon': HugeIcons.strokeRoundedImage03,
+          'label': 'Resolution',
+          'value': metadata?['resolution'],
+        });
       }
-      if (metadata?['fileSize'] != null) {
-        properties.add({'icon': 'storage', 'label': 'File Size', 'value': metadata!['fileSize']});
+      if (metadata?['fileSize'] != null && metadata?['fileSize'] != '') {
+        properties.add({
+          'icon': HugeIcons.strokeRoundedDatabase01,
+          'label': 'File Size',
+          'value': '${bytesToMB(metadata?['fileSize'])} MB',
+        });
       }
       break;
   }

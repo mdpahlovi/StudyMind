@@ -6,6 +6,7 @@ import 'package:flutter/material.dart' hide Notification;
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/notification.dart';
+import 'package:studymind/core/utils.dart';
 import 'package:studymind/models/library.dart';
 import 'package:studymind/services/library.dart';
 import 'package:studymind/widgets/dialog/success.dart';
@@ -112,9 +113,9 @@ class ItemCreateController extends GetxController {
     });
   }
 
-  void createLibraryItem(ItemType type) {
+  void createLibraryItem(ItemType type) async {
     isCreating.value = true;
-    final CreateLibraryItem createLibraryItemData;
+    final CreateLibraryItem? createLibraryItemData;
 
     switch (type) {
       case ItemType.folder:
@@ -126,38 +127,103 @@ class ItemCreateController extends GetxController {
         );
         break;
       case ItemType.note:
-        createLibraryItemData = CreateLibraryItem(
-          name: nameController.text,
-          type: ItemType.note,
-          parentId: selectedFolder.value?.id,
-          metadata: {'content': noteEditorState.document.toJson(), 'description': descriptionController.text},
-        );
-        break;
-
-      case ItemType.flashcard:
-        createLibraryItemData = CreateLibraryItem(
-          name: nameController.text,
-          type: ItemType.flashcard,
-          parentId: selectedFolder.value?.id,
-          metadata: {
-            'content': jsonEncode(flashcards.map((flashcard) => flashcard.toJson()).toList()),
-            'cardCount': flashcards.length,
-            'description': descriptionController.text,
-          },
-        );
+        if (noteEditorState.document.isEmpty != false) {
+          createLibraryItemData = CreateLibraryItem(
+            name: nameController.text,
+            type: ItemType.note,
+            parentId: selectedFolder.value?.id,
+            metadata: {'description': descriptionController.text, 'content': noteEditorState.document.toJson()},
+          );
+        } else {
+          createLibraryItemData = null;
+        }
         break;
       case ItemType.document:
-      case ItemType.audio:
-      case ItemType.video:
-      case ItemType.image:
-        createLibraryItemData = CreateLibraryItem(
-          name: nameController.text,
-          type: type,
-          parentId: selectedFolder.value?.id,
-          metadata: {'description': descriptionController.text, 'fileType': selectedFile.value?.extension},
-          file: selectedFile.value,
-        );
+        if (selectedFile.value != null) {
+          createLibraryItemData = CreateLibraryItem(
+            name: nameController.text,
+            type: type,
+            parentId: selectedFolder.value?.id,
+            metadata: {'description': descriptionController.text, 'fileType': selectedFile.value!.extension},
+            file: selectedFile.value,
+          );
+        } else {
+          createLibraryItemData = null;
+        }
         break;
+      case ItemType.flashcard:
+        if (flashcards.isNotEmpty) {
+          createLibraryItemData = CreateLibraryItem(
+            name: nameController.text,
+            type: ItemType.flashcard,
+            parentId: selectedFolder.value?.id,
+            metadata: {
+              'content': jsonEncode(flashcards.map((flashcard) => flashcard.toJson()).toList()),
+              'cardCount': flashcards.length,
+              'description': descriptionController.text,
+            },
+          );
+        } else {
+          createLibraryItemData = null;
+        }
+        break;
+      case ItemType.audio:
+        if (selectedFile.value != null) {
+          createLibraryItemData = CreateLibraryItem(
+            name: nameController.text,
+            type: type,
+            parentId: selectedFolder.value?.id,
+            metadata: {
+              'description': descriptionController.text,
+              'fileType': selectedFile.value!.extension,
+              'duration': await getAudioDuration(selectedFile.value!.path!),
+            },
+            file: selectedFile.value,
+          );
+        } else {
+          createLibraryItemData = null;
+        }
+        break;
+      case ItemType.video:
+        if (selectedFile.value != null) {
+          createLibraryItemData = CreateLibraryItem(
+            name: nameController.text,
+            type: type,
+            parentId: selectedFolder.value?.id,
+            metadata: {
+              'description': descriptionController.text,
+              'fileType': selectedFile.value!.extension,
+              'duration': await getVideoDuration(selectedFile.value!.path!),
+            },
+            file: selectedFile.value,
+          );
+        } else {
+          createLibraryItemData = null;
+        }
+        break;
+      case ItemType.image:
+        if (selectedFile.value != null) {
+          createLibraryItemData = CreateLibraryItem(
+            name: nameController.text,
+            type: type,
+            parentId: selectedFolder.value?.id,
+            metadata: {
+              'description': descriptionController.text,
+              'fileType': selectedFile.value!.extension,
+              'resolution': await getImageResolution(selectedFile.value!.path!),
+            },
+            file: selectedFile.value,
+          );
+        } else {
+          createLibraryItemData = null;
+        }
+        break;
+    }
+
+    if (createLibraryItemData == null) {
+      Notification.error('Please fill in all the required fields.');
+      isCreating.value = false;
+      return;
     }
 
     libraryService.createLibraryItem(createLibraryItemData).then((response) {

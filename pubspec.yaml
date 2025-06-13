@@ -80,6 +80,16 @@ dependencies:
     # Flutter HTML Iframe: https://pub.dev/packages/flutter_html_iframe
     flutter_html_iframe: ^3.0.0
 
+    # Just Audio: https://pub.dev/packages/just_audio
+    just_audio: ^0.10.4
+
+    # Video Player: https://pub.dev/packages/video_player
+    video_player: ^2.10.0
+
+    # Image: https://pub.dev/packages/image
+    image: ^4.5.4
+    chewie: ^1.11.3
+
 dev_dependencies:
     flutter_test:
         sdk: flutter

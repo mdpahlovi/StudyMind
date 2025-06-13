@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:studymind/controllers/library.dart';
+import 'package:studymind/widgets/custom_image.dart';
 
 class ViewImage extends StatelessWidget {
   final LibraryItem item;
@@ -7,6 +10,10 @@ class ViewImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('View Image'));
+    final double width = MediaQuery.of(context).size.width - 32;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: CustomImage(imageUrl: item.metadata?['fileUrl'] ?? '', width: width, height: width * sqrt(2)),
+    );
   }
 }
