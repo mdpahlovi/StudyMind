@@ -1,11 +1,14 @@
+import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:studymind/controllers/item_create.dart';
 import 'package:studymind/theme/colors.dart';
 
 class CreateNote extends StatefulWidget {
-  const CreateNote({super.key});
+  final FocusNode focusNode;
+  final bool hasFocused;
+  const CreateNote({super.key, required this.focusNode, required this.hasFocused});
 
   @override
   CreateNoteState createState() => CreateNoteState();
@@ -15,13 +18,8 @@ class CreateNoteState extends State<CreateNote> {
   final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    itemCreateController.noteController.clear();
+    itemCreateController.noteEditorState = EditorState.blank(withInitialText: true);
     super.dispose();
   }
 
@@ -34,29 +32,31 @@ class CreateNoteState extends State<CreateNote> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Note Content', style: textTheme.labelLarge),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Container(
+          height: 480,
           decoration: BoxDecoration(
             color: colorPalette.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: colorPalette.border),
+            border: Border.all(
+              color: widget.hasFocused ? colorPalette.primary : colorPalette.border,
+              width: widget.hasFocused ? 2 : 1,
+            ),
           ),
-          child: Column(
-            children: [
-              QuillSimpleToolbar(
-                controller: itemCreateController.noteController,
-                config: const QuillSimpleToolbarConfig(),
+          child: AppFlowyEditor(
+            editorState: itemCreateController.noteEditorState,
+            focusNode: widget.focusNode,
+            editorStyle: EditorStyle.mobile(
+              padding: EdgeInsets.all(16),
+              textStyleConfiguration: TextStyleConfiguration(
+                text: GoogleFonts.plusJakartaSans(color: colorPalette.content, fontSize: 14),
               ),
-              Divider(),
-              QuillEditor.basic(
-                controller: itemCreateController.noteController,
-                config: QuillEditorConfig(
-                  padding: const EdgeInsets.all(16),
-                  minHeight: 480,
-                  placeholder: 'Start writing your note...',
-                ),
-              ),
-            ],
+              cursorColor: colorPalette.primary,
+              selectionColor: colorPalette.primary.withAlpha(128),
+              dragHandleColor: colorPalette.primary,
+            ),
+            characterShortcutEvents: [...standardCharacterShortcutEvents],
+            commandShortcutEvents: [...standardCommandShortcutEvents],
           ),
         ),
       ],

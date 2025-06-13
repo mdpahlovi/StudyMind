@@ -4,6 +4,7 @@ import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/library/widgets/item_options_sheet.dart';
 import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/theme/colors.dart';
+import 'package:studymind/widgets/custom_badge.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
 class ItemGrid extends StatelessWidget {
@@ -42,7 +43,10 @@ class ItemCard extends StatelessWidget {
 
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final TypeStyle typeStyle = ItemTypeStyle.getStyle(item.type);
+    final Color color = item.metadata?['color'] != null
+        ? Color(int.parse(item.metadata!['color']!.replaceFirst('#', '0xFF')))
+        : ItemTypeStyle.getStyle(item.type).color;
+    final String icon = item.metadata?['icon'] ?? ItemTypeStyle.getStyle(item.type).icon;
 
     return Obx(() {
       final selectedItems = libraryController.selectedItems;
@@ -70,11 +74,11 @@ class ItemCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: typeStyle.color.withAlpha(50),
+                        color: color.withAlpha(50),
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: CustomIcon(icon: typeStyle.icon, size: 16, color: typeStyle.color),
+                      child: CustomIcon(icon: icon, size: 16, color: color),
                     ),
                     const SizedBox(width: 6),
                     Expanded(
@@ -87,40 +91,49 @@ class ItemCard extends StatelessWidget {
                     ),
                     selectedItems.isNotEmpty
                         ? Container(
-                          margin: const EdgeInsets.all(6),
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(width: 2, color: colorPalette.content),
-                          ),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () => isSelected ? selectedItems.remove(item) : selectedItems.add(item),
-                            child: isSelected ? const CustomIcon(icon: 'tick', size: 16) : const SizedBox(),
-                          ),
-                        )
+                            margin: const EdgeInsets.all(6),
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(width: 2, color: colorPalette.content),
+                            ),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () => isSelected ? selectedItems.remove(item) : selectedItems.add(item),
+                              child: isSelected ? const CustomIcon(icon: 'tick', size: 16) : const SizedBox(),
+                            ),
+                          )
                         : // Three dot menu button
-                        Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(shape: BoxShape.circle),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(18),
-                            onTap: () => Get.bottomSheet(ItemOptionsSheet(item: item)),
-                            child: const Icon(Icons.more_vert),
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(shape: BoxShape.circle),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(18),
+                              onTap: () => Get.bottomSheet(ItemOptionsSheet(item: item)),
+                              child: const Icon(Icons.more_vert),
+                            ),
                           ),
-                        ),
                   ],
                 ),
                 Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: colorPalette.contentDim.withAlpha(50),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(child: CustomIcon(icon: typeStyle.icon, size: 40)),
+                  child: Stack(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: colorPalette.contentDim.withAlpha(50),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(child: CustomIcon(icon: icon, size: 40)),
+                      ),
+                      Positioned(
+                        bottom: 6,
+                        right: 6,
+                        child: CustomBadge(label: item.type.name, color: color),
+                      ),
+                    ],
                   ),
                 ),
               ],

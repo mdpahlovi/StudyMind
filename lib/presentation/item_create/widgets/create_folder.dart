@@ -22,7 +22,8 @@ class CreateFolderState extends State<CreateFolder> {
 
   @override
   void dispose() {
-    itemCreateController.noteController.clear();
+    itemCreateController.folderColor.value = '#A8C686';
+    itemCreateController.folderIcon.value = 'folder';
     super.dispose();
   }
 
@@ -42,30 +43,30 @@ class CreateFolderState extends State<CreateFolder> {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children:
-              FolderMetadata.color.map((color) {
-                return Obx(() {
-                  final selectedColor = itemCreateController.folderColor.value;
+          children: FolderMetadata.color.map((color) {
+            return Obx(() {
+              final selectedColor = itemCreateController.folderColor.value;
 
-                  return Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Color(int.parse(color.replaceFirst('#', '0xFF'))),
-                      borderRadius: BorderRadius.circular(12),
-                      border: selectedColor == color ? Border.all(color: Colors.white, width: 2) : null,
-                    ),
-                    child: InkWell(
-                      onTap: () => itemCreateController.folderColor.value = color,
-                      borderRadius: BorderRadius.circular(12),
-                      child:
-                          selectedColor == color
-                              ? const Center(child: CustomIcon(icon: 'tick', color: Colors.white))
-                              : const SizedBox.expand(),
-                    ),
-                  );
-                });
-              }).toList(),
+              return Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Color(int.parse(color.replaceFirst('#', '0xFF'))),
+                  borderRadius: BorderRadius.circular(12),
+                  border: selectedColor == color ? Border.all(color: Colors.white, width: 2) : null,
+                ),
+                child: InkWell(
+                  onTap: () => itemCreateController.folderColor.value = color,
+                  borderRadius: BorderRadius.circular(12),
+                  child: selectedColor == color
+                      ? const Center(
+                          child: CustomIcon(icon: 'tick', color: Colors.white),
+                        )
+                      : const SizedBox.expand(),
+                ),
+              );
+            });
+          }).toList(),
         ),
         const SizedBox(height: 16),
         // Icon Selection
@@ -74,39 +75,34 @@ class CreateFolderState extends State<CreateFolder> {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children:
-              FolderMetadata.icons.map((icon) {
-                return Obx(() {
-                  final selectedIcon = itemCreateController.folderIcon.value;
+          children: FolderMetadata.icons.map((icon) {
+            return Obx(() {
+              final selectedIcon = itemCreateController.folderIcon.value;
 
-                  return Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color:
-                          selectedIcon == icon
-                              ? colorPalette.primary.withAlpha(50)
-                              : colorPalette.content.withAlpha(25),
-                      borderRadius: BorderRadius.circular(12),
-                      border:
-                          selectedIcon == icon
-                              ? Border.all(color: colorPalette.primary, width: 2)
-                              : Border.all(color: colorPalette.content, width: 1),
+              return Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: selectedIcon == icon ? colorPalette.primary.withAlpha(50) : colorPalette.content.withAlpha(25),
+                  borderRadius: BorderRadius.circular(12),
+                  border: selectedIcon == icon
+                      ? Border.all(color: colorPalette.primary, width: 2)
+                      : Border.all(color: colorPalette.content, width: 1),
+                ),
+                child: InkWell(
+                  onTap: () => itemCreateController.folderIcon.value = icon,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Center(
+                    child: CustomIcon(
+                      icon: icon,
+                      color: selectedIcon == icon ? colorPalette.primary : colorPalette.content,
+                      size: 24,
                     ),
-                    child: InkWell(
-                      onTap: () => itemCreateController.folderIcon.value = icon,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Center(
-                        child: CustomIcon(
-                          icon: icon,
-                          color: selectedIcon == icon ? colorPalette.primary : colorPalette.content,
-                          size: 24,
-                        ),
-                      ),
-                    ),
-                  );
-                });
-              }).toList(),
+                  ),
+                ),
+              );
+            });
+          }).toList(),
         ),
       ],
     );

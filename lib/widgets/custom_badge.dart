@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:studymind/widgets/custom_icon.dart';
 
 class CustomBadge extends StatelessWidget {
-  const CustomBadge({super.key, required this.label, this.icon, required this.color});
+  const CustomBadge({super.key, required this.label, required this.color});
 
   final String label;
-  final String? icon;
   final Color color;
 
   @override
@@ -13,15 +11,9 @@ class CustomBadge extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(color: color.withAlpha(50), borderRadius: BorderRadius.circular(4)),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null) ...[CustomIcon(icon: icon!, color: color, size: 12), const SizedBox(width: 4)],
-          Text(label, style: textTheme.labelSmall?.copyWith(color: color)),
-        ],
-      ),
+      child: Text(label.toUpperCase(), style: textTheme.labelSmall?.copyWith(fontSize: 10, color: color)),
     );
   }
 }

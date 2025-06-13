@@ -10,6 +10,7 @@ import 'package:studymind/presentation/item_create/widgets/create_folder.dart';
 import 'package:studymind/presentation/item_create/widgets/create_image.dart';
 import 'package:studymind/presentation/item_create/widgets/create_note.dart';
 import 'package:studymind/presentation/item_create/widgets/create_video.dart';
+import 'package:studymind/presentation/item_create/widgets/note_toolbar.dart';
 import 'package:studymind/presentation/item_create/widgets/parent_folder_selector.dart';
 import 'package:studymind/widgets/custom_back_button.dart';
 import 'package:studymind/widgets/custom_button.dart';
@@ -31,15 +32,25 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
+  final FocusNode focusNode = FocusNode();
+  bool hasFocused = false;
+
   @override
   void initState() {
     super.initState();
+    focusNode.addListener(onFocusChange);
+  }
+
+  void onFocusChange() {
+    setState(() => hasFocused = focusNode.hasFocus);
   }
 
   @override
   void dispose() {
     nameController.dispose();
     descriptionController.dispose();
+    focusNode.removeListener(onFocusChange);
+    focusNode.dispose();
     super.dispose();
   }
 
@@ -57,80 +68,88 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(leading: CustomBackButton(icon: 'cancel'), title: Text('Create ${type.name.capitalize}')),
-      body: SafeArea(
-        child: Form(
-          key: formKey,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Name Input Section
-                Column(
+      appBar: AppBar(
+        leading: CustomBackButton(icon: 'cancel'),
+        title: Text('Create ${type.name.capitalize}'),
+      ),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Name', style: textTheme.labelLarge),
-                    SizedBox(height: 8),
-                    CustomTextField(
-                      controller: nameController,
-                      placeholder: 'Enter Name',
-                      validator: Validators.validateName,
+                    // Name Input Section
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Name', style: textTheme.labelLarge),
+                        SizedBox(height: 8),
+                        CustomTextField(
+                          controller: nameController,
+                          placeholder: 'Enter Name',
+                          validator: Validators.validateName,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    // Item-specific content
+                    buildItemCreateWidget(type, focusNode, hasFocused),
+                    const SizedBox(height: 16),
+                    // Parent Folder Selector
+                    ParentFolderSelector(),
+                    const SizedBox(height: 16),
+                    // Description Input Section
+                    type != ItemType.folder
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Description', style: textTheme.labelLarge),
+                              SizedBox(height: 8),
+                              CustomTextField(
+                                controller: descriptionController,
+                                placeholder: 'Add a brief description (optional)',
+                                maxLines: 3,
+                                maxLength: 200,
+                              ),
+                            ],
+                          )
+                        : SizedBox(),
+                    type != ItemType.folder ? const SizedBox(height: 16) : SizedBox(),
+                    // Create Button
+                    const SizedBox(height: 8),
+                    Obx(
+                      () => CustomButton(
+                        text: 'Create ${type.name.capitalize}',
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            Get.dialog(ConfirmDialog(onConfirmed: () => handleCreate()));
+                          }
+                        },
+                        isLoading: itemCreateController.isCreating.value,
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                // Item-specific content
-                buildItemCreateWidget(type),
-                const SizedBox(height: 16),
-                // Parent Folder Selector
-                ParentFolderSelector(),
-                const SizedBox(height: 16),
-                // Description Input Section
-                type != ItemType.folder
-                    ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Description', style: textTheme.labelLarge),
-                        SizedBox(height: 8),
-                        CustomTextField(
-                          controller: descriptionController,
-                          placeholder: 'Add a brief description (optional)',
-                          maxLines: 3,
-                          maxLength: 200,
-                        ),
-                      ],
-                    )
-                    : SizedBox(),
-                type != ItemType.folder ? const SizedBox(height: 16) : SizedBox(),
-                // Create Button
-                const SizedBox(height: 8),
-                Obx(
-                  () => CustomButton(
-                    text: 'Create ${type.name.capitalize}',
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        Get.dialog(ConfirmDialog(onConfirmed: () => handleCreate()));
-                      }
-                    },
-                    isLoading: itemCreateController.isCreating.value,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+          if (hasFocused) Positioned(bottom: 0, left: 0, right: 0, child: NoteToolbar()),
+        ],
       ),
     );
   }
 }
 
-Widget buildItemCreateWidget(ItemType type) {
+Widget buildItemCreateWidget(ItemType type, FocusNode focusNode, bool hasFocused) {
   switch (type) {
     case ItemType.folder:
       return CreateFolder();
     case ItemType.note:
-      return CreateNote();
+      return CreateNote(focusNode: focusNode, hasFocused: hasFocused);
     case ItemType.document:
       return CreateDocument();
     case ItemType.flashcard:

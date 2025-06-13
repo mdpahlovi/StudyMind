@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:studymind/controllers/library.dart';
 import 'package:studymind/constants/item_type.dart';
+import 'package:studymind/controllers/library.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_badge.dart';
 import 'package:studymind/widgets/custom_icon.dart';
@@ -33,7 +33,10 @@ class RecentCard extends StatelessWidget {
 
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final TypeStyle typeStyle = ItemTypeStyle.getStyle(item.type);
+    final Color color = item.metadata?['color'] != null
+        ? Color(int.parse(item.metadata!['color']!.replaceFirst('#', '0xFF')))
+        : ItemTypeStyle.getStyle(item.type).color;
+    final String icon = item.metadata?['icon'] ?? ItemTypeStyle.getStyle(item.type).icon;
 
     return Card(
       child: InkWell(
@@ -46,7 +49,7 @@ class RecentCard extends StatelessWidget {
               // Thumbnail
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: SizedBox(width: 70, height: 70, child: CustomIcon(icon: typeStyle.icon, size: 40)),
+                child: SizedBox(width: 70, height: 70, child: CustomIcon(icon: icon, size: 40)),
               ),
               const SizedBox(width: 12),
               // Content
@@ -57,7 +60,7 @@ class RecentCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomBadge(label: item.type.name.capitalize!, icon: typeStyle.icon, color: typeStyle.color),
+                        CustomBadge(label: item.type.name, color: color),
                         CustomIcon(icon: 'arrowRight', color: colorPalette.content, size: 20),
                       ],
                     ),

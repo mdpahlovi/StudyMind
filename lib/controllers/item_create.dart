@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/notification.dart';
@@ -51,7 +51,7 @@ class ItemCreateController extends GetxController {
   final RxString folderIcon = 'folder'.obs;
 
   // Note Metadata
-  final QuillController noteController = QuillController.basic();
+  late EditorState noteEditorState = EditorState.blank(withInitialText: true);
 
   // Flashcard Metadata
   final RxList<Flashcard> flashcards = <Flashcard>[].obs;
@@ -78,7 +78,7 @@ class ItemCreateController extends GetxController {
     folderIcon.value = 'folder';
 
     // Note Metadata
-    noteController.dispose();
+    noteEditorState = EditorState.blank(withInitialText: true);
 
     // Flashcard Metadata
     flashcards.clear();
@@ -122,7 +122,7 @@ class ItemCreateController extends GetxController {
           name: name,
           type: ItemType.note,
           parentId: selectedFolder.value?.id,
-          metadata: {'content': noteController.document.toDelta().toJson(), 'description': description},
+          metadata: {'content': noteEditorState.document.toJson(), 'description': description},
         );
         break;
 
@@ -156,8 +156,9 @@ class ItemCreateController extends GetxController {
         // Reset Metadata
         folderColor.value = '#A8C686';
         folderIcon.value = 'folder';
-        noteController.clear();
+        noteEditorState = EditorState.blank(withInitialText: true);
         flashcards.clear();
+        selectedFile.value = null;
 
         final itemResponse = LibraryItem.fromJson(response.data);
         libraryController.fetchLibraryItems(parentUid: selectedFolder.value?.uid);

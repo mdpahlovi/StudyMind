@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-    sdk: ^3.7.2
+    sdk: ^3.8.1
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -48,7 +48,7 @@ dependencies:
     hugeicons: ^0.0.11
 
     # Intl: https://pub.dev/packages/intl
-    intl: ^0.20.2
+    intl: ^0.19.0
 
     # Cached Network Image: https://pub.dev/packages/cached_network_image
     cached_network_image: ^3.4.1
@@ -59,28 +59,20 @@ dependencies:
     # Logger: https://pub.dev/packages/logger
     logger: ^2.5.0
 
-    # Flutter Native Splash: https://pub.dev/packages/flutter_native_splash
-    flutter_native_splash: ^2.4.6
+    # AppFlowy Editor: https://pub.dev/packages/appflowy_editor
+    appflowy_editor: ^5.2.0
 
-    # Flutter Quill: https://pub.dev/packages/flutter_quill
-    flutter_quill: ^11.4.1
+    # Flutter Localization: https://pub.dev/packages/flutter_localization
+    # flutter_localization: ^0.3.2
 
-    # Flutter Localizations: https://pub.dev/packages/flutter_localizations
-    flutter_localizations:
-        sdk: flutter
-
-    # Flutter SVG:     # Flutter SVG: https://pub.dev/packages/flutter_svg
-    flutter_svg: ^2.1.0
-
-    # Connectivity Plus:  https://pub.dev/packages/connectivity_plus
+    # Connectivity Plus: https://pub.dev/packages/connectivity_plus
     connectivity_plus: ^6.1.4
 
-    # Firebase Core: https://pub.dev/packages/firebase_core
-    firebase_core: ^3.13.1
+    # File Picker: https://pub.dev/packages/file_picker
+    file_picker: ^8.0.2
 
-    # File Picker:  Picker: URL_ADDRESS.dev/packages/file_picker
-    file_picker: ^10.1.9
-    supabase_flutter: ^2.9.0
+    # Supabase Flutter: https://pub.dev/packages/supabase_flutter
+    supabase_flutter: ^2.9.1
 
 dev_dependencies:
     flutter_test:
@@ -91,7 +83,7 @@ dev_dependencies:
     # activated in the `analysis_options.yaml` file located at the root of your
     # package. See that file for information about deactivating specific lint
     # rules and activating additional ones.
-    flutter_lints: ^6.0.0
+    flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -132,6 +124,3 @@ flutter:
     #
     # For details regarding fonts from package dependencies,
     # see https://flutter.dev/to/font-from-package
-flutter_native_splash:
-    color: "#EAEAC4"
-    image: "assets/images/splash.png"
