@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/constants/item_type.dart';
+import 'package:studymind/controllers/item_create.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/dialog/confirm.dart';
+import 'package:studymind/widgets/dialog/move.dart';
+import 'package:studymind/widgets/dialog/rename.dart';
 
 class ItemOption {
   void Function()? onTap;
@@ -39,6 +42,8 @@ class ItemOptionsSheetState extends State<ItemOptionsSheet> {
 }
 
 Widget buildItemOptionsContainer({required BuildContext context, required List<LibraryItem> selectedItems}) {
+  final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
+
   final ColorPalette colorPalette = AppColors().palette;
   final TextTheme textTheme = Theme.of(context).textTheme;
   final TypeStyle typeStyle = ItemTypeStyle.getStyle(selectedItems.first.type);
@@ -54,11 +59,25 @@ Widget buildItemOptionsContainer({required BuildContext context, required List<L
           selectedItems.first.type == ItemType.note ||
           selectedItems.first.type == ItemType.flashcard,
     ),
-    ItemOption(title: 'Rename', icon: HugeIcons.strokeRoundedEdit02, disabled: selectedItems.length > 1),
-    ItemOption(title: 'Move', icon: HugeIcons.strokeRoundedFolderExport),
+    ItemOption(
+      onTap: () => Get.dialog(RenameDialog(item: selectedItems.first)),
+      title: 'Rename',
+      icon: HugeIcons.strokeRoundedEdit02,
+      disabled: selectedItems.length > 1,
+    ),
+    ItemOption(
+      onTap: () => Get.dialog(MoveDialog(items: selectedItems)),
+      title: 'Move',
+      icon: HugeIcons.strokeRoundedFolderExport,
+    ),
     ItemOption(
       onTap: () {
-        Get.dialog(ConfirmDialog(message: 'You want to remove? If yes,\nPlease press confirm.'));
+        Get.dialog(
+          ConfirmDialog(
+            message: 'You want to remove? If yes,\nPlease press confirm.',
+            onConfirm: () => itemCreateController.updateBulkLibraryItem(selectedItems, 'REMOVE'),
+          ),
+        );
       },
       title: 'Remove',
       icon: HugeIcons.strokeRoundedDelete02,

@@ -40,6 +40,7 @@ class ItemCreateController extends GetxController {
   final LibraryController libraryController = Get.find<LibraryController>();
 
   final RxBool isCreating = false.obs;
+  final RxBool isUpdating = false.obs;
   final RxBool isLoadingFolder = true.obs;
   final RxList<Folder> folders = <Folder>[].obs;
   final Rxn<Folder> selectedFolder = Rxn<Folder>();
@@ -74,6 +75,7 @@ class ItemCreateController extends GetxController {
   void onClose() {
     super.onClose();
     isCreating.value = false;
+    isUpdating.value = false;
     isLoadingFolder.value = true;
     folders.clear();
     selectedFolder.value = null;
@@ -255,6 +257,60 @@ class ItemCreateController extends GetxController {
       }
 
       isCreating.value = false;
+    });
+  }
+
+  void updateLibraryItem(String uid, String name) {
+    Get.back();
+    isUpdating.value = true;
+
+    final currentFolder = libraryController.breadcrumbs.isNotEmpty ? libraryController.breadcrumbs.last : null;
+
+    final UpdateLibraryItem updateLibraryItemData = UpdateLibraryItem(uid: uid, name: name);
+
+    libraryService.updateLibraryItem(updateLibraryItemData).then((response) {
+      if (response.success && response.data != null) {
+        // Refetch
+        libraryController.selectedItems.clear();
+        libraryController.fetchLibraryItems(parentUid: currentFolder?.uid);
+        libraryController.fetchLibraryItemsByRecent();
+
+        // Show Success Dialog
+        Notification.success(response.message);
+      } else {
+        Notification.error(response.message);
+      }
+
+      isUpdating.value = false;
+    });
+  }
+
+  void updateBulkLibraryItem(List<LibraryItem> selectedItems, String action) {
+    Get.back();
+    isUpdating.value = true;
+
+    final currentFolder = libraryController.breadcrumbs.isNotEmpty ? libraryController.breadcrumbs.last : null;
+
+    final UpdateBulkLibraryItem updateBulkLibraryItemData = UpdateBulkLibraryItem(
+      uid: selectedItems.map((e) => e.uid).toList(),
+      isActive: action == 'REMOVE' ? false : true,
+      parentId: action == 'MOVE' ? selectedFolder.value?.id : currentFolder?.id,
+    );
+
+    libraryService.updateBulkLibraryItem(updateBulkLibraryItemData).then((response) {
+      if (response.success && response.data != null) {
+        // Refetch
+        libraryController.selectedItems.clear();
+        libraryController.fetchLibraryItems(parentUid: currentFolder?.uid);
+        libraryController.fetchLibraryItemsByRecent();
+
+        // Show Success Dialog
+        Notification.success(response.message);
+      } else {
+        Notification.error(response.message);
+      }
+
+      isUpdating.value = false;
     });
   }
 }

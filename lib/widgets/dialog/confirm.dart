@@ -75,28 +75,19 @@ class ConfirmDialogState extends State<ConfirmDialog> with TickerProviderStateMi
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorPalette.content,
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
                       onPressed: () => Get.back(),
+                      style: ElevatedButton.styleFrom(backgroundColor: colorPalette.content),
                       child: Text('Cancel', style: textTheme.titleMedium?.copyWith(color: colorPalette.background)),
                     ),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorPalette.success,
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        elevation: 2,
-                      ),
                       onPressed: () {
                         Get.back();
                         if (widget.onConfirm != null) widget.onConfirm!();
                       },
+                      style: ElevatedButton.styleFrom(backgroundColor: colorPalette.success),
                       child: Text('Confirm', style: textTheme.titleMedium),
                     ),
                   ),

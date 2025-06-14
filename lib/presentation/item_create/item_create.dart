@@ -89,6 +89,8 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
                     buildItemCreateWidget(type, focusNode, hasFocused),
                     const SizedBox(height: 16),
                     // Parent Folder Selector
+                    Text('Parent Folder', style: textTheme.labelLarge),
+                    SizedBox(height: 8),
                     ParentFolderSelector(),
                     const SizedBox(height: 16),
                     // Description Input Section

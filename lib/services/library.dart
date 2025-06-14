@@ -25,12 +25,17 @@ class LibraryService {
     return await apiService.post(
       '/library',
       data: data.file != null ? await data.toFormData() : data.toJson(),
-      options:
-          data.file != null ? Options(contentType: 'multipart/form-data') : Options(contentType: 'application/json'),
+      options: data.file != null
+          ? Options(contentType: 'multipart/form-data')
+          : Options(contentType: 'application/json'),
     );
   }
 
   Future<ApiResponse> updateLibraryItem(UpdateLibraryItem data) async {
     return await apiService.patch('/library/${data.uid}', data: data.toJson());
+  }
+
+  Future<ApiResponse> updateBulkLibraryItem(UpdateBulkLibraryItem data) async {
+    return await apiService.patch('/library/bulk', data: data.toJson());
   }
 }

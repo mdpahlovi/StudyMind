@@ -100,28 +100,19 @@ class SuccessDialogState extends State<SuccessDialog> with TickerProviderStateMi
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorPalette.content,
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
                       onPressed: () => Get.back(),
+                      style: ElevatedButton.styleFrom(backgroundColor: colorPalette.content),
                       child: Text('Cancel', style: textTheme.titleMedium?.copyWith(color: colorPalette.background)),
                     ),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorPalette.success,
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        elevation: 2,
-                      ),
                       onPressed: () {
                         Get.back();
                         if (widget.onConfirmed != null) widget.onConfirmed!();
                       },
+                      style: ElevatedButton.styleFrom(backgroundColor: colorPalette.success),
                       child: Text('Confirm', style: textTheme.titleMedium),
                     ),
                   ),
@@ -142,12 +133,11 @@ class CheckmarkPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint =
-        Paint()
-          ..color = Color(0xFF38A169)
-          ..strokeWidth = 4
-          ..strokeCap = StrokeCap.round
-          ..style = PaintingStyle.stroke;
+    final paint = Paint()
+      ..color = Color(0xFF38A169)
+      ..strokeWidth = 4
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
 
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 4;
@@ -206,10 +196,9 @@ class ConfettiPainter extends CustomPainter {
       final x = size.width / 2 + distance * cos(angle);
       final y = size.height / 2 + distance * sin(angle);
 
-      final paint =
-          Paint()
-            ..color = colors[i % colors.length].withValues(alpha: 1 - progress)
-            ..style = PaintingStyle.fill;
+      final paint = Paint()
+        ..color = colors[i % colors.length].withValues(alpha: 1 - progress)
+        ..style = PaintingStyle.fill;
 
       canvas.drawCircle(Offset(x, y), 3, paint);
     }

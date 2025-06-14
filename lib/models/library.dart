@@ -64,26 +64,19 @@ class CreateLibraryItem {
 
 class UpdateLibraryItem {
   final String uid;
-  final bool isActive;
   final String name;
-  final ItemType type;
+
+  UpdateLibraryItem({required this.uid, required this.name});
+
+  Map<String, dynamic> toJson() => {'name': name};
+}
+
+class UpdateBulkLibraryItem {
+  final List<String> uid;
+  final bool isActive;
   final int? parentId;
-  final Map<String, dynamic>? metadata;
 
-  UpdateLibraryItem({
-    required this.uid,
-    required this.isActive,
-    required this.name,
-    required this.type,
-    this.parentId,
-    this.metadata,
-  });
+  UpdateBulkLibraryItem({required this.uid, required this.isActive, required this.parentId});
 
-  Map<String, dynamic> toJson() => {
-    'isActive': isActive,
-    'name': name,
-    'type': type.toString().split('.').last.toUpperCase(),
-    'parentId': parentId,
-    'metadata': jsonEncode(metadata),
-  };
+  Map<String, dynamic> toJson() => {'uid': uid, 'isActive': isActive, 'parentId': parentId};
 }
