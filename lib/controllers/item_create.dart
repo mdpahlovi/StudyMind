@@ -260,34 +260,50 @@ class ItemCreateController extends GetxController {
     });
   }
 
+  void updateLoader(bool value) {
+    isUpdating.value = value;
+
+    if (Get.currentRoute.contains('/item_by_type')) {
+      libraryController.isLoadingType.value = value;
+    } else {
+      libraryController.isLoadingFolder.value = value;
+    }
+  }
+
+  void updateRefetch() {
+    libraryController.selectedItems.clear();
+
+    if (Get.currentRoute.contains('/item_by_type')) {
+      libraryController.refreshByType();
+    } else {
+      libraryController.refreshByFolder();
+    }
+
+    libraryController.fetchLibraryItemsByRecent();
+  }
+
   void updateLibraryItem(String uid, String name) {
     Get.back();
-    isUpdating.value = true;
-
-    final currentFolder = libraryController.breadcrumbs.isNotEmpty ? libraryController.breadcrumbs.last : null;
+    updateLoader(true);
 
     final UpdateLibraryItem updateLibraryItemData = UpdateLibraryItem(uid: uid, name: name);
 
     libraryService.updateLibraryItem(updateLibraryItemData).then((response) {
       if (response.success && response.data != null) {
-        // Refetch
-        libraryController.selectedItems.clear();
-        libraryController.fetchLibraryItems(parentUid: currentFolder?.uid);
-        libraryController.fetchLibraryItemsByRecent();
+        updateRefetch();
 
-        // Show Success Dialog
         Notification.success(response.message);
       } else {
         Notification.error(response.message);
       }
 
-      isUpdating.value = false;
+      updateLoader(false);
     });
   }
 
   void updateBulkLibraryItem(List<LibraryItem> selectedItems, String action) {
     Get.back();
-    isUpdating.value = true;
+    updateLoader(true);
 
     final currentFolder = libraryController.breadcrumbs.isNotEmpty ? libraryController.breadcrumbs.last : null;
 
@@ -299,18 +315,14 @@ class ItemCreateController extends GetxController {
 
     libraryService.updateBulkLibraryItem(updateBulkLibraryItemData).then((response) {
       if (response.success && response.data != null) {
-        // Refetch
-        libraryController.selectedItems.clear();
-        libraryController.fetchLibraryItems(parentUid: currentFolder?.uid);
-        libraryController.fetchLibraryItemsByRecent();
+        updateRefetch();
 
-        // Show Success Dialog
         Notification.success(response.message);
       } else {
         Notification.error(response.message);
       }
 
-      isUpdating.value = false;
+      updateLoader(false);
     });
   }
 }
