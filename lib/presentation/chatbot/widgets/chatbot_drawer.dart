@@ -53,7 +53,7 @@ class ChatbotDrawer extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.builder(
+              child: ListView.separated(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 itemCount: chatHistory.length,
                 itemBuilder: (context, index) {
@@ -80,11 +80,14 @@ class ChatbotDrawer extends StatelessWidget {
                     },
                   );
                 },
+                separatorBuilder: (context, index) => const Divider(),
               ),
             ),
             Container(
               padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(border: Border(top: BorderSide(color: colorPalette.border))),
+              decoration: BoxDecoration(
+                border: Border(top: BorderSide(color: colorPalette.border)),
+              ),
               child: SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(

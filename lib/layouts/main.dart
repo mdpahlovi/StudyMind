@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:studymind/presentation/chatbot/chatbot.dart';
+import 'package:get/get.dart';
 import 'package:studymind/presentation/home/home.dart';
 import 'package:studymind/presentation/library/library.dart';
 import 'package:studymind/presentation/profile/profile.dart';
+import 'package:studymind/routes/routes.dart';
 import 'package:studymind/widgets/custom_icon.dart';
+import 'package:uuid/uuid.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -16,21 +18,37 @@ class MainLayoutState extends State<MainLayout> {
   int selectedIndex = 0;
 
   void onDestinationSelected(int index) {
-    setState(() => selectedIndex = index);
+    if (index == 2) {
+      Get.toNamed(AppRoutes.chatSession.replaceFirst(':uid', Uuid().v4()));
+    } else {
+      setState(() => selectedIndex = index);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: [HomeScreen(), LibraryScreen(), ChatbotScreen(), ProfileScreen()][selectedIndex],
+      body: [HomeScreen(), LibraryScreen(), SizedBox(), ProfileScreen()][selectedIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
         onDestinationSelected: onDestinationSelected,
         destinations: [
-          NavigationDestination(icon: CustomIcon(icon: 'home'), label: 'Home'),
-          NavigationDestination(icon: CustomIcon(icon: 'library'), label: 'Library'),
-          NavigationDestination(icon: CustomIcon(icon: 'chatbot'), label: 'Chatbot'),
-          NavigationDestination(icon: CustomIcon(icon: 'profile'), label: 'Profile'),
+          NavigationDestination(
+            icon: CustomIcon(icon: 'home'),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: CustomIcon(icon: 'library'),
+            label: 'Library',
+          ),
+          NavigationDestination(
+            icon: CustomIcon(icon: 'chatbot'),
+            label: 'Chatbot',
+          ),
+          NavigationDestination(
+            icon: CustomIcon(icon: 'profile'),
+            label: 'Profile',
+          ),
         ],
       ),
     );

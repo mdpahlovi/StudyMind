@@ -43,17 +43,15 @@ class ItemCreateSheetState extends State<ItemCreateSheet> {
             ),
           ),
           Divider(),
-
           // Scrollable content
           Flexible(
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(left: 12, right: 12, bottom: paddings.bottom),
+              padding: EdgeInsets.only(bottom: paddings.bottom),
               child: Column(
-                children:
-                    ItemTypeStyle.options
-                        .map<List<Widget>>((option) => [const SizedBox(height: 12), CreateOption(option: option)])
-                        .expand((widget) => widget)
-                        .toList(),
+                children: ItemTypeStyle.options
+                    .map<List<Widget>>((option) => [CreateOption(option: option), const Divider()])
+                    .expand((widget) => widget)
+                    .toList(),
               ),
             ),
           ),
@@ -75,35 +73,50 @@ class CreateOption extends StatelessWidget {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Card(
-      child: InkWell(
-        onTap: () {
-          itemCreateController.setSelectedFolder(Get.parameters['uid']);
-          Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(color: option.color.withAlpha(50), borderRadius: BorderRadius.circular(8)),
-                child: CustomIcon(icon: option.icon, color: option.color, size: 24),
-              ),
-              const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(option.title, style: textTheme.titleMedium),
-                  Text(option.description, style: textTheme.bodySmall),
-                ],
-              ),
-              const Spacer(),
-              CustomIcon(icon: 'arrowRight', color: colorPalette.content, size: 24),
-            ],
-          ),
-        ),
+    // return Card(
+    //   child: InkWell(
+    //     onTap: () {
+    //       itemCreateController.setSelectedFolder(Get.parameters['uid']);
+    //       Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
+    //     },
+    //     child: Padding(
+    //       padding: const EdgeInsets.all(12),
+    //       child: Row(
+    //         children: [
+    //           Container(
+    //             padding: const EdgeInsets.all(12),
+    //             decoration: BoxDecoration(color: option.color.withAlpha(50), borderRadius: BorderRadius.circular(8)),
+    //             child: CustomIcon(icon: option.icon, color: option.color, size: 24),
+    //           ),
+    //           const SizedBox(width: 16),
+    //           Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: [
+    //               Text(option.title, style: textTheme.titleMedium),
+    //               Text(option.description, style: textTheme.bodySmall),
+    //             ],
+    //           ),
+    //           const Spacer(),
+    //           CustomIcon(icon: 'arrowRight', color: colorPalette.content, size: 24),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
+
+    return ListTile(
+      onTap: () {
+        itemCreateController.setSelectedFolder(Get.parameters['uid']);
+        Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
+      },
+      leading: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(color: option.color.withAlpha(50), borderRadius: BorderRadius.circular(8)),
+        child: CustomIcon(icon: option.icon, color: option.color, size: 24),
       ),
+      title: Text(option.title, style: textTheme.titleMedium),
+      subtitle: Text(option.description, style: textTheme.bodySmall),
+      trailing: CustomIcon(icon: 'arrowRight', color: colorPalette.content, size: 24),
     );
   }
 }

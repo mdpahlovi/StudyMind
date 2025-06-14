@@ -60,7 +60,9 @@ class ProfileScreenState extends State<ProfileScreen> {
                       shape: BoxShape.circle,
                       border: Border.all(width: 2, color: colorPalette.content),
                     ),
-                    child: ClipOval(child: CustomImage(imageUrl: imageUrl, fit: BoxFit.cover)),
+                    child: ClipOval(
+                      child: CustomImage(imageUrl: imageUrl, fit: BoxFit.cover),
+                    ),
                   ),
                 );
               }),
@@ -110,7 +112,9 @@ class ProfileScreenState extends State<ProfileScreen> {
                         child: ListTile(
                           leading: Icon(item['icon'], size: 20),
                           title: Text(item['title'], style: textTheme.titleMedium),
-                          trailing: CustomIcon(icon: 'arrowRight'),
+                          trailing: item['toggle']
+                              ? Switch(value: true, onChanged: (value) {})
+                              : CustomIcon(icon: 'arrowRight'),
                           onTap: item['onTap'],
                         ),
                       );
@@ -179,7 +183,12 @@ class ProfileScreenState extends State<ProfileScreen> {
                 leading: Icon(HugeIcons.strokeRoundedLogout01, size: 20, color: colorPalette.error),
                 title: Text("Logout", style: textTheme.titleMedium?.copyWith(color: colorPalette.error)),
                 trailing: CustomIcon(icon: 'arrowRight', color: colorPalette.error),
-                onTap: () => Get.dialog(ConfirmDialog(onConfirmed: () => authController.logout())),
+                onTap: () => Get.dialog(
+                  ConfirmDialog(
+                    message: 'You want to logout? If yes,\nPlease press confirm.',
+                    onConfirm: () => authController.logout(),
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
               Center(child: Text('Version 1.0.0', style: textTheme.bodySmall)),
@@ -198,9 +207,16 @@ class ProfileScreenState extends State<ProfileScreen> {
         children: [
           Icon(icon, color: const Color(0xFF8B5CF6), size: 20),
           const SizedBox(height: 8),
-          Text(value, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            value,
+            style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 4),
-          Text(label, style: TextStyle(color: Colors.grey[400], fontSize: 12), textAlign: TextAlign.center),
+          Text(
+            label,
+            style: TextStyle(color: Colors.grey[400], fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

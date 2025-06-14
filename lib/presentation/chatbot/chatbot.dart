@@ -5,6 +5,7 @@ import 'package:studymind/presentation/chatbot/widgets/chatbot_drawer.dart';
 import 'package:studymind/presentation/chatbot/widgets/chatbot_empty.dart';
 import 'package:studymind/presentation/chatbot/widgets/chatbot_input.dart';
 import 'package:studymind/presentation/chatbot/widgets/typing_indicator.dart';
+import 'package:studymind/widgets/custom_back_button.dart';
 
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
@@ -48,35 +49,36 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Builder(
-          builder:
-              (context) => Center(
-                child: IconButton(
-                  icon: const Icon(Icons.menu_rounded, size: 24),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
-              ),
-        ),
+        leading: CustomBackButton(),
         title: const Text('Chatbot'),
+        actions: [
+          Builder(
+            builder: (context) => Center(
+              child: IconButton(
+                icon: const Icon(Icons.menu_rounded, size: 24),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
+            ),
+          ),
+        ],
       ),
       drawer: ChatbotDrawer(),
       body: Column(
         children: [
           Expanded(
-            child:
-                messages.isEmpty
-                    ? ChatbotEmpty()
-                    : ListView.builder(
-                      controller: scrollController,
-                      padding: const EdgeInsets.all(16),
-                      itemCount: messages.length + (isTyping ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index == messages.length && isTyping) {
-                          return TypingIndicator(fadeController: fadeController);
-                        }
-                        return ChatBubble(message: messages[index]);
-                      },
-                    ),
+            child: messages.isEmpty
+                ? ChatbotEmpty()
+                : ListView.builder(
+                    controller: scrollController,
+                    padding: const EdgeInsets.all(16),
+                    itemCount: messages.length + (isTyping ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == messages.length && isTyping) {
+                        return TypingIndicator(fadeController: fadeController);
+                      }
+                      return ChatBubble(message: messages[index]);
+                    },
+                  ),
           ),
           ChatbotInput(messageController: messageController, sendMessage: sendMessage),
         ],

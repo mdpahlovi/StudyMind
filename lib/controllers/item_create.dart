@@ -221,7 +221,7 @@ class ItemCreateController extends GetxController {
     }
 
     if (createLibraryItemData == null) {
-      Notification.error('Please fill in all the required fields.');
+      Notification.error('Please fill necessary fields.');
       isCreating.value = false;
       return;
     }

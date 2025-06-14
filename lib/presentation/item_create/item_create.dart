@@ -115,7 +115,12 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
                         text: 'Create ${type.name.capitalize}',
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
-                            Get.dialog(ConfirmDialog(onConfirmed: () => itemCreateController.createLibraryItem(type)));
+                            Get.dialog(
+                              ConfirmDialog(
+                                message: "You want to create ${type.name}?\nPlease recheck before confirm.",
+                                onConfirm: () => itemCreateController.createLibraryItem(type),
+                              ),
+                            );
                           }
                         },
                         isLoading: itemCreateController.isCreating.value,

@@ -3,8 +3,13 @@ import 'package:get/get.dart';
 import 'package:studymind/theme/colors.dart';
 
 class ConfirmDialog extends StatefulWidget {
-  final void Function()? onConfirmed;
-  const ConfirmDialog({super.key, this.onConfirmed});
+  final String message;
+  final void Function()? onConfirm;
+  const ConfirmDialog({
+    super.key,
+    this.message = 'This action cannot be undone. Please confirm that you want to proceed.',
+    this.onConfirm,
+  });
 
   @override
   ConfirmDialogState createState() => ConfirmDialogState();
@@ -64,11 +69,7 @@ class ConfirmDialogState extends State<ConfirmDialog> with TickerProviderStateMi
               SizedBox(height: 24),
               Text('Are You Sure?', style: textTheme.headlineLarge),
               SizedBox(height: 12),
-              Text(
-                'This action cannot be undone. Please confirm that you want to proceed.',
-                textAlign: TextAlign.center,
-                style: textTheme.bodyMedium,
-              ),
+              Text(widget.message, textAlign: TextAlign.center, style: textTheme.bodyMedium),
               SizedBox(height: 32),
               Row(
                 children: [
@@ -94,7 +95,7 @@ class ConfirmDialogState extends State<ConfirmDialog> with TickerProviderStateMi
                       ),
                       onPressed: () {
                         Get.back();
-                        if (widget.onConfirmed != null) widget.onConfirmed!();
+                        if (widget.onConfirm != null) widget.onConfirm!();
                       },
                       child: Text('Confirm', style: textTheme.titleMedium),
                     ),
@@ -118,12 +119,11 @@ class WarningIconPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint =
-        Paint()
-          ..color = colorPalette.warning
-          ..strokeWidth = 4
-          ..strokeCap = StrokeCap.round
-          ..style = PaintingStyle.stroke;
+    final paint = Paint()
+      ..color = colorPalette.warning
+      ..strokeWidth = 4
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
 
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 4;
@@ -143,10 +143,9 @@ class WarningIconPainter extends CustomPainter {
 
       // Draw dot
       if (exclamationProgress > 0.5) {
-        final dotPaint =
-            Paint()
-              ..color = colorPalette.warning
-              ..style = PaintingStyle.fill;
+        final dotPaint = Paint()
+          ..color = colorPalette.warning
+          ..style = PaintingStyle.fill;
         canvas.drawCircle(Offset(center.dx, center.dy + 12), 2, dotPaint);
       }
     }
