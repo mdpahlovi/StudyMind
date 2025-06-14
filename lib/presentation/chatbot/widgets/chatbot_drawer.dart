@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:studymind/controllers/chat.dart';
+import 'package:studymind/presentation/chatbot/widgets/chat_session_empty.dart';
+import 'package:studymind/presentation/chatbot/widgets/chat_session_list.dart';
+import 'package:studymind/presentation/chatbot/widgets/chat_session_loader.dart';
+import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
+import 'package:uuid/uuid.dart';
 
 class ChatbotDrawer extends StatelessWidget {
   const ChatbotDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ChatController chatController = Get.find<ChatController>();
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
-
-    final List<String> chatHistory = [
-      'Math homework help',
-      'Physics equations',
-      'Chemistry formulas',
-      'Biology concepts',
-      'History timeline',
-      'Literature analysis',
-      'Programming basics',
-    ];
 
     return Drawer(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -53,35 +51,15 @@ class ChatbotDrawer extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                itemCount: chatHistory.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: colorPalette.primary.withAlpha(50),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: CustomIcon(icon: 'message', color: colorPalette.primary),
-                    ),
-                    title: Text(
-                      chatHistory[index],
-                      style: textTheme.titleMedium,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text('${index + 1} hour${index == 0 ? '' : 's'} ago', style: textTheme.bodySmall),
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Handle chat history item tap
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) => const Divider(),
-              ),
+              child: Obx(() {
+                final chatSessions = chatController.chatSessions;
+                final selectedChat = chatSessions.firstWhereOrNull((e) => e.uid == Get.parameters['uid']);
+
+                if (chatController.isLoadingSessions.value) return const ChatSessionLoader();
+                if (chatSessions.isEmpty) return const ChatSessionEmpty();
+
+                return ChatSessionList(sessions: chatSessions, selectedChat: selectedChat);
+              }),
             ),
             Container(
               padding: const EdgeInsets.all(16),
@@ -92,8 +70,9 @@ class ChatbotDrawer extends StatelessWidget {
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    Navigator.pop(context);
-                    // Handle "New Chat" button tap
+                    Get.offNamed(AppRoutes.chatSession.replaceFirst(':uid', Uuid().v4()));
+                    chatController.chatMessages.clear();
+                    chatController.selectedSession.value = null;
                   },
                   icon: CustomIcon(icon: 'add', color: colorPalette.primary),
                   label: Text('New Chat', style: textTheme.titleMedium?.copyWith(color: colorPalette.primary)),

@@ -8,7 +8,7 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(leading: CustomBackButton(), title: const Text('Notification')),
-      body: const Center(child: Text('Notification')),
+      body: const Center(child: Text('Opps! No notification available.')),
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_bubble.dart';
 import 'package:studymind/presentation/chatbot/widgets/chatbot_drawer.dart';
 import 'package:studymind/presentation/chatbot/widgets/chatbot_empty.dart';
@@ -15,18 +17,10 @@ class ChatbotScreen extends StatefulWidget {
 }
 
 class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMixin {
+  final ChatController chatController = Get.find<ChatController>();
+
   final TextEditingController messageController = TextEditingController();
   final ScrollController scrollController = ScrollController();
-  final List<ChatMessage> messages = [];
-  final List<String> chatHistory = [
-    'Math homework help',
-    'Physics equations',
-    'Chemistry formulas',
-    'Biology concepts',
-    'History timeline',
-    'Literature analysis',
-    'Programming basics',
-  ];
 
   late AnimationController fadeController;
   bool isTyping = false;
@@ -50,35 +44,46 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
     return Scaffold(
       appBar: AppBar(
         leading: CustomBackButton(),
-        title: const Text('Chatbot'),
+        title: Obx(() {
+          final selectedSession = chatController.selectedSession.value;
+          if (selectedSession != null) {
+            return Text(selectedSession.title);
+          } else {
+            return const Text('Chatbot');
+          }
+        }),
         actions: [
           Builder(
             builder: (context) => Center(
               child: IconButton(
                 icon: const Icon(Icons.menu_rounded, size: 24),
-                onPressed: () => Scaffold.of(context).openDrawer(),
+                onPressed: () => Scaffold.of(context).openEndDrawer(),
               ),
             ),
           ),
         ],
       ),
-      drawer: ChatbotDrawer(),
+      endDrawer: ChatbotDrawer(),
       body: Column(
         children: [
           Expanded(
-            child: messages.isEmpty
-                ? ChatbotEmpty()
-                : ListView.builder(
-                    controller: scrollController,
-                    padding: const EdgeInsets.all(16),
-                    itemCount: messages.length + (isTyping ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index == messages.length && isTyping) {
-                        return TypingIndicator(fadeController: fadeController);
-                      }
-                      return ChatBubble(message: messages[index]);
-                    },
-                  ),
+            child: Obx(() {
+              final chatMessages = chatController.chatMessages;
+
+              if (chatMessages.isEmpty) return const ChatbotEmpty();
+
+              return ListView.builder(
+                controller: scrollController,
+                padding: const EdgeInsets.all(16),
+                itemCount: chatMessages.length + (isTyping ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index == chatMessages.length && isTyping) {
+                    return TypingIndicator(fadeController: fadeController);
+                  }
+                  return ChatBubble(message: chatMessages[index]);
+                },
+              );
+            }),
           ),
           ChatbotInput(messageController: messageController, sendMessage: sendMessage),
         ],
@@ -91,7 +96,7 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
     if (text.isEmpty) return;
 
     setState(() {
-      messages.add(ChatMessage(text: text, isUser: true));
+      // messages.add(ChatMessage(text: text, isUser: true));
       isTyping = true;
     });
 
@@ -103,7 +108,7 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         setState(() {
-          messages.add(ChatMessage(text: generateAIResponse(text), isUser: false));
+          // messages.add(ChatMessage(text: generateAIResponse(text), isUser: false));
           isTyping = false;
         });
         fadeController.stop();
@@ -136,20 +141,4 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
     ];
     return responses[DateTime.now().millisecond % responses.length];
   }
-
-  void loadChatHistory(String chatTitle) {
-    // Simulate loading chat history
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Loading: $chatTitle'), behavior: SnackBarBehavior.floating));
-  }
-}
-
-class ChatMessage {
-  final String text;
-  final bool isUser;
-  final DateTime timestamp;
-
-  ChatMessage({required this.text, required this.isUser, DateTime? timestamp})
-    : timestamp = timestamp ?? DateTime.now();
 }

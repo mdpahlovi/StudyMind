@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:studymind/presentation/chatbot/chatbot.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/theme/colors.dart';
 
 class ChatBubble extends StatelessWidget {
@@ -11,22 +12,27 @@ class ChatBubble extends StatelessWidget {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    final bool isUser = message.isUser;
+    final bool isUser = message.role == ChatMessageRole.user;
+
+    final bubbleColor = isUser ? colorPalette.primary : colorPalette.accent;
+    final textColor = isUser ? colorPalette.white : colorPalette.black;
+
+    final avatarBg = isUser
+        ? LinearGradient(colors: [colorPalette.primary, colorPalette.secondary])
+        : LinearGradient(colors: [colorPalette.tertiary, colorPalette.accent]);
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: Row(
         mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (!isUser) ...[
             Container(
               width: 32,
               height: 32,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(Icons.smart_toy_rounded, color: Colors.white, size: 18),
+              decoration: BoxDecoration(gradient: avatarBg, borderRadius: BorderRadius.circular(16)),
+              child: const Icon(HugeIcons.strokeRoundedChatBot, color: Colors.white, size: 18),
             ),
             const SizedBox(width: 8),
           ],
@@ -34,7 +40,7 @@ class ChatBubble extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: isUser ? const Color(0xFF6366F1) : Colors.white,
+                color: bubbleColor,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(12),
                   topRight: const Radius.circular(12),
@@ -42,10 +48,7 @@ class ChatBubble extends StatelessWidget {
                   bottomRight: Radius.circular(isUser ? 0 : 12),
                 ),
               ),
-              child: Text(
-                message.text,
-                style: textTheme.bodyMedium?.copyWith(color: isUser ? Colors.white : Colors.black),
-              ),
+              child: Text(message.message, style: textTheme.bodyMedium?.copyWith(color: textColor)),
             ),
           ),
           if (isUser) ...[
@@ -53,8 +56,8 @@ class ChatBubble extends StatelessWidget {
             Container(
               width: 32,
               height: 32,
-              decoration: BoxDecoration(color: const Color(0xFFE5E7EB), borderRadius: BorderRadius.circular(16)),
-              child: const Icon(Icons.person_rounded, color: Color(0xFF6B7280), size: 18),
+              decoration: BoxDecoration(gradient: avatarBg, borderRadius: BorderRadius.circular(16)),
+              child: Icon(HugeIcons.strokeRoundedUser, color: colorPalette.black, size: 18),
             ),
           ],
         ],

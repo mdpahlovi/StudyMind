@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/presentation/home/home.dart';
 import 'package:studymind/presentation/library/library.dart';
 import 'package:studymind/presentation/profile/profile.dart';
@@ -15,11 +16,16 @@ class MainLayout extends StatefulWidget {
 }
 
 class MainLayoutState extends State<MainLayout> {
+  final ChatController chatController = Get.find<ChatController>();
   int selectedIndex = 0;
 
   void onDestinationSelected(int index) {
     if (index == 2) {
-      Get.toNamed(AppRoutes.chatSession.replaceFirst(':uid', Uuid().v4()));
+      if (chatController.selectedSession.value != null) {
+        Get.toNamed(AppRoutes.chatSession.replaceFirst(':uid', chatController.selectedSession.value!.uid));
+      } else {
+        Get.toNamed(AppRoutes.chatSession.replaceFirst(':uid', Uuid().v4()));
+      }
     } else {
       setState(() => selectedIndex = index);
     }

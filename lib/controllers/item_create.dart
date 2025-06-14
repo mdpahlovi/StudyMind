@@ -108,7 +108,6 @@ class ItemCreateController extends GetxController {
         selectedFolder.value = folders.first;
       } else {
         Notification.error(response.message);
-        Get.back();
       }
 
       isLoadingFolder.value = false;

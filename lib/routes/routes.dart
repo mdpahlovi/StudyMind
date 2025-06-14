@@ -17,7 +17,7 @@ class AppRoutes {
   static const String splashScreen = '/splash';
   static const String login = '/login';
   static const String register = '/register';
-  static const String forgotPassword = '/forgot-password';
+  static const String forgotPassword = '/forgot_password';
   static const String home = '/home';
   static const String itemByType = '/item_by_type/:type';
   static const String itemByFolder = '/item_by_folder/:uid';

@@ -97,7 +97,6 @@ class LibraryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchLibraryItems(parentUid: Get.parameters['uid']);
     fetchLibraryItemsByRecent();
   }
 
@@ -125,7 +124,6 @@ class LibraryController extends GetxController {
         folderItems.value = libraryResponse.libraryItems;
       } else {
         Notification.error(response.message);
-        Get.back();
       }
 
       isLoadingFolder.value = false;
@@ -141,7 +139,6 @@ class LibraryController extends GetxController {
         recentItems.value = libraryResponse.libraryItems;
       } else {
         Notification.error(response.message);
-        Get.back();
       }
 
       isLoadingRecent.value = false;
@@ -158,7 +155,6 @@ class LibraryController extends GetxController {
         libraryItems.value = libraryResponse.libraryItems;
       } else {
         Notification.error(response.message);
-        Get.back();
       }
 
       isLoadingType.value = false;
@@ -174,7 +170,6 @@ class LibraryController extends GetxController {
         libraryItem.value = fetchedItem;
       } else {
         Notification.error(response.message);
-        Get.back();
       }
 
       isLoadingItem.value = false;

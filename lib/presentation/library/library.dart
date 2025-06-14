@@ -19,6 +19,12 @@ class LibraryScreenState extends State<LibraryScreen> {
   final LibraryController libraryController = Get.find<LibraryController>();
 
   @override
+  void initState() {
+    super.initState();
+    libraryController.fetchLibraryItems(parentUid: null);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
