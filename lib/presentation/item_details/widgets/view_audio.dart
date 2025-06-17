@@ -36,36 +36,50 @@ class ViewAudioState extends State<ViewAudio> {
 
     return AspectRatio(
       aspectRatio: 16 / 9,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: colorPalette.border),
-          color: colorPalette.surface,
-        ),
+      child: Card(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            StreamBuilder<PlayerState>(
-              stream: player.playerStateStream,
-              builder: (context, snapshot) {
-                final playerState = snapshot.data;
-                final processingState = playerState?.processingState;
-                final playing = playerState?.playing;
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: colorPalette.content, width: 2),
+              ),
+              child: Center(
+                child: StreamBuilder<PlayerState>(
+                  stream: player.playerStateStream,
+                  builder: (context, snapshot) {
+                    final playerState = snapshot.data;
+                    final processingState = playerState?.processingState;
+                    final playing = playerState?.playing;
 
-                if (processingState == ProcessingState.loading || processingState == ProcessingState.buffering) {
-                  return const CircularProgressIndicator();
-                } else if (playing != true) {
-                  return IconButton(icon: const Icon(HugeIcons.strokeRoundedPlay, size: 36), onPressed: player.play);
-                } else if (processingState != ProcessingState.completed) {
-                  return IconButton(icon: const Icon(HugeIcons.strokeRoundedPause, size: 36), onPressed: player.pause);
-                } else {
-                  return IconButton(
-                    icon: const Icon(HugeIcons.strokeRoundedReplay, size: 36),
-                    onPressed: () => player.seek(Duration.zero),
-                  );
-                }
-              },
+                    if (processingState == ProcessingState.loading || processingState == ProcessingState.buffering) {
+                      return Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: CircularProgressIndicator(color: colorPalette.content, strokeWidth: 2),
+                      );
+                    } else if (playing != true) {
+                      return IconButton(
+                        icon: const Icon(HugeIcons.strokeRoundedPlay, size: 36),
+                        onPressed: player.play,
+                      );
+                    } else if (processingState != ProcessingState.completed) {
+                      return IconButton(
+                        icon: const Icon(HugeIcons.strokeRoundedPause, size: 36),
+                        onPressed: player.pause,
+                      );
+                    } else {
+                      return IconButton(
+                        icon: const Icon(HugeIcons.strokeRoundedReplay, size: 36),
+                        onPressed: () => player.seek(Duration.zero),
+                      );
+                    }
+                  },
+                ),
+              ),
             ),
             const SizedBox(height: 8),
             StreamBuilder<Duration>(
@@ -85,6 +99,7 @@ class ViewAudioState extends State<ViewAudio> {
                           onChanged: (value) {
                             player.seek(Duration(milliseconds: value.toInt()));
                           },
+                          inactiveColor: colorPalette.primary.withAlpha(100),
                         ),
                         Text('${formatDuration(position)} / ${formatDuration(duration)}', style: textTheme.labelMedium),
                       ],

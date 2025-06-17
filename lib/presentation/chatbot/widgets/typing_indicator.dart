@@ -1,68 +1,71 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:studymind/theme/colors.dart';
 
 class TypingIndicator extends StatefulWidget {
-  final AnimationController fadeController;
-  const TypingIndicator({super.key, required this.fadeController});
+  const TypingIndicator({super.key});
 
   @override
   State<TypingIndicator> createState() => TypingIndicatorState();
 }
 
-class TypingIndicatorState extends State<TypingIndicator> {
+class TypingIndicatorState extends State<TypingIndicator> with TickerProviderStateMixin {
+  late AnimationController animationController;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    animationController = AnimationController(duration: const Duration(milliseconds: 1200), vsync: this);
+    animation = Tween<double>(begin: 0.0, end: 1.0).animate(animationController);
+
+    animationController.repeat();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Icon(Icons.smart_toy_rounded, color: Colors.white, size: 18),
-          ),
-          const SizedBox(width: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(18),
-                topRight: Radius.circular(18),
-                bottomRight: Radius.circular(18),
-                bottomLeft: Radius.circular(4),
-              ),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 5, offset: const Offset(0, 2))],
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                buildDot(0, fadeController: widget.fadeController),
-                const SizedBox(width: 4),
-                buildDot(1, fadeController: widget.fadeController),
-                const SizedBox(width: 4),
-                buildDot(2, fadeController: widget.fadeController),
-              ],
-            ),
-          ),
+          Text('Typing', style: textTheme.bodyMedium),
+          const SizedBox(width: 4),
+          buildDot(0),
+          const SizedBox(width: 4),
+          buildDot(1),
+          const SizedBox(width: 4),
+          buildDot(2),
         ],
       ),
     );
   }
 
-  Widget buildDot(int index, {required AnimationController fadeController}) {
+  Widget buildDot(int index) {
+    final ColorPalette colorPalette = AppColors().palette;
+
     return AnimatedBuilder(
-      animation: fadeController,
+      animation: animation,
       builder: (context, child) {
-        final value = (fadeController.value - (index * 0.2)).clamp(0.0, 1.0);
+        final animationValue = (animation.value + (index * 0.3)) % 1.0;
+        final opacity = (sin(animationValue * pi * 2) + 1) / 2;
+
         return Container(
           width: 8,
           height: 8,
+          margin: const EdgeInsets.only(top: 5),
           decoration: BoxDecoration(
-            color: Color.lerp(const Color(0xFFE5E7EB), const Color(0xFF6B7280), value),
+            color: colorPalette.content.withValues(alpha: 0.3 + (opacity * 0.7)),
             shape: BoxShape.circle,
           ),
         );

@@ -13,8 +13,8 @@ class LibraryService {
     return await apiService.get('/library/by-type', queryParameters: query.toJson());
   }
 
-  Future<ApiResponse> getLibraryItemsWithPath(GetLibraryItemsWithPathQuery query) async {
-    return await apiService.get('/library/with-path', queryParameters: query.toJson());
+  Future<ApiResponse> getLibraryItemsWithPath({required String type}) async {
+    return await apiService.get('/library/with-path', queryParameters: {'type': type});
   }
 
   Future<ApiResponse> getLibraryItemByUid(String uid) async {

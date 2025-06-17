@@ -27,7 +27,7 @@ class ItemCreateScreen extends StatefulWidget {
 class ItemCreateScreenState extends State<ItemCreateScreen> {
   final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
 
-  final ItemType type = ItemType.values.firstWhere((e) => e.toString().split('.').last == Get.parameters['type']);
+  final ItemType type = ItemType.values.byName(Get.parameters['type']!);
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final FocusNode focusNode = FocusNode();

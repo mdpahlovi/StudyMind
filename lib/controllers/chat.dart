@@ -1,6 +1,34 @@
 import 'package:get/get.dart';
+import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/services/chat.dart';
+import 'package:studymind/services/library.dart';
+
+class ChatContext {
+  final String uid;
+  final bool isEmbedded;
+  final String name;
+  final ItemType type;
+  final String path;
+
+  ChatContext({
+    required this.uid,
+    required this.isEmbedded,
+    required this.name,
+    required this.type,
+    required this.path,
+  });
+
+  factory ChatContext.fromJson(Map<String, dynamic> json) {
+    return ChatContext(
+      uid: json['uid'],
+      isEmbedded: ['DOCUMENT', 'AUDIO', 'VIDEO'].contains(json['type']) ? json['is_embedded'] : true,
+      name: json['name'],
+      type: ItemType.values.byName(json['type'].toLowerCase()),
+      path: json['path'],
+    );
+  }
+}
 
 class ChatSession {
   final int id;
@@ -8,7 +36,7 @@ class ChatSession {
   final bool isActive;
   final int userId;
   final String title;
-  final String? describe;
+  final String? description;
   final String? lastMessage;
   final DateTime? lastMessageAt;
   final DateTime createdAt;
@@ -20,7 +48,7 @@ class ChatSession {
     required this.isActive,
     required this.userId,
     required this.title,
-    this.describe,
+    this.description,
     this.lastMessage,
     this.lastMessageAt,
     required this.createdAt,
@@ -34,27 +62,12 @@ class ChatSession {
       isActive: json['isActive'] ?? true,
       userId: json['userId'],
       title: json['title'],
-      describe: json['describe'],
+      description: json['description'],
       lastMessage: json['lastMessage'],
       lastMessageAt: json['lastMessageAt'] != null ? DateTime.parse(json['lastMessageAt']) : null,
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'uid': uid,
-      'isActive': isActive,
-      'userId': userId,
-      'title': title,
-      'describe': describe,
-      'lastMessage': lastMessage,
-      'lastMessageAt': lastMessageAt?.toIso8601String(),
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-    };
   }
 }
 
@@ -85,19 +98,15 @@ enum ChatMessageRole {
 }
 
 class ChatMessage {
-  final int id;
   final String uid;
   final ChatMessageRole role;
-  final int chatSessionId;
   final String message;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   ChatMessage({
-    required this.id,
     required this.uid,
     required this.role,
-    required this.chatSessionId,
     required this.message,
     required this.createdAt,
     required this.updatedAt,
@@ -105,10 +114,8 @@ class ChatMessage {
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
     return ChatMessage(
-      id: json['id'],
       uid: json['uid'],
       role: ChatMessageRole.fromString(json['role']),
-      chatSessionId: json['chatSessionId'],
       message: json['message'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
@@ -117,10 +124,8 @@ class ChatMessage {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'uid': uid,
       'role': role.value,
-      'chatSessionId': chatSessionId,
       'message': message,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
@@ -140,17 +145,17 @@ class ChatSessionWithMessage {
       messages: List<ChatMessage>.from(json['messages'].map((x) => ChatMessage.fromJson(x))),
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {'session': session.toJson(), 'messages': messages.map((x) => x.toJson()).toList()};
-  }
 }
 
 class ChatController extends GetxController {
+  final LibraryService libraryService = LibraryService();
   final ChatService chatService = ChatService();
 
-  final RxBool isLoadingSessions = false.obs;
-  final RxBool isLoadingMessages = false.obs;
+  final RxBool isLoadingContext = false.obs;
+  final RxBool isLoadingSession = false.obs;
+  final RxBool isLoadingMessage = false.obs;
+  final RxBool isGenAiTyping = true.obs;
+  final RxList<ChatContext> chatContexts = <ChatContext>[].obs;
   final RxList<ChatSession> chatSessions = <ChatSession>[].obs;
   final RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
   final Rxn<ChatSession> selectedSession = Rxn<ChatSession>();
@@ -158,11 +163,42 @@ class ChatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    fetchChatContexts();
     fetchChatSessions();
   }
 
+  @override
+  void onClose() {
+    super.onClose();
+    isLoadingContext.value = false;
+    isLoadingSession.value = false;
+    isLoadingMessage.value = false;
+    isGenAiTyping.value = false;
+    chatContexts.clear();
+    chatSessions.clear();
+    chatMessages.clear();
+    selectedSession.value = null;
+  }
+
+  Future<void> fetchChatContexts() async {
+    isLoadingContext.value = true;
+
+    libraryService.getLibraryItemsWithPath(type: '').then((response) {
+      if (response.success && response.data != null) {
+        final List<ChatContext> contextResponse = List<ChatContext>.from(
+          response.data.map((x) => ChatContext.fromJson(x)),
+        );
+        chatContexts.value = contextResponse;
+      } else {
+        Notification.error(response.message);
+      }
+
+      isLoadingContext.value = false;
+    });
+  }
+
   Future<void> fetchChatSessions({String search = ''}) async {
-    isLoadingSessions.value = true;
+    isLoadingSession.value = true;
 
     chatService.getChatSessions(search: search).then((response) {
       if (response.success && response.data != null) {
@@ -172,12 +208,12 @@ class ChatController extends GetxController {
         Notification.error(response.message);
       }
 
-      isLoadingSessions.value = false;
+      isLoadingSession.value = false;
     });
   }
 
   Future<void> fetchOneChatSession({required String uid}) async {
-    isLoadingMessages.value = true;
+    isLoadingMessage.value = true;
 
     chatService.getOneChatSession(uid: uid).then((response) {
       if (response.success && response.data != null) {
@@ -188,7 +224,36 @@ class ChatController extends GetxController {
         Notification.error(response.message);
       }
 
-      isLoadingMessages.value = false;
+      isLoadingMessage.value = false;
     });
+  }
+
+  Future<void> requestQuery() async {
+    isGenAiTyping.value = true;
+    final session = Get.parameters['uid'];
+
+    if (session == null) {
+      Notification.error('Please select a chat session');
+      return;
+    }
+
+    if (chatMessages.isEmpty) {
+      Notification.error('Please send a message first');
+      return;
+    }
+
+    final response = await chatService.requestQuery(uid: session, message: chatMessages.last);
+    if (response.success && response.data != null) {
+      final session = ChatSession.fromJson(response.data['session']);
+      final message = ChatMessage.fromJson(response.data['message']);
+
+      selectedSession.value = session;
+      chatSessions.insert(0, session);
+      chatMessages.add(message);
+    } else {
+      Notification.error(response.message);
+    }
+
+    isGenAiTyping.value = false;
   }
 }

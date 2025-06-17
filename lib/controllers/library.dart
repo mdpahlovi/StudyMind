@@ -10,6 +10,7 @@ class LibraryItem {
   final int id;
   final String uid;
   final bool isActive;
+  final bool isEmbedded;
   final String name;
   final ItemType type;
   final int? parentId;
@@ -23,6 +24,7 @@ class LibraryItem {
     required this.id,
     required this.uid,
     required this.isActive,
+    required this.isEmbedded,
     required this.name,
     required this.type,
     this.parentId,
@@ -38,8 +40,9 @@ class LibraryItem {
       id: json['id'],
       uid: json['uid'],
       isActive: json['isActive'],
+      isEmbedded: ['DOCUMENT', 'AUDIO', 'VIDEO'].contains(json['type']) ? json['isEmbedded'] : true,
       name: json['name'],
-      type: ItemType.values.firstWhere((e) => e.toString().split('.').last == json['type'].toLowerCase()),
+      type: ItemType.values.byName(json['type'].toLowerCase()),
       parentId: json['parentId'],
       userId: json['userId'],
       metadata: json['metadata'],
@@ -55,7 +58,7 @@ class LibraryItem {
       'uid': uid,
       'isActive': isActive,
       'name': name,
-      'type': type.toString().split('.').last.toUpperCase(),
+      'type': type.name.toUpperCase(),
       'parentId': parentId,
       'userId': userId,
       'metadata': metadata,

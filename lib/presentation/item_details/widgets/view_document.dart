@@ -16,22 +16,25 @@ class ViewDocument extends StatelessWidget {
       return const Center(child: Text("No document available"));
     }
 
-    final viewerUrl = Uri.encodeFull("https://docs.google.com/gview?embedded=true&url=$fileUrl");
+    final viewerUrl = Uri.encodeFull("https://mozilla.github.io/pdf.js/web/viewer.html?file=$fileUrl");
     final width = MediaQuery.of(context).size.width - 32;
 
     return AspectRatio(
       aspectRatio: 1 / sqrt(2), // A4 paper ratio
-      child: Html(
-        data:
-            """
+      child: Card(
+        child: Html(
+          data:
+              """
               <iframe 
                 src="$viewerUrl" 
-                width="$width" 
-                height="${width * sqrt(2)}" 
-                style="border:none;">
-              </iframe>
-            """,
-        extensions: [IframeHtmlExtension()],
+                  width="$width" 
+                  height="${width * sqrt(2)}" 
+                  style="border:none;">
+                </iframe>
+              """,
+          style: {'*': Style(padding: HtmlPaddings.zero, margin: Margins.zero)},
+          extensions: [IframeHtmlExtension()],
+        ),
       ),
     );
   }

@@ -9,9 +9,9 @@ String bytesToMB(dynamic bytes, {int decimals = 2}) {
   return mb.toStringAsFixed(decimals);
 }
 
-String secToMin(int totalSeconds) {
+String secToMin(dynamic totalSeconds) {
   int minutes = totalSeconds ~/ 60;
-  int seconds = totalSeconds % 60;
+  int seconds = (totalSeconds % 60).toInt();
   return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
 }
 

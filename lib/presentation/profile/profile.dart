@@ -88,7 +88,7 @@ class ProfileScreenState extends State<ProfileScreen> {
               Obx(() {
                 final DateTime? createdAt = authController.user.value?.createdAt;
                 return Text(
-                  'Joined ${createdAt != null ? DateFormat('MMM dd, YYYY').format(createdAt) : ""}',
+                  'Joined ${createdAt != null ? DateFormat('MMM dd, yyyy').format(createdAt) : ""}',
                   textAlign: TextAlign.center,
                   style: textTheme.bodySmall,
                   maxLines: 1,

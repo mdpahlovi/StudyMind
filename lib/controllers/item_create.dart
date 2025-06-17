@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Notification;
@@ -101,7 +99,7 @@ class ItemCreateController extends GetxController {
   void fetchFolders() {
     isLoadingFolder.value = true;
 
-    libraryService.getLibraryItemsWithPath(GetLibraryItemsWithPathQuery(type: 'FOLDER')).then((response) {
+    libraryService.getLibraryItemsWithPath(type: 'FOLDER').then((response) {
       if (response.success && response.data != null) {
         final folderResponse = response.data.map((x) => Folder.fromJson(x));
         folders.value = [Folder(id: null, uid: null, name: "Root Folder", path: "/"), ...folderResponse];
@@ -159,7 +157,7 @@ class ItemCreateController extends GetxController {
             type: ItemType.flashcard,
             parentId: selectedFolder.value?.id,
             metadata: {
-              'content': jsonEncode(flashcards.map((flashcard) => flashcard.toJson()).toList()),
+              'content': flashcards.map((flashcard) => flashcard.toJson()).toList(),
               'cardCount': flashcards.length,
               'description': descriptionController.text,
             },

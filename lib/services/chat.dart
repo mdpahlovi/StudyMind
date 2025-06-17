@@ -1,3 +1,4 @@
+import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/services/api.dart';
 
 class ChatService {
@@ -9,5 +10,9 @@ class ChatService {
 
   Future<ApiResponse> getOneChatSession({required String uid}) async {
     return await apiService.get('/chat/$uid');
+  }
+
+  Future<ApiResponse> requestQuery({required String uid, required ChatMessage message}) async {
+    return await apiService.patch('/chat/$uid', data: message.toJson());
   }
 }

@@ -4,8 +4,8 @@ import 'package:studymind/widgets/custom_icon.dart';
 
 class ChatbotInput extends StatelessWidget {
   final TextEditingController messageController;
-  final void Function() sendMessage;
-  const ChatbotInput({super.key, required this.messageController, required this.sendMessage});
+  final void Function() onSendMessage;
+  const ChatbotInput({super.key, required this.messageController, required this.onSendMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class ChatbotInput extends StatelessWidget {
                     IconButton.filled(
                       padding: EdgeInsets.zero,
                       constraints: BoxConstraints(minWidth: 32, minHeight: 32),
-                      onPressed: () => sendMessage(),
+                      onPressed: () => onSendMessage(),
                       icon: CustomIcon(icon: 'sent', size: 18),
                     ),
                   ],

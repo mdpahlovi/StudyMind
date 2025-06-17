@@ -55,7 +55,7 @@ class ChatbotDrawer extends StatelessWidget {
                 final chatSessions = chatController.chatSessions;
                 final selectedChat = chatSessions.firstWhereOrNull((e) => e.uid == Get.parameters['uid']);
 
-                if (chatController.isLoadingSessions.value) return const ChatSessionLoader();
+                if (chatController.isLoadingSession.value) return const ChatSessionLoader();
                 if (chatSessions.isEmpty) return const ChatSessionEmpty();
 
                 return ChatSessionList(sessions: chatSessions, selectedChat: selectedChat);

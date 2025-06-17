@@ -25,14 +25,6 @@ class GetLibraryItemsByTypeQuery {
   Map<String, dynamic> toJson() => {'search': search, 'type': type.toUpperCase(), 'page': page, 'limit': limit};
 }
 
-class GetLibraryItemsWithPathQuery {
-  final String type;
-
-  GetLibraryItemsWithPathQuery({this.type = 'FOLDER'});
-
-  Map<String, dynamic> toJson() => {'type': type};
-}
-
 class CreateLibraryItem {
   final String name;
   final ItemType type;
@@ -44,7 +36,7 @@ class CreateLibraryItem {
 
   Map<String, dynamic> toJson() => {
     'name': name,
-    'type': type.toString().split('.').last.toUpperCase(),
+    'type': type.name.toUpperCase(),
     'parentId': parentId,
     'metadata': jsonEncode(metadata),
   };
@@ -53,7 +45,7 @@ class CreateLibraryItem {
     final map = <String, dynamic>{};
 
     map['name'] = name;
-    map['type'] = type.toString().split('.').last.toUpperCase();
+    map['type'] = type.name.toUpperCase();
     if (parentId != null) map['parentId'] = parentId.toString();
     if (metadata != null) map['metadata'] = jsonEncode(metadata);
     if (file != null) map['file'] = await MultipartFile.fromFile(file!.path!, filename: file!.name);
