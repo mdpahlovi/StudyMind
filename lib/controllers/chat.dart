@@ -154,7 +154,7 @@ class ChatController extends GetxController {
   final RxBool isLoadingContext = false.obs;
   final RxBool isLoadingSession = false.obs;
   final RxBool isLoadingMessage = false.obs;
-  final RxBool isGenAiTyping = true.obs;
+  final RxBool isGenAiTyping = false.obs;
   final RxList<ChatContext> chatContexts = <ChatContext>[].obs;
   final RxList<ChatSession> chatSessions = <ChatSession>[].obs;
   final RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;

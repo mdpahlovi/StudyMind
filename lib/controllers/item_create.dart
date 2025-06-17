@@ -1,6 +1,6 @@
-import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Notification;
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/notification.dart';
@@ -55,7 +55,7 @@ class ItemCreateController extends GetxController {
   final RxString folderIcon = 'folder'.obs;
 
   // Note Metadata
-  late EditorState noteEditorState = EditorState.blank(withInitialText: true);
+  final QuillController noteController = QuillController.basic();
 
   // Flashcard Metadata
   final RxList<Flashcard> flashcards = <Flashcard>[].obs;
@@ -87,7 +87,7 @@ class ItemCreateController extends GetxController {
     folderIcon.value = 'folder';
 
     // Note Metadata
-    noteEditorState = EditorState.blank(withInitialText: true);
+    noteController.dispose();
 
     // Flashcard Metadata
     flashcards.clear();
@@ -126,12 +126,15 @@ class ItemCreateController extends GetxController {
         );
         break;
       case ItemType.note:
-        if (noteEditorState.document.isEmpty != false) {
+        if (noteController.document.isEmpty() == false) {
           createLibraryItemData = CreateLibraryItem(
             name: nameController.text,
             type: ItemType.note,
             parentId: selectedFolder.value?.id,
-            metadata: {'description': descriptionController.text, 'content': noteEditorState.document.toJson()},
+            metadata: {
+              'description': descriptionController.text,
+              'content': noteController.document.toDelta().toJson(),
+            },
           );
         } else {
           createLibraryItemData = null;
@@ -232,7 +235,7 @@ class ItemCreateController extends GetxController {
         descriptionController.clear();
         folderColor.value = '#A8C686';
         folderIcon.value = 'folder';
-        noteEditorState = EditorState.blank(withInitialText: true);
+        noteController.clear();
         flashcards.clear();
         selectedFile.value = null;
 

@@ -48,7 +48,7 @@ dependencies:
     hugeicons: ^0.0.11
 
     # Intl: https://pub.dev/packages/intl
-    intl: ^0.19.0
+    intl: ^0.20.2
 
     # Cached Network Image: https://pub.dev/packages/cached_network_image
     cached_network_image: ^3.4.1
@@ -59,17 +59,20 @@ dependencies:
     # Logger: https://pub.dev/packages/logger
     logger: ^2.5.0
 
-    # AppFlowy Editor: https://pub.dev/packages/appflowy_editor
-    appflowy_editor: ^5.2.0
+    # Flutter Quill: https://pub.dev/packages/flutter_quill
+    flutter_quill: ^11.4.1
 
     # Flutter Localization: https://pub.dev/packages/flutter_localization
-    # flutter_localization: ^0.3.2
+    flutter_localization: ^0.3.2
+
+    # Markdown Quill: https://pub.dev/packages/markdown_quill
+    markdown_quill: ^4.3.0
 
     # Connectivity Plus: https://pub.dev/packages/connectivity_plus
     connectivity_plus: ^6.1.4
 
     # File Picker: https://pub.dev/packages/file_picker
-    file_picker: ^8.0.2
+    file_picker: ^10.2.0
 
     # Supabase Flutter: https://pub.dev/packages/supabase_flutter
     supabase_flutter: ^2.9.1
@@ -94,6 +97,8 @@ dependencies:
 
     # UUID: https://pub.dev/packages/uuid
     uuid: ^4.5.1
+
+    # Timeago: https://pub.dev/packages/timeago
     timeago: ^3.7.1
 
 dev_dependencies:
