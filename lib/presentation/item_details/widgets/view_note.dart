@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:studymind/constants/quill_constant.dart';
 import 'package:studymind/controllers/library.dart';
+import 'package:studymind/core/utils.dart';
 
 class ViewNote extends StatelessWidget {
   final LibraryItem item;
@@ -7,6 +10,13 @@ class ViewNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('View Note'));
+    return QuillEditor.basic(
+      controller: QuillController(
+        document: Document.fromDelta(markdownTODelta.convert(item.metadata?['content'] ?? '')),
+        selection: const TextSelection.collapsed(offset: 0),
+        readOnly: true,
+      ),
+      config: QuillEditorConfig(customStyles: QuillConstant.customStyles),
+    );
   }
 }

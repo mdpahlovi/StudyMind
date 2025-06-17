@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:studymind/core/logger.dart';
+import 'package:studymind/presentation/chatbot/widgets/chat_content_dialog.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
@@ -54,7 +57,13 @@ class ChatbotInput extends StatelessWidget {
                     IconButton.outlined(
                       padding: EdgeInsets.zero,
                       constraints: BoxConstraints(minWidth: 32, minHeight: 32),
-                      onPressed: () {},
+                      onPressed: () => Get.dialog(
+                        ChatContentDialog(
+                          onContentSelected: (content) {
+                            logger.d(content);
+                          },
+                        ),
+                      ),
                       icon: CustomIcon(icon: 'add', size: 18),
                     ),
                     Expanded(child: SizedBox()),

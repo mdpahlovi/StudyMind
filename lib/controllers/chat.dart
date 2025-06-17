@@ -4,14 +4,14 @@ import 'package:studymind/core/notification.dart';
 import 'package:studymind/services/chat.dart';
 import 'package:studymind/services/library.dart';
 
-class ChatContext {
+class ChatContent {
   final String uid;
   final bool isEmbedded;
   final String name;
   final ItemType type;
   final String path;
 
-  ChatContext({
+  ChatContent({
     required this.uid,
     required this.isEmbedded,
     required this.name,
@@ -19,8 +19,8 @@ class ChatContext {
     required this.path,
   });
 
-  factory ChatContext.fromJson(Map<String, dynamic> json) {
-    return ChatContext(
+  factory ChatContent.fromJson(Map<String, dynamic> json) {
+    return ChatContent(
       uid: json['uid'],
       isEmbedded: ['DOCUMENT', 'AUDIO', 'VIDEO'].contains(json['type']) ? json['is_embedded'] : true,
       name: json['name'],
@@ -155,7 +155,7 @@ class ChatController extends GetxController {
   final RxBool isLoadingSession = false.obs;
   final RxBool isLoadingMessage = false.obs;
   final RxBool isGenAiTyping = false.obs;
-  final RxList<ChatContext> chatContexts = <ChatContext>[].obs;
+  final RxList<ChatContent> chatContents = <ChatContent>[].obs;
   final RxList<ChatSession> chatSessions = <ChatSession>[].obs;
   final RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
   final Rxn<ChatSession> selectedSession = Rxn<ChatSession>();
@@ -163,7 +163,7 @@ class ChatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchChatContexts();
+    fetchChatContents();
     fetchChatSessions();
   }
 
@@ -174,21 +174,21 @@ class ChatController extends GetxController {
     isLoadingSession.value = false;
     isLoadingMessage.value = false;
     isGenAiTyping.value = false;
-    chatContexts.clear();
+    chatContents.clear();
     chatSessions.clear();
     chatMessages.clear();
     selectedSession.value = null;
   }
 
-  Future<void> fetchChatContexts() async {
+  Future<void> fetchChatContents() async {
     isLoadingContext.value = true;
 
     libraryService.getLibraryItemsWithPath(type: '').then((response) {
       if (response.success && response.data != null) {
-        final List<ChatContext> contextResponse = List<ChatContext>.from(
-          response.data.map((x) => ChatContext.fromJson(x)),
+        final List<ChatContent> contextResponse = List<ChatContent>.from(
+          response.data.map((x) => ChatContent.fromJson(x)),
         );
-        chatContexts.value = contextResponse;
+        chatContents.value = contextResponse;
       } else {
         Notification.error(response.message);
       }

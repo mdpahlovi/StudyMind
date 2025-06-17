@@ -23,6 +23,7 @@ class RenameDialogState extends State<RenameDialog> {
 
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

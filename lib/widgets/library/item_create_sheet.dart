@@ -73,37 +73,6 @@ class CreateOption extends StatelessWidget {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    // return Card(
-    //   child: InkWell(
-    //     onTap: () {
-    //       itemCreateController.setSelectedFolder(Get.parameters['uid']);
-    //       Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
-    //     },
-    //     child: Padding(
-    //       padding: const EdgeInsets.all(12),
-    //       child: Row(
-    //         children: [
-    //           Container(
-    //             padding: const EdgeInsets.all(12),
-    //             decoration: BoxDecoration(color: option.color.withAlpha(50), borderRadius: BorderRadius.circular(8)),
-    //             child: CustomIcon(icon: option.icon, color: option.color, size: 24),
-    //           ),
-    //           const SizedBox(width: 16),
-    //           Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               Text(option.title, style: textTheme.titleMedium),
-    //               Text(option.description, style: textTheme.bodySmall),
-    //             ],
-    //           ),
-    //           const Spacer(),
-    //           CustomIcon(icon: 'arrowRight', color: colorPalette.content, size: 24),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
-
     return ListTile(
       onTap: () {
         itemCreateController.setSelectedFolder(Get.parameters['uid']);

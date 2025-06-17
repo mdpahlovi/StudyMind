@@ -133,7 +133,7 @@ class ItemCreateController extends GetxController {
             parentId: selectedFolder.value?.id,
             metadata: {
               'description': descriptionController.text,
-              'content': noteController.document.toDelta().toJson(),
+              'content': deltaToMarkdown.convert(noteController.document.toDelta()),
             },
           );
         } else {

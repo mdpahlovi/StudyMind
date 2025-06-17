@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:image/image.dart' as img;
 import 'package:just_audio/just_audio.dart';
+import 'package:markdown/markdown.dart' as md;
+import 'package:markdown_quill/markdown_quill.dart';
 import 'package:video_player/video_player.dart';
 
 String bytesToMB(dynamic bytes, {int decimals = 2}) {
@@ -41,3 +43,6 @@ Future<String> getImageResolution(String filePath) async {
 
   return image != null ? '${image.width}x${image.height}' : '';
 }
+
+final markdownTODelta = MarkdownToDelta(markdownDocument: md.Document(encodeHtml: false));
+final deltaToMarkdown = DeltaToMarkdown();
