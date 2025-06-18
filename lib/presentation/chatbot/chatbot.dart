@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_bubble.dart';
@@ -20,7 +23,7 @@ class ChatbotScreen extends StatefulWidget {
 class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMixin {
   final ChatController chatController = Get.find<ChatController>();
 
-  final TextEditingController messageController = TextEditingController();
+  final QuillController messageController = QuillController.basic();
   final ScrollController scrollController = ScrollController();
 
   late AnimationController fadeController;
@@ -40,7 +43,7 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
   }
 
   void requestQuery() async {
-    final message = messageController.text.trim();
+    final message = convertToString(messageController);
 
     if (message.isEmpty) return;
 
@@ -127,4 +130,29 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
       }
     });
   }
+}
+
+// Only for custom mention
+String convertToString(QuillController controller) {
+  final buffer = StringBuffer();
+
+  for (final op in controller.document.toDelta().toList()) {
+    if (op.isInsert) {
+      if (op.data is String) {
+        buffer.write(op.data);
+      } else if (op.data is Map) {
+        final map = op.data as Map<String, dynamic>;
+        if (map.containsKey('custom') && jsonDecode(map['custom']) is Map) {
+          final customData = jsonDecode(map['custom']) as Map<String, dynamic>;
+          if (customData.containsKey('mention')) {
+            final mentionData = customData['mention'] as String;
+            final parts = mentionData.split('|');
+            buffer.write('@content {uid: ${parts[0]}, name: ${parts[1]}, type: ${parts[2]}}');
+          }
+        }
+      }
+    }
+  }
+
+  return buffer.toString();
 }

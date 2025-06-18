@@ -7,9 +7,9 @@ import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
 class ChatContentDialog extends StatefulWidget {
-  final Function(ChatContent) onContentSelected;
+  final Function(ChatContent) onSelect;
 
-  const ChatContentDialog({super.key, required this.onContentSelected});
+  const ChatContentDialog({super.key, required this.onSelect});
 
   @override
   State<ChatContentDialog> createState() => ChatContentDialogState();
@@ -89,7 +89,7 @@ class ChatContentDialogState extends State<ChatContentDialog> {
                 child: Column(
                   children: filteredChatContent
                       .map<List<Widget>>(
-                        (content) => [buildChatContent(context, content, widget.onContentSelected), const Divider()],
+                        (content) => [buildChatContent(context, content, widget.onSelect), const Divider()],
                       )
                       .expand((widget) => widget)
                       .toList(),
@@ -103,14 +103,17 @@ class ChatContentDialogState extends State<ChatContentDialog> {
   }
 }
 
-Widget buildChatContent(BuildContext context, ChatContent content, Function(ChatContent) onContentSelected) {
+Widget buildChatContent(BuildContext context, ChatContent content, Function(ChatContent) onSelect) {
   final ColorPalette colorPalette = AppColors().palette;
   final TextTheme textTheme = Theme.of(context).textTheme;
   final Color color = ItemTypeStyle.getStyle(content.type).color;
   final String icon = ItemTypeStyle.getStyle(content.type).icon;
 
   return ListTile(
-    onTap: () => onContentSelected(content),
+    onTap: () {
+      Get.back();
+      onSelect(content);
+    },
     leading: Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(color: color.withAlpha(50), borderRadius: BorderRadius.circular(8)),
