@@ -39,7 +39,7 @@ class ViewFlashcardState extends State<ViewFlashcard> {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     final List<Flashcard> flashcards = [];
-    for (var flashcard in widget.item.metadata?['content'] ?? []) {
+    for (var flashcard in widget.item.metadata?['cards'] ?? []) {
       flashcards.add(Flashcard.fromJson(flashcard));
     }
 

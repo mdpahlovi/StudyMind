@@ -12,7 +12,7 @@ class ViewNote extends StatelessWidget {
   Widget build(BuildContext context) {
     return QuillEditor.basic(
       controller: QuillController(
-        document: Document.fromDelta(markdownTODelta.convert(item.metadata?['content'] ?? '')),
+        document: Document.fromDelta(markdownTODelta.convert(item.metadata?['notes'] ?? '')),
         selection: const TextSelection.collapsed(offset: 0),
         readOnly: true,
       ),

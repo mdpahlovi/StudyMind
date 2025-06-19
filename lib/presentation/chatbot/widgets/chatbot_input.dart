@@ -9,72 +9,81 @@ import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
 class ChatbotInput extends StatefulWidget {
-  final QuillController messageController;
   final void Function() onSendMessage;
 
-  const ChatbotInput({super.key, required this.messageController, required this.onSendMessage});
+  const ChatbotInput({super.key, required this.onSendMessage});
 
   @override
-  State<ChatbotInput> createState() => _ChatbotInputState();
+  State<ChatbotInput> createState() => ChatbotInputState();
 }
 
-class _ChatbotInputState extends State<ChatbotInput> {
-  late FocusNode _focusNode;
+class ChatbotInputState extends State<ChatbotInput> {
+  final ChatController chatController = Get.find<ChatController>();
+  late FocusNode focusNode;
   // To generate unique mention IDs
 
   @override
   void initState() {
     super.initState();
-    _focusNode = FocusNode();
-    widget.messageController.addListener(_onTextChanged);
+    focusNode = FocusNode();
+    chatController.messageController.addListener(onTextChanged);
   }
 
   @override
   void dispose() {
-    widget.messageController.removeListener(_onTextChanged);
-    _focusNode.dispose();
+    chatController.messageController.removeListener(onTextChanged);
+    focusNode.dispose();
     super.dispose();
   }
 
-  void _onTextChanged() {
-    final text = widget.messageController.document.toPlainText();
-    final selection = widget.messageController.selection;
+  void onTextChanged() {
+    final text = chatController.messageController.document.toPlainText();
+    final selection = chatController.messageController.selection;
 
     // Check if user typed @ and show dialog
     if (text.isNotEmpty && selection.baseOffset > 0) {
       final char = text[selection.baseOffset - 1];
-      if (char == '@') {
-        _showMentionDialog();
-      }
+      if (char == '@') showMentionDialog();
     }
   }
 
-  void _showMentionDialog() {
-    Get.dialog(ChatContentDialog(onSelect: (chatContent) => _insertMention(chatContent)));
+  void showMentionDialog() {
+    Get.dialog(ChatContentDialog(onSelect: (chatContent) => insertMention(chatContent)));
   }
 
-  void _insertMention(ChatContent chatContent) {
-    final selection = widget.messageController.selection;
+  void insertMention(ChatContent chatContent) {
+    final selection = chatController.messageController.selection;
     final currentOffset = selection.baseOffset;
 
     // Create ChatMention
     final mention = ChatMention(uid: chatContent.uid, name: chatContent.name, type: chatContent.type);
 
     // Remove the @ character
-    widget.messageController.replaceText(currentOffset - 1, 1, '', TextSelection.collapsed(offset: currentOffset - 1));
+    chatController.messageController.replaceText(
+      currentOffset - 1,
+      1,
+      '',
+      TextSelection.collapsed(offset: currentOffset - 1),
+    );
 
     // Insert the mention embed
-    widget.messageController.document.insert(
+    chatController.messageController.document.insert(
       currentOffset - 1,
       BlockEmbed.custom(MentionEmbed.fromChatMention(mention)),
     );
 
     // Move cursor after the mention and add a space
-    widget.messageController.updateSelection(TextSelection.collapsed(offset: currentOffset), ChangeSource.local);
+    chatController.messageController.updateSelection(
+      TextSelection.collapsed(offset: currentOffset),
+      ChangeSource.local,
+    );
 
     // Add a space after the mention
-    widget.messageController.document.insert(currentOffset, ' ');
-    widget.messageController.updateSelection(TextSelection.collapsed(offset: currentOffset + 1), ChangeSource.local);
+    chatController.messageController.document.insert(currentOffset, ' ');
+    chatController.messageController.updateSelection(
+      TextSelection.collapsed(offset: currentOffset + 1),
+      ChangeSource.local,
+    );
   }
 
   @override
@@ -93,14 +102,14 @@ class _ChatbotInputState extends State<ChatbotInput> {
             Padding(
               padding: const EdgeInsets.only(bottom: 40),
               child: QuillEditor.basic(
-                controller: widget.messageController,
+                controller: chatController.messageController,
                 config: QuillEditorConfig(
                   padding: const EdgeInsets.all(16),
                   placeholder: 'Type here - use @ to mention content',
                   customStyles: QuillConstant.customStyles,
                   embedBuilders: [MentionEmbedBuilder()],
                 ),
-                focusNode: _focusNode,
+                focusNode: focusNode,
               ),
             ),
             Positioned(
@@ -117,7 +126,7 @@ class _ChatbotInputState extends State<ChatbotInput> {
                     IconButton.outlined(
                       padding: EdgeInsets.zero,
                       constraints: BoxConstraints(minWidth: 32, minHeight: 32),
-                      onPressed: _showMentionDialog,
+                      onPressed: showMentionDialog,
                       icon: CustomIcon(icon: 'add', size: 18),
                     ),
                     Expanded(child: SizedBox()),

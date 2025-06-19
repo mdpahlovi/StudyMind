@@ -22,10 +22,7 @@ class ChatbotScreen extends StatefulWidget {
 
 class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMixin {
   final ChatController chatController = Get.find<ChatController>();
-
-  final QuillController messageController = QuillController.basic();
   final ScrollController scrollController = ScrollController();
-
   late AnimationController fadeController;
 
   @override
@@ -37,13 +34,13 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
   @override
   void dispose() {
     fadeController.dispose();
-    messageController.dispose();
+    chatController.messageController.clear();
     scrollController.dispose();
     super.dispose();
   }
 
   void requestQuery() async {
-    final message = convertToString(messageController);
+    final message = convertToString(chatController.messageController);
 
     if (message.isEmpty) return;
 
@@ -57,7 +54,7 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
       ),
     );
 
-    messageController.clear();
+    chatController.messageController.clear();
     scrollToBottom();
     fadeController.repeat();
 
@@ -113,7 +110,7 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
               );
             }),
           ),
-          ChatbotInput(messageController: messageController, onSendMessage: requestQuery),
+          ChatbotInput(onSendMessage: requestQuery),
         ],
       ),
     );
