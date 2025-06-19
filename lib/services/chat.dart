@@ -12,7 +12,7 @@ class ChatService {
     return await apiService.get('/chat/$uid');
   }
 
-  Future<ApiResponse> requestQuery({required String uid, required ChatMessage message}) async {
-    return await apiService.patch('/chat/$uid', data: message.toJson());
+  Future<ApiResponse> requestQuery({required String uid, required List<ChatMessage> message}) async {
+    return await apiService.patch('/chat/$uid', data: {'message': message.map((m) => m.toJson()).toList()});
   }
 }

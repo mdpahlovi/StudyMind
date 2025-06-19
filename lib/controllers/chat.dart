@@ -247,7 +247,7 @@ class ChatController extends GetxController {
       return;
     }
 
-    final response = await chatService.requestQuery(uid: session, message: chatMessages.last);
+    final response = await chatService.requestQuery(uid: session, message: chatMessages);
     if (response.success && response.data != null) {
       final session = ChatSession.fromJson(response.data['session']);
       final message = ChatMessage.fromJson(response.data['message']);

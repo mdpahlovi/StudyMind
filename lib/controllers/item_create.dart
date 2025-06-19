@@ -133,7 +133,7 @@ class ItemCreateController extends GetxController {
             parentId: selectedFolder.value?.id,
             metadata: {
               'description': descriptionController.text,
-              'content': deltaToMarkdown.convert(noteController.document.toDelta()),
+              'notes': deltaToMarkdown.convert(noteController.document.toDelta()),
             },
           );
         } else {
@@ -160,9 +160,9 @@ class ItemCreateController extends GetxController {
             type: ItemType.flashcard,
             parentId: selectedFolder.value?.id,
             metadata: {
-              'content': flashcards.map((flashcard) => flashcard.toJson()).toList(),
-              'cardCount': flashcards.length,
               'description': descriptionController.text,
+              'cards': flashcards.map((flashcard) => flashcard.toJson()).toList(),
+              'cardCount': flashcards.length,
             },
           );
         } else {

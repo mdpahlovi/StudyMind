@@ -48,7 +48,7 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
       ChatMessage(
         uid: Uuid().v4(),
         role: ChatMessageRole.user,
-        message: message,
+        message: message.trimRight(),
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
