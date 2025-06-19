@@ -132,7 +132,6 @@ class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMi
   }
 }
 
-// Only for custom mention
 String convertToString(QuillController controller) {
   final buffer = StringBuffer();
 

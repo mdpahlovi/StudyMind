@@ -251,6 +251,7 @@ class ChatController extends GetxController {
       chatSessions.insert(0, session);
       chatMessages.add(message);
     } else {
+      chatMessages.removeLast();
       Notification.error(response.message);
     }
 
