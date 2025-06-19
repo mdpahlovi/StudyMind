@@ -1,11 +1,9 @@
-import 'dart:convert';
-
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/services/chat.dart';
 import 'package:studymind/services/library.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 
 class ChatContent {
   final String uid;
@@ -252,6 +250,7 @@ class ChatController extends GetxController {
       final session = ChatSession.fromJson(response.data['session']);
       final message = ChatMessage.fromJson(response.data['message']);
 
+      if (selectedSession.value != null) chatSessions.remove(selectedSession.value);
       selectedSession.value = session;
       chatSessions.insert(0, session);
       chatMessages.add(message);
@@ -262,28 +261,4 @@ class ChatController extends GetxController {
 
     isGenAiTyping.value = false;
   }
-}
-
-String convertToString(QuillController controller) {
-  final buffer = StringBuffer();
-
-  for (final op in controller.document.toDelta().toList()) {
-    if (op.isInsert) {
-      if (op.data is String) {
-        buffer.write(op.data);
-      } else if (op.data is Map) {
-        final map = op.data as Map<String, dynamic>;
-        if (map.containsKey('custom') && jsonDecode(map['custom']) is Map) {
-          final customData = jsonDecode(map['custom']) as Map<String, dynamic>;
-          if (customData.containsKey('mention')) {
-            final mentionData = customData['mention'] as String;
-            final parts = mentionData.split('|');
-            buffer.write('@mention {uid: ${parts[0]}, name: ${parts[1]}, type: ${parts[2]}}');
-          }
-        }
-      }
-    }
-  }
-
-  return buffer.toString();
 }
