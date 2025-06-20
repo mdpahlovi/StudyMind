@@ -100,6 +100,7 @@ dependencies:
 
     # Timeago: https://pub.dev/packages/timeago
     timeago: ^3.7.1
+    path_provider: ^2.1.5
 
 dev_dependencies:
     flutter_test:

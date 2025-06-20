@@ -4,6 +4,7 @@ import 'package:image/image.dart' as img;
 import 'package:just_audio/just_audio.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:markdown_quill/markdown_quill.dart';
+import 'package:studymind/constants/created_embed.dart';
 import 'package:studymind/constants/mention_embed.dart';
 import 'package:video_player/video_player.dart';
 
@@ -49,11 +50,12 @@ final markdownTODelta = MarkdownToDelta(
   markdownDocument: md.Document(
     encodeHtml: false,
     blockSyntaxes: [EmbeddableTableSyntax()],
-    inlineSyntaxes: [MentionSyntax()],
+    inlineSyntaxes: [MentionSyntax(), CreatedSyntax()],
   ),
   customElementToEmbeddable: {
     EmbeddableTable.tableType: EmbeddableTable.fromMdSyntax,
     EmbeddableMention.mentionType: EmbeddableMention.fromMdSyntax,
+    EmbeddableCreated.createdType: EmbeddableCreated.fromMdSyntax,
   },
 );
 final deltaToMarkdown = DeltaToMarkdown();

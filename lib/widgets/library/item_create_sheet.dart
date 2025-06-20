@@ -75,7 +75,9 @@ class CreateOption extends StatelessWidget {
 
     return ListTile(
       onTap: () {
-        itemCreateController.setSelectedFolder(Get.parameters['uid']);
+        if (Get.currentRoute != AppRoutes.home) {
+          itemCreateController.setSelectedFolder(Get.parameters['uid']);
+        }
         Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
       },
       leading: Container(

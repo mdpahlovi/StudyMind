@@ -4,6 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/controllers/item_create.dart';
 import 'package:studymind/controllers/library.dart';
+import 'package:studymind/services/download.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/dialog/confirm.dart';
@@ -16,8 +17,16 @@ class ItemOption {
   final String title;
   final bool danger;
   final bool disabled;
+  final bool isLoading;
 
-  ItemOption({required this.icon, required this.title, this.danger = false, this.disabled = false, this.onTap});
+  ItemOption({
+    required this.icon,
+    required this.title,
+    this.danger = false,
+    this.disabled = false,
+    this.onTap,
+    this.isLoading = false,
+  });
 }
 
 class ItemOptionsSheet extends StatefulWidget {
@@ -29,19 +38,38 @@ class ItemOptionsSheet extends StatefulWidget {
 }
 
 class ItemOptionsSheetState extends State<ItemOptionsSheet> {
+  bool isDownloading = false;
+
   @override
   Widget build(BuildContext context) {
     final LibraryController libraryController = Get.find<LibraryController>();
 
     if (widget.item != null) {
-      return buildItemOptionsContainer(context: context, selectedItems: [widget.item!]);
+      return buildItemOptionsContainer(
+        context: context,
+        selectedItems: [widget.item!],
+        isDownloading: isDownloading,
+        onDownloadStateChanged: (loading) => setState(() => isDownloading = loading),
+      );
     } else {
-      return Obx(() => buildItemOptionsContainer(context: context, selectedItems: libraryController.selectedItems));
+      return Obx(
+        () => buildItemOptionsContainer(
+          context: context,
+          selectedItems: libraryController.selectedItems,
+          isDownloading: isDownloading,
+          onDownloadStateChanged: (loading) => setState(() => isDownloading = loading),
+        ),
+      );
     }
   }
 }
 
-Widget buildItemOptionsContainer({required BuildContext context, required List<LibraryItem> selectedItems}) {
+Widget buildItemOptionsContainer({
+  required BuildContext context,
+  required List<LibraryItem> selectedItems,
+  required bool isDownloading,
+  required Function(bool) onDownloadStateChanged,
+}) {
   final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
 
   final ColorPalette colorPalette = AppColors().palette;
@@ -51,6 +79,14 @@ Widget buildItemOptionsContainer({required BuildContext context, required List<L
 
   final List<ItemOption> options = [
     ItemOption(
+      onTap: selectedItems.first.metadata?['filePath'] != null && !isDownloading
+          ? () async {
+              Get.back();
+              onDownloadStateChanged(true);
+              await Download.fromSupabase(selectedItems.first.metadata!['filePath']);
+              onDownloadStateChanged(false);
+            }
+          : null,
       title: 'Download',
       icon: HugeIcons.strokeRoundedDownload01,
       disabled:
@@ -58,6 +94,7 @@ Widget buildItemOptionsContainer({required BuildContext context, required List<L
           selectedItems.first.type == ItemType.folder ||
           selectedItems.first.type == ItemType.note ||
           selectedItems.first.type == ItemType.flashcard,
+      isLoading: isDownloading,
     ),
     ItemOption(
       onTap: () => Get.dialog(RenameDialog(item: selectedItems.first)),
@@ -100,11 +137,13 @@ Widget buildItemOptionsContainer({required BuildContext context, required List<L
             children: [
               if (selectedItems.length == 1) CustomIcon(icon: typeStyle.icon, size: 24),
               if (selectedItems.length == 1) const SizedBox(width: 6),
-              Text(
-                selectedItems.length == 1 ? selectedItems.first.name : '${selectedItems.length} items selected',
-                style: textTheme.headlineMedium,
+              Expanded(
+                child: Text(
+                  selectedItems.length == 1 ? selectedItems.first.name : '${selectedItems.length} items selected',
+                  style: textTheme.headlineMedium,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              const Spacer(),
               IconButton(
                 onPressed: () => Get.back(),
                 icon: CustomIcon(icon: 'cancel', color: colorPalette.content, size: 24),
@@ -134,13 +173,14 @@ Widget buildItemOptionsContainer({required BuildContext context, required List<L
 Widget buildOptionTile(BuildContext context, ItemOption option) {
   final ColorPalette colorPalette = AppColors().palette;
   final TextTheme textTheme = Theme.of(context).textTheme;
+  final Color color = option.danger ? colorPalette.error : colorPalette.content;
 
   return ListTile(
-    onTap: option.onTap,
-    leading: Icon(option.icon, color: option.danger ? colorPalette.error : colorPalette.content, size: 20),
-    title: Text(
-      option.title,
-      style: textTheme.titleMedium?.copyWith(color: option.danger ? colorPalette.error : colorPalette.content),
-    ),
+    onTap: option.isLoading ? null : option.onTap,
+    leading: Icon(option.icon, color: color, size: 20),
+    title: Text(option.title, style: textTheme.titleMedium?.copyWith(color: color)),
+    trailing: option.isLoading
+        ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: color))
+        : null,
   );
 }

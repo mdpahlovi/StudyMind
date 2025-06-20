@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:studymind/constants/created_embed.dart';
 import 'package:studymind/constants/mention_embed.dart';
 import 'package:studymind/constants/quill_constant.dart';
 import 'package:studymind/constants/table_embed.dart';
@@ -42,7 +43,7 @@ class ChatBubble extends StatelessWidget {
               ),
               config: QuillEditorConfig(
                 customStyles: QuillConstant.customStyles,
-                embedBuilders: [TableEmbed(), MentionEmbedBuilder()],
+                embedBuilders: [TableEmbed(), MentionEmbedBuilder(), CreatedEmbedBuilder()],
               ),
             ),
     );
