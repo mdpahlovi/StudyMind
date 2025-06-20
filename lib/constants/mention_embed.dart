@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/controllers/library.dart';
+import 'package:studymind/theme/colors.dart';
 
 class ChatMention {
   final String uid;
@@ -11,56 +14,85 @@ class ChatMention {
 
   ChatMention({required this.uid, required this.name, required this.type});
 
-  String toEmbedData() {
-    return '$uid|$name|${type.name.toUpperCase()}';
-  }
-
-  static ChatMention fromEmbedData(String data) {
-    final parts = data.split('|');
-    return ChatMention(uid: parts[0], name: parts[1], type: ItemType.values.byName(parts[2].toLowerCase()));
+  factory ChatMention.fromString(String data) {
+    final Map<String, dynamic> json = jsonDecode(data.replaceFirst('@mention ', ''));
+    return ChatMention(uid: json['uid'], name: json['name'], type: ItemType.values.byName(json['type'].toLowerCase()));
   }
 
   @override
   String toString() {
-    return 'ChatMention{uid: $uid, name: $name, type: $type}';
+    return '@mention {"uid": "$uid", "name": "$name", "type": "${type.name.toUpperCase()}"}';
   }
-}
-
-class MentionEmbed extends CustomBlockEmbed {
-  const MentionEmbed(String value) : super(mentionType, value);
-
-  static const String mentionType = 'mention';
-
-  static MentionEmbed fromChatMention(ChatMention mention) => MentionEmbed(mention.toEmbedData());
-
-  ChatMention get chatMention => ChatMention.fromEmbedData(data);
 }
 
 class MentionEmbedBuilder extends EmbedBuilder {
   @override
-  String get key => 'mention';
+  String get key => EmbeddableMention.mentionType;
 
   @override
   Widget build(BuildContext context, EmbedContext embedContext) {
-    final mention = MentionEmbed(embedContext.node.value.data);
-    final chatMention = mention.chatMention;
-    final Color color = ItemTypeStyle.getStyle(chatMention.type).color;
+    final ChatMention mention = ChatMention.fromString(embedContext.node.value.data);
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final Color color = ItemTypeStyle.getStyle(mention.type).color;
 
-    return InkWell(
-      onTap: embedContext.readOnly
-          ? null
-          : () {
-              final index = embedContext.controller.document.search(embedContext.node.value.data).first;
-              embedContext.controller.replaceText(index, 1, '', TextSelection.collapsed(offset: index));
-            },
-      child: Container(
-        decoration: BoxDecoration(
-          color: color.withAlpha(50),
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: color, width: 1),
-        ),
-        child: Text('@${chatMention.name}', style: GoogleFonts.plusJakartaSans(fontSize: 10, color: color)),
+    return Container(
+      decoration: BoxDecoration(
+        color: color.withAlpha(50),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: color, width: 1),
+      ),
+      child: Column(
+        children: [Text('@${mention.name}', style: textTheme.labelMedium?.copyWith(height: 1.2, color: color))],
       ),
     );
+  }
+}
+
+class MentionOutlineEmbedBuilder extends EmbedBuilder {
+  @override
+  String get key => EmbeddableMention.mentionType;
+
+  @override
+  Widget build(BuildContext context, EmbedContext embedContext) {
+    final ChatMention mention = ChatMention.fromString(embedContext.node.value.data);
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final Color color = AppColors().palette.content;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: color, width: 1),
+      ),
+      child: Text('@${mention.name}', style: textTheme.labelMedium?.copyWith(height: 1.2, color: color)),
+    );
+  }
+}
+
+class MentionSyntax extends md.InlineSyntax {
+  MentionSyntax() : super(r'@mention\s+(\{[^}]+\})');
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    final fullMatch = match.group(0);
+
+    final element = md.Element.empty(EmbeddableMention.mentionType);
+    element.attributes['data'] = fullMatch!;
+
+    parser.addNode(element);
+    return true;
+  }
+}
+
+class EmbeddableMention extends Embeddable {
+  const EmbeddableMention(Map<String, dynamic> data) : super(mentionType, data);
+
+  static const String mentionType = 'mention';
+
+  static BlockEmbed fromMdSyntax(Map<String, dynamic> attributes) {
+    return BlockEmbed.custom(CustomBlockEmbed('mention', attributes['data']));
+  }
+
+  static BlockEmbed fromChatMention(ChatMention mention) {
+    return BlockEmbed.custom(CustomBlockEmbed('mention', mention.toString()));
   }
 }

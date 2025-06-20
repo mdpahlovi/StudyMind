@@ -4,6 +4,7 @@ import 'package:image/image.dart' as img;
 import 'package:just_audio/just_audio.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:markdown_quill/markdown_quill.dart';
+import 'package:studymind/constants/mention_embed.dart';
 import 'package:video_player/video_player.dart';
 
 String bytesToMB(dynamic bytes, {int decimals = 2}) {
@@ -45,7 +46,14 @@ Future<String> getImageResolution(String filePath) async {
 }
 
 final markdownTODelta = MarkdownToDelta(
-  markdownDocument: md.Document(encodeHtml: false, blockSyntaxes: [const EmbeddableTableSyntax()]),
-  customElementToEmbeddable: {EmbeddableTable.tableType: EmbeddableTable.fromMdSyntax},
+  markdownDocument: md.Document(
+    encodeHtml: false,
+    blockSyntaxes: [EmbeddableTableSyntax()],
+    inlineSyntaxes: [MentionSyntax()],
+  ),
+  customElementToEmbeddable: {
+    EmbeddableTable.tableType: EmbeddableTable.fromMdSyntax,
+    EmbeddableMention.mentionType: EmbeddableMention.fromMdSyntax,
+  },
 );
 final deltaToMarkdown = DeltaToMarkdown();

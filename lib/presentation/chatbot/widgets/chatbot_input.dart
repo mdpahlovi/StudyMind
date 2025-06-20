@@ -67,10 +67,7 @@ class ChatbotInputState extends State<ChatbotInput> {
     );
 
     // Insert the mention embed
-    chatController.messageController.document.insert(
-      currentOffset - 1,
-      BlockEmbed.custom(MentionEmbed.fromChatMention(mention)),
-    );
+    chatController.messageController.document.insert(currentOffset - 1, EmbeddableMention.fromChatMention(mention));
 
     // Move cursor after the mention and add a space
     chatController.messageController.updateSelection(

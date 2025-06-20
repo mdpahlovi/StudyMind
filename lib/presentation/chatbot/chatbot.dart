@@ -141,9 +141,7 @@ String convertToString(QuillController controller) {
         if (map.containsKey('custom') && jsonDecode(map['custom']) is Map) {
           final customData = jsonDecode(map['custom']) as Map<String, dynamic>;
           if (customData.containsKey('mention')) {
-            final mentionData = customData['mention'] as String;
-            final parts = mentionData.split('|');
-            buffer.write('@content {uid: ${parts[0]}, name: ${parts[1]}, type: ${parts[2]}}');
+            buffer.write(customData['mention'] as String);
           }
         }
       }
