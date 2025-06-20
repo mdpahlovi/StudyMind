@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
+import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/core/utils.dart';
@@ -36,6 +37,7 @@ class Flashcard {
 class ItemCreateController extends GetxController {
   final libraryService = LibraryService();
   final LibraryController libraryController = Get.find<LibraryController>();
+  final ChatController chatController = Get.find<ChatController>();
 
   final RxBool isCreating = false.obs;
   final RxBool isUpdating = false.obs;
@@ -244,6 +246,8 @@ class ItemCreateController extends GetxController {
         // Refetch
         libraryController.fetchLibraryItems(parentUid: selectedFolder.value?.uid);
         libraryController.fetchLibraryItemsByRecent();
+        if (itemResponse.type == ItemType.folder) fetchFolders();
+        chatController.fetchChatContents();
 
         // Show Success Dialog
         Get.dialog(
@@ -280,6 +284,8 @@ class ItemCreateController extends GetxController {
     }
 
     libraryController.fetchLibraryItemsByRecent();
+    fetchFolders();
+    chatController.fetchChatContents();
   }
 
   void updateLibraryItem(String uid, String name) {
