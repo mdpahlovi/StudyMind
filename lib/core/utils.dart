@@ -44,5 +44,8 @@ Future<String> getImageResolution(String filePath) async {
   return image != null ? '${image.width}x${image.height}' : '';
 }
 
-final markdownTODelta = MarkdownToDelta(markdownDocument: md.Document(encodeHtml: false));
+final markdownTODelta = MarkdownToDelta(
+  markdownDocument: md.Document(encodeHtml: false, blockSyntaxes: [const EmbeddableTableSyntax()]),
+  customElementToEmbeddable: {EmbeddableTable.tableType: EmbeddableTable.fromMdSyntax},
+);
 final deltaToMarkdown = DeltaToMarkdown();

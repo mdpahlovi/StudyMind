@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:studymind/constants/quill_constant.dart';
+import 'package:studymind/constants/table_embed.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/utils.dart';
 
@@ -16,7 +17,7 @@ class ViewNote extends StatelessWidget {
         selection: const TextSelection.collapsed(offset: 0),
         readOnly: true,
       ),
-      config: QuillEditorConfig(customStyles: QuillConstant.customStyles),
+      config: QuillEditorConfig(customStyles: QuillConstant.customStyles, embedBuilders: [TableEmbed()]),
     );
   }
 }
