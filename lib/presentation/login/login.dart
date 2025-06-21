@@ -1,8 +1,9 @@
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Notification;
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/controllers/auth.dart';
+import 'package:studymind/core/notification.dart';
 import 'package:studymind/core/validators.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
@@ -126,17 +127,7 @@ class LoginScreenState extends State<LoginScreen> {
                               isPassword: true,
                               validator: Validators.validatePassword,
                             ),
-                            const SizedBox(height: 16),
-                            // Forgot Password
-                            InkWell(
-                              onTap: () => Get.toNamed(AppRoutes.forgotPassword),
-                              child: Text(
-                                'Forgot Password?',
-                                style: textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 24),
                             // Login Button
                             Obx(
                               () => CustomButton(
@@ -162,17 +153,17 @@ class LoginScreenState extends State<LoginScreen> {
                             SocialButton(
                               text: 'Google',
                               color: Colors.red,
-                              onPressed: () {
-                                // Handle Google login
-                              },
+                              onPressed: () => Notification.error(
+                                'Please use email and password login.\nOr user "guest@gmail.com" and "123456"',
+                              ),
                             ),
                             const SizedBox(height: 16),
                             SocialButton(
                               text: 'Facebook',
                               color: Colors.blue,
-                              onPressed: () {
-                                // Handle Facebook login
-                              },
+                              onPressed: () => Notification.error(
+                                'Please use email and password login.\nOr user "guest@gmail.com" and "123456"',
+                              ),
                             ),
                           ],
                         ),

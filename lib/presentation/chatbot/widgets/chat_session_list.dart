@@ -40,7 +40,7 @@ class ChatSessionList extends StatelessWidget {
             child: CustomIcon(icon: 'message', color: colorPalette.primary),
           ),
           title: Text(session.title, style: textTheme.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
-          subtitle: Text(timeago.format(session.createdAt), style: textTheme.bodySmall),
+          subtitle: Text(timeago.format(session.lastMessageAt!), style: textTheme.bodySmall),
         );
       },
       separatorBuilder: (context, index) => const Divider(),

@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
-import 'package:studymind/constants/item_type.dart';
-import 'package:studymind/controllers/library.dart';
+import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/theme/colors.dart';
-import 'package:studymind/widgets/custom_badge.dart';
-import 'package:studymind/widgets/custom_icon.dart';
 
-class RecentCard extends StatelessWidget {
-  final LibraryItem item;
+class SessionCard extends StatelessWidget {
+  final ChatSession session;
 
-  const RecentCard({super.key, required this.item});
+  const SessionCard({super.key, required this.session});
 
   String getFormattedDate(DateTime date) {
     final now = DateTime.now();
@@ -29,30 +26,25 @@ class RecentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LibraryController libraryController = Get.find<LibraryController>();
-
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final Color color = item.metadata?['color'] != null
-        ? Color(int.parse(item.metadata!['color']!.replaceFirst('#', '0xFF')))
-        : ItemTypeStyle.getStyle(item.type).color;
-    final String icon = item.metadata?['icon'] ?? ItemTypeStyle.getStyle(item.type).icon;
 
     return Card(
       child: InkWell(
-        onTap: () => libraryController.navigateToItem(item),
+        onTap: () {},
         child: Padding(
-          padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 10),
+          padding: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Thumbnail
               Container(
+                margin: const EdgeInsets.only(top: 4),
                 decoration: BoxDecoration(
                   color: colorPalette.white.withAlpha(25),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: SizedBox(width: 62, height: 62, child: CustomIcon(icon: icon, size: 36)),
+                child: SizedBox(width: 62, height: 66, child: Icon(HugeIcons.strokeRoundedChatBot, size: 36)),
               ),
               const SizedBox(width: 12),
               // Content
@@ -60,16 +52,15 @@ class RecentCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomBadge(label: item.type.name, color: color),
-                        CustomIcon(icon: 'arrowRight', color: colorPalette.content, size: 20),
-                      ],
+                    Text(session.title, style: textTheme.titleMedium, overflow: TextOverflow.ellipsis),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${session.lastMessage!}\n',
+                      style: textTheme.bodySmall?.copyWith(height: 1.25),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
-                    Text(item.name, style: textTheme.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
-                    Text(getFormattedDate(item.createdAt), style: textTheme.bodySmall),
+                    Text(getFormattedDate(session.lastMessageAt!), style: textTheme.bodySmall),
                   ],
                 ),
               ),

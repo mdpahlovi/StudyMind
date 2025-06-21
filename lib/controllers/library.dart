@@ -136,7 +136,7 @@ class LibraryController extends GetxController {
   void fetchLibraryItemsByRecent() {
     isLoadingRecent.value = true;
 
-    libraryService.getLibraryItemsByType(GetLibraryItemsByTypeQuery(limit: 6)).then((response) {
+    libraryService.getLibraryItemsByType(GetLibraryItemsByTypeQuery(limit: 4)).then((response) {
       if (response.success && response.data != null) {
         final libraryResponse = LibraryResponse.fromJson(response.data);
         recentItems.value = libraryResponse.libraryItems;

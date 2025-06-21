@@ -1,4 +1,5 @@
 {
-  "dart.flutterSdkPath": ".fvm/versions/3.32.4",
-  "cmake.sourceDirectory": "C:/Users/mdpah/Desktop/Working Project/studymind/studymind/linux"
+    "dart.flutterSdkPath": ".fvm/versions/3.32.4",
+    "cmake.sourceDirectory": "C:/Users/mdpah/Desktop/Working Project/studymind/studymind/linux",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

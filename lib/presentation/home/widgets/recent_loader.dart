@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:studymind/theme/colors.dart';
 
 class RecentLoader extends StatefulWidget {
-  final bool isSearch;
-  const RecentLoader({super.key, this.isSearch = false});
+  final double height;
+  const RecentLoader({super.key, this.height = 90});
 
   @override
   State<RecentLoader> createState() => RecentLoaderState();
@@ -41,7 +41,7 @@ class RecentLoaderState extends State<RecentLoader> with SingleTickerProviderSta
       animation: animationController,
       builder: (context, child) {
         return Container(
-          height: 92,
+          height: widget.height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             gradient: LinearGradient(

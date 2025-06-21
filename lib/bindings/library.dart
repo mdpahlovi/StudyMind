@@ -7,7 +7,7 @@ class LibraryBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(LibraryController(), permanent: true);
-    Get.put(ItemCreateController(), permanent: true);
     Get.put(ChatController(), permanent: true);
+    Get.put(ItemCreateController(), permanent: true);
   }
 }

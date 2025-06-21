@@ -62,8 +62,9 @@ dependencies:
     # Flutter Quill: https://pub.dev/packages/flutter_quill
     flutter_quill: ^11.4.1
 
-    # Flutter Localization: https://pub.dev/packages/flutter_localization
-    flutter_localization: ^0.3.2
+    # Flutter Localizations: https://pub.dev/packages/flutter_localizations
+    flutter_localizations:
+        sdk: flutter
 
     # Markdown Quill: https://pub.dev/packages/markdown_quill
     markdown_quill: ^4.3.0
@@ -100,7 +101,12 @@ dependencies:
 
     # Timeago: https://pub.dev/packages/timeago
     timeago: ^3.7.1
+
+    # Path Provider: https://pub.dev/packages/path_provider
     path_provider: ^2.1.5
+
+    # Google Sign In: https://pub.dev/packages/google_sign_in
+    google_sign_in: ^6.3.0
 
 dev_dependencies:
     flutter_test:
