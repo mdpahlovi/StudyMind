@@ -25,7 +25,10 @@ PreferredSizeWidget buildItemAppBar() {
           return CustomBackButton(onPressed: libraryController.navigateToBack);
         }
       } else {
-        return IconButton(icon: const CustomIcon(icon: 'cancel', size: 28), onPressed: () => selectedItems.clear());
+        return IconButton(
+          icon: const CustomIcon(icon: 'cancel', size: 28),
+          onPressed: () => selectedItems.clear(),
+        );
       }
     }),
     title: Obx(() {
@@ -73,10 +76,9 @@ PreferredSizeWidget buildItemAppBar() {
                   shape: BoxShape.circle,
                   border: Border.all(width: 2, color: colorPalette.content),
                 ),
-                child:
-                    libraryItems.length == selectedItems.length
-                        ? const CustomIcon(icon: 'tick', size: 16)
-                        : const SizedBox(),
+                child: libraryItems.length == selectedItems.length
+                    ? const CustomIcon(icon: 'tick', size: 16)
+                    : const SizedBox(),
               ),
               onPressed: () {
                 if (libraryItems.length == selectedItems.length) {
@@ -87,7 +89,10 @@ PreferredSizeWidget buildItemAppBar() {
                 }
               },
             ),
-            IconButton(icon: const Icon(Icons.more_vert), onPressed: () => Get.bottomSheet(ItemOptionsSheet())),
+            IconButton(
+              icon: const Icon(Icons.more_vert),
+              onPressed: () => Get.bottomSheet(ItemOptionsSheet(selectedItems: selectedItems)),
+            ),
           ],
         );
       }),

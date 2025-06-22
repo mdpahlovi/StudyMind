@@ -252,7 +252,7 @@ class ItemCreateController extends GetxController {
         Get.dialog(
           SuccessDialog(
             message: '${itemResponse.name} ${itemResponse.type.name} has been created. Do you want to open it?',
-            onConfirmed: () => libraryController.navigateToItem(itemResponse, isReplace: true),
+            onConfirm: () => libraryController.navigateToItem(itemResponse, isReplace: true),
           ),
         );
       } else {

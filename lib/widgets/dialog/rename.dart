@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/item_create.dart';
-import 'package:studymind/controllers/library.dart';
 import 'package:studymind/theme/colors.dart';
 
 class RenameDialog extends StatefulWidget {
-  final LibraryItem item;
-  const RenameDialog({super.key, required this.item});
+  final String value;
+  final void Function(String value)? onConfirm;
+  const RenameDialog({super.key, required this.value, this.onConfirm});
 
   @override
   State<RenameDialog> createState() => RenameDialogState();
@@ -14,7 +14,7 @@ class RenameDialog extends StatefulWidget {
 
 class RenameDialogState extends State<RenameDialog> {
   final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
-  String name = '';
+  String value = '';
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class RenameDialogState extends State<RenameDialog> {
           children: [
             Text('Enter Name', style: textTheme.headlineMedium, textAlign: TextAlign.center),
             const SizedBox(height: 12),
-            TextFormField(initialValue: widget.item.name, onChanged: (value) => setState(() => name = value)),
+            TextFormField(initialValue: widget.value, onChanged: (val) => setState(() => value = val)),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -43,10 +43,10 @@ class RenameDialogState extends State<RenameDialog> {
                 ),
                 const SizedBox(width: 8),
                 ElevatedButton(
-                  onPressed: name.isNotEmpty && widget.item.name != name
+                  onPressed: value.isNotEmpty && widget.value != value
                       ? () {
                           Get.back();
-                          itemCreateController.updateLibraryItem(widget.item.uid, name);
+                          if (widget.onConfirm != null) widget.onConfirm!(value);
                         }
                       : null,
                   child: Text('Rename', style: textTheme.titleMedium),

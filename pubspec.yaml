@@ -108,6 +108,7 @@ dependencies:
     # Google Sign In: https://pub.dev/packages/google_sign_in
     google_sign_in: ^6.3.0
     infinite_scroll_pagination: ^5.1.0
+    permission_handler: ^12.0.0+1
 
 dev_dependencies:
     flutter_test:

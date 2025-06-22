@@ -53,7 +53,7 @@ class ItemCard extends StatelessWidget {
       final isSelected = selectedItems.contains(item);
 
       return Card(
-        color: isSelected ? colorPalette.content.withAlpha(26) : colorPalette.surface,
+        color: isSelected ? colorPalette.content.withAlpha(25) : colorPalette.surface,
         child: InkWell(
           onTap: () {
             if (selectedItems.isEmpty) {
@@ -111,7 +111,7 @@ class ItemCard extends StatelessWidget {
                             decoration: BoxDecoration(shape: BoxShape.circle),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(18),
-                              onTap: () => Get.bottomSheet(ItemOptionsSheet(item: item)),
+                              onTap: () => Get.bottomSheet(ItemOptionsSheet(selectedItems: [item])),
                               child: const Icon(Icons.more_vert),
                             ),
                           ),

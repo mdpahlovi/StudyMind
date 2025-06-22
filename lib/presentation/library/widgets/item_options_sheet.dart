@@ -30,8 +30,8 @@ class ItemOption {
 }
 
 class ItemOptionsSheet extends StatefulWidget {
-  final LibraryItem? item;
-  const ItemOptionsSheet({super.key, this.item});
+  final List<LibraryItem> selectedItems;
+  const ItemOptionsSheet({super.key, this.selectedItems = const []});
 
   @override
   State<ItemOptionsSheet> createState() => ItemOptionsSheetState();
@@ -42,132 +42,122 @@ class ItemOptionsSheetState extends State<ItemOptionsSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final LibraryController libraryController = Get.find<LibraryController>();
+    final List<LibraryItem> selectedItems = widget.selectedItems;
 
-    if (widget.item != null) {
-      return buildItemOptionsContainer(
-        context: context,
-        selectedItems: [widget.item!],
-        isDownloading: isDownloading,
-        onDownloadStateChanged: (loading) => setState(() => isDownloading = loading),
-      );
-    } else {
-      return Obx(
-        () => buildItemOptionsContainer(
-          context: context,
-          selectedItems: libraryController.selectedItems,
-          isDownloading: isDownloading,
-          onDownloadStateChanged: (loading) => setState(() => isDownloading = loading),
-        ),
-      );
-    }
-  }
-}
+    final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
 
-Widget buildItemOptionsContainer({
-  required BuildContext context,
-  required List<LibraryItem> selectedItems,
-  required bool isDownloading,
-  required Function(bool) onDownloadStateChanged,
-}) {
-  final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
+    final ColorPalette colorPalette = AppColors().palette;
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final TypeStyle typeStyle = ItemTypeStyle.getStyle(selectedItems.first.type);
+    final EdgeInsets paddings = MediaQuery.of(context).padding;
+    final bool isInSameFolder = selectedItems.every((item) => item.parentId == selectedItems.first.parentId);
 
-  final ColorPalette colorPalette = AppColors().palette;
-  final TextTheme textTheme = Theme.of(context).textTheme;
-  final TypeStyle typeStyle = ItemTypeStyle.getStyle(selectedItems.first.type);
-  final EdgeInsets paddings = MediaQuery.of(context).padding;
+    final List<ItemOption> options = [
+      ItemOption(
+        onTap: selectedItems.length == 1 && selectedItems.first.metadata?['filePath'] != null && !isDownloading
+            ? () async {
+                Get.back();
+                setState(() => isDownloading = true);
+                await Download.fromSupabase(selectedItems.first.metadata!['filePath']);
+                setState(() => isDownloading = false);
+              }
+            : null,
+        title: 'Download',
+        icon: HugeIcons.strokeRoundedDownload01,
+        disabled:
+            selectedItems.length != 1 ||
+            selectedItems.first.type == ItemType.folder ||
+            selectedItems.first.type == ItemType.note ||
+            selectedItems.first.type == ItemType.flashcard,
+        isLoading: isDownloading,
+      ),
+      ItemOption(
+        onTap: selectedItems.length == 1
+            ? () {
+                Get.dialog(
+                  RenameDialog(
+                    value: selectedItems.first.name,
+                    onConfirm: (name) {
+                      itemCreateController.updateLibraryItem(selectedItems.first.uid, name);
+                    },
+                  ),
+                );
+              }
+            : null,
+        title: 'Rename',
+        icon: HugeIcons.strokeRoundedEdit02,
+        disabled: selectedItems.length != 1,
+      ),
+      ItemOption(
+        onTap: isInSameFolder ? () => Get.dialog(MoveDialog(items: selectedItems)) : null,
+        title: 'Move',
+        icon: HugeIcons.strokeRoundedFolderExport,
+        disabled: !isInSameFolder,
+      ),
+      ItemOption(
+        onTap: selectedItems.isNotEmpty
+            ? () {
+                Get.dialog(
+                  ConfirmDialog(
+                    message: 'You want to remove? If yes,\nPlease press confirm.',
+                    onConfirm: () => itemCreateController.updateBulkLibraryItem(selectedItems, 'REMOVE'),
+                  ),
+                );
+              }
+            : null,
+        title: 'Remove',
+        icon: HugeIcons.strokeRoundedDelete02,
+        danger: true,
+      ),
+    ];
 
-  final List<ItemOption> options = [
-    ItemOption(
-      onTap: selectedItems.first.metadata?['filePath'] != null && !isDownloading
-          ? () async {
-              Get.back();
-              onDownloadStateChanged(true);
-              await Download.fromSupabase(selectedItems.first.metadata!['filePath']);
-              onDownloadStateChanged(false);
-            }
-          : null,
-      title: 'Download',
-      icon: HugeIcons.strokeRoundedDownload01,
-      disabled:
-          selectedItems.length > 1 ||
-          selectedItems.first.type == ItemType.folder ||
-          selectedItems.first.type == ItemType.note ||
-          selectedItems.first.type == ItemType.flashcard,
-      isLoading: isDownloading,
-    ),
-    ItemOption(
-      onTap: () => Get.dialog(RenameDialog(item: selectedItems.first)),
-      title: 'Rename',
-      icon: HugeIcons.strokeRoundedEdit02,
-      disabled: selectedItems.length > 1,
-    ),
-    ItemOption(
-      onTap: () => Get.dialog(MoveDialog(items: selectedItems)),
-      title: 'Move',
-      icon: HugeIcons.strokeRoundedFolderExport,
-    ),
-    ItemOption(
-      onTap: () {
-        Get.dialog(
-          ConfirmDialog(
-            message: 'You want to remove? If yes,\nPlease press confirm.',
-            onConfirm: () => itemCreateController.updateBulkLibraryItem(selectedItems, 'REMOVE'),
-          ),
-        );
-      },
-      title: 'Remove',
-      icon: HugeIcons.strokeRoundedDelete02,
-      danger: true,
-    ),
-  ];
-
-  return Container(
-    decoration: BoxDecoration(
-      color: colorPalette.background,
-      borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-    ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Fixed header
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            children: [
-              if (selectedItems.length == 1) CustomIcon(icon: typeStyle.icon, size: 24),
-              if (selectedItems.length == 1) const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  selectedItems.length == 1 ? selectedItems.first.name : '${selectedItems.length} items selected',
-                  style: textTheme.headlineMedium,
-                  overflow: TextOverflow.ellipsis,
+    return Container(
+      decoration: BoxDecoration(
+        color: colorPalette.background,
+        borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Fixed header
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                if (selectedItems.length == 1) CustomIcon(icon: typeStyle.icon, size: 24),
+                if (selectedItems.length == 1) const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    selectedItems.length == 1 ? selectedItems.first.name : '${selectedItems.length} items selected',
+                    style: textTheme.headlineMedium,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-              IconButton(
-                onPressed: () => Get.back(),
-                icon: CustomIcon(icon: 'cancel', color: colorPalette.content, size: 24),
-              ),
-            ],
-          ),
-        ),
-        const Divider(height: 1),
-        // Scrollable content
-        Flexible(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: paddings.bottom),
-            child: Column(
-              children: options
-                  .where((option) => !option.disabled)
-                  .map<List<Widget>>((option) => [buildOptionTile(context, option), const Divider()])
-                  .expand((widget) => widget)
-                  .toList(),
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: CustomIcon(icon: 'cancel', color: colorPalette.content, size: 24),
+                ),
+              ],
             ),
           ),
-        ),
-      ],
-    ),
-  );
+          const Divider(height: 1),
+          // Scrollable content
+          Flexible(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: paddings.bottom),
+              child: Column(
+                children: options
+                    .where((option) => !option.disabled)
+                    .map<List<Widget>>((option) => [buildOptionTile(context, option), const Divider()])
+                    .expand((widget) => widget)
+                    .toList(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 Widget buildOptionTile(BuildContext context, ItemOption option) {

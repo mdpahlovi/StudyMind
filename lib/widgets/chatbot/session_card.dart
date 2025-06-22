@@ -7,8 +7,16 @@ import 'package:studymind/theme/colors.dart';
 
 class SessionCard extends StatelessWidget {
   final ChatSession session;
-
-  const SessionCard({super.key, required this.session});
+  final Function()? addSession;
+  final Function()? removeSession;
+  final List<ChatSession> selectedSessions;
+  const SessionCard({
+    super.key,
+    required this.session,
+    this.addSession,
+    this.removeSession,
+    this.selectedSessions = const [],
+  });
 
   String getFormattedDate(DateTime date) {
     final now = DateTime.now();
@@ -30,10 +38,25 @@ class SessionCard extends StatelessWidget {
     final ChatController chatController = Get.find<ChatController>();
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final isSelected = selectedSessions.contains(session);
 
     return Card(
+      color: isSelected ? colorPalette.content.withAlpha(25) : colorPalette.surface,
+      shape: RoundedRectangleBorder(
+        side: isSelected ? BorderSide(width: 2, color: colorPalette.content) : BorderSide.none,
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: InkWell(
-        onTap: () => chatController.navigateToSession(session),
+        onTap: () {
+          if (selectedSessions.isEmpty) {
+            chatController.navigateToSession(session);
+          } else {
+            if (addSession != null && removeSession != null) {
+              isSelected ? removeSession!() : addSession!();
+            }
+          }
+        },
+        onLongPress: selectedSessions.isEmpty ? addSession : null,
         child: Padding(
           padding: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 10),
           child: Row(

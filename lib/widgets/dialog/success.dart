@@ -7,8 +7,8 @@ import 'package:studymind/theme/colors.dart';
 class SuccessDialog extends StatefulWidget {
   final String message;
   final String confirmText;
-  final void Function()? onConfirmed;
-  const SuccessDialog({super.key, this.message = '', this.confirmText = 'Confirm', this.onConfirmed});
+  final void Function()? onConfirm;
+  const SuccessDialog({super.key, this.message = '', this.confirmText = 'Confirm', this.onConfirm});
 
   @override
   SuccessDialogState createState() => SuccessDialogState();
@@ -110,7 +110,7 @@ class SuccessDialogState extends State<SuccessDialog> with TickerProviderStateMi
                     child: ElevatedButton(
                       onPressed: () {
                         Get.back();
-                        if (widget.onConfirmed != null) widget.onConfirmed!();
+                        if (widget.onConfirm != null) widget.onConfirm!();
                       },
                       style: ElevatedButton.styleFrom(backgroundColor: colorPalette.success),
                       child: Text('Confirm', style: textTheme.titleMedium),
