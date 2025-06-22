@@ -35,9 +35,14 @@ class SessionOptionsSheet extends StatefulWidget {
 }
 
 class SessionOptionsSheetState extends State<SessionOptionsSheet> {
+  bool isRenaming = false;
+  bool isRemoving = false;
+
   @override
   Widget build(BuildContext context) {
     final List<ChatSession> selectedSessions = widget.selectedSessions;
+
+    final ChatController chatController = Get.find<ChatController>();
 
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
@@ -47,7 +52,17 @@ class SessionOptionsSheetState extends State<SessionOptionsSheet> {
       SessionOption(
         onTap: selectedSessions.length == 1
             ? () {
-                Get.dialog(RenameDialog(value: selectedSessions.first.title, onConfirm: (name) {}));
+                Get.dialog(
+                  RenameDialog(
+                    value: selectedSessions.first.title,
+                    onConfirm: (name) {
+                      Get.back();
+                      setState(() => isRenaming = true);
+                      chatController.renameChatSession(uid: selectedSessions.first.uid, name: name);
+                      setState(() => isRenaming = false);
+                    },
+                  ),
+                );
               }
             : null,
         title: 'Rename',
@@ -56,7 +71,17 @@ class SessionOptionsSheetState extends State<SessionOptionsSheet> {
       ),
       SessionOption(
         onTap: () {
-          Get.dialog(ConfirmDialog(message: 'You want to remove? If yes,\nPlease press confirm.', onConfirm: () {}));
+          Get.dialog(
+            ConfirmDialog(
+              message: 'You want to remove? If yes,\nPlease press confirm.',
+              onConfirm: () {
+                Get.back();
+                setState(() => isRemoving = true);
+                chatController.removeChatSession(uid: selectedSessions.map((e) => e.uid).toList());
+                setState(() => isRemoving = false);
+              },
+            ),
+          );
         },
         title: 'Remove',
         icon: HugeIcons.strokeRoundedDelete02,

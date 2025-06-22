@@ -15,4 +15,12 @@ class ChatService {
   Future<ApiResponse> requestQuery({required String uid, required List<ChatMessage> message}) async {
     return await apiService.patch('/chat/$uid', data: {'message': message.map((m) => m.toJson()).toList()});
   }
+
+  Future<ApiResponse> renameChatSession({required String uid, required String name}) async {
+    return await apiService.patch('/chat/$uid', data: {'name': name});
+  }
+
+  Future<ApiResponse> removeChatSession({required List<String> uid}) async {
+    return await apiService.patch('/chat/bulk', data: {'uid': uid});
+  }
 }

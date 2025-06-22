@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ColorPalette {
   final Color primary;
@@ -199,6 +200,6 @@ class AppColors {
     border: Color(0xFF242424), // Dark gray border
   );
 
-  ColorPalette get palette => dark;
+  ColorPalette get palette => Get.isDarkMode ? dark : light;
   ColorPalette getPalette(String mode) => mode == "dark" ? dark : light;
 }

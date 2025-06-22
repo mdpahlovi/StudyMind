@@ -290,4 +290,22 @@ class ChatController extends GetxController {
 
     isGenAiTyping.value = false;
   }
+
+  Future<void> renameChatSession({required String uid, required String name}) async {
+    final response = await chatService.renameChatSession(uid: uid, name: name);
+    if (response.success && response.data != null) {
+      fetchChatSessions();
+    } else {
+      Notification.error(response.message);
+    }
+  }
+
+  Future<void> removeChatSession({required List<String> uid}) async {
+    final response = await chatService.removeChatSession(uid: uid);
+    if (response.success && response.data != null) {
+      fetchChatSessions();
+    } else {
+      Notification.error(response.message);
+    }
+  }
 }

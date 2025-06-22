@@ -3,6 +3,8 @@ import 'package:studymind/bindings/initial.dart';
 import 'package:studymind/bindings/main.dart';
 import 'package:studymind/layouts/main.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_session.dart';
+import 'package:studymind/presentation/edit_profile/edit_profile.dart';
+import 'package:studymind/presentation/faq/faq.dart';
 import 'package:studymind/presentation/forgot_password/forgot_password.dart';
 import 'package:studymind/presentation/item_create/item_create.dart';
 import 'package:studymind/presentation/item_details/item_details.dart';
@@ -11,6 +13,8 @@ import 'package:studymind/presentation/library/widgets/item_by_type.dart';
 import 'package:studymind/presentation/login/login.dart';
 import 'package:studymind/presentation/notification/notification.dart';
 import 'package:studymind/presentation/register/register.dart';
+import 'package:studymind/presentation/removed_chat/removed_chat.dart';
+import 'package:studymind/presentation/removed_item/removed_item.dart';
 import 'package:studymind/presentation/splash_screen/splash_screen.dart';
 
 class AppRoutes {
@@ -25,6 +29,10 @@ class AppRoutes {
   static const String itemCreate = '/item_create/:type';
   static const String itemDetails = '/item_details/:uid';
   static const String chatSession = '/chat_session/:uid';
+  static const String editProfile = '/edit_profile';
+  static const String removedItem = '/removed_item';
+  static const String removedChat = '/removed_chat';
+  static const String faq = '/faq';
 
   static List<GetPage<dynamic>> routes = [
     GetPage(
@@ -92,6 +100,30 @@ class AppRoutes {
     GetPage(
       name: chatSession,
       page: () => const ChatSessionScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: editProfile,
+      page: () => const EditProfileScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: removedChat,
+      page: () => const RemovedChatScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: removedItem,
+      page: () => const RemovedItemScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: faq,
+      page: () => const FAQScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
