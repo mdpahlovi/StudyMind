@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/controllers/chat.dart';
-import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -26,10 +25,7 @@ class ChatSessionList extends StatelessWidget {
         return ListTile(
           selected: selectedChat == session,
           selectedTileColor: colorPalette.primary.withAlpha(20),
-          onTap: () {
-            Get.offNamed(AppRoutes.chatSession.replaceFirst(':uid', session.uid));
-            chatController.fetchOneChatSession(uid: session.uid);
-          },
+          onTap: () => chatController.navigateToSession(session, isReplace: true),
           leading: Container(
             width: 40,
             height: 40,

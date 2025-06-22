@@ -44,20 +44,19 @@ class ItemByTypeState extends State<ItemByType> {
             padding: const EdgeInsets.all(16),
             children: [
               TextField(
-                onChanged:
-                    (value) => setState(() {
-                      searchQuery = value;
-                      if (debounce?.isActive ?? false) debounce?.cancel();
-                      debounce = Timer(const Duration(milliseconds: 500), () {
-                        final type = Get.parameters['type'];
+                onChanged: (value) => setState(() {
+                  searchQuery = value;
+                  if (debounce?.isActive ?? false) debounce?.cancel();
+                  debounce = Timer(const Duration(milliseconds: 500), () {
+                    final type = Get.parameters['type'];
 
-                        if (type == 'recent_activity') {
-                          libraryController.fetchLibraryItemsByType(search: searchQuery, type: '');
-                        } else if (type != null) {
-                          libraryController.fetchLibraryItemsByType(search: searchQuery, type: type);
-                        }
-                      });
-                    }),
+                    if (type == 'recent_activity') {
+                      libraryController.fetchLibraryItemsByType(search: searchQuery, type: '');
+                    } else if (type != null) {
+                      libraryController.fetchLibraryItemsByType(search: searchQuery, type: type);
+                    }
+                  });
+                }),
                 decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search)),
               ),
               const SizedBox(height: 16),

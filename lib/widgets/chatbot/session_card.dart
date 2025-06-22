@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:studymind/controllers/chat.dart';
-import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 
 class SessionCard extends StatelessWidget {
@@ -34,10 +33,7 @@ class SessionCard extends StatelessWidget {
 
     return Card(
       child: InkWell(
-        onTap: () {
-          Get.toNamed(AppRoutes.chatSession.replaceFirst(':uid', session.uid));
-          chatController.fetchOneChatSession(uid: session.uid);
-        },
+        onTap: () => chatController.navigateToSession(session),
         child: Padding(
           padding: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 10),
           child: Row(

@@ -3,10 +3,8 @@ import 'package:get/get.dart';
 import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_session_empty.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_session_list.dart';
-import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
-import 'package:uuid/uuid.dart';
 
 class ChatbotDrawer extends StatelessWidget {
   const ChatbotDrawer({super.key});
@@ -54,11 +52,7 @@ class ChatbotDrawer extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
-                  onPressed: () {
-                    Get.offNamed(AppRoutes.chatSession.replaceFirst(':uid', Uuid().v4()));
-                    chatController.chatMessages.clear();
-                    chatController.selectedSession.value = null;
-                  },
+                  onPressed: () => chatController.navigateToNewChat(),
                   icon: CustomIcon(icon: 'add', color: colorPalette.primary),
                   label: Text('New Chat', style: textTheme.titleMedium?.copyWith(color: colorPalette.primary)),
                   style: OutlinedButton.styleFrom(

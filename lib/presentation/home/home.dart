@@ -6,12 +6,10 @@ import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/home/widgets/recent_card.dart';
 import 'package:studymind/presentation/home/widgets/recent_loader.dart';
-import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/chatbot/session_card.dart';
 import 'package:studymind/widgets/custom_image.dart';
 import 'package:studymind/widgets/notification_button.dart';
-import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -28,7 +26,11 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: () async => libraryController.fetchLibraryItemsByRecent(),
+        onRefresh: () async {
+          libraryController.fetchLibraryItemsByType();
+          libraryController.fetchLibraryItems();
+          chatController.fetchChatSessions();
+        },
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           physics: const AlwaysScrollableScrollPhysics(),
@@ -89,7 +91,7 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: InkWell(
-                  onTap: () => Get.toNamed(AppRoutes.chatSession.replaceFirst(':uid', Uuid().v4())),
+                  onTap: () => chatController.navigateToNewChat(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -128,8 +130,8 @@ class HomeScreen extends StatelessWidget {
               // Recent Activity
               const SizedBox(height: 16),
               Obx(() {
-                final List<LibraryItem> recentItems = libraryController.recentItems;
-                if (libraryController.isLoadingRecent.value || recentItems.isNotEmpty) {
+                final List<LibraryItem> recentItems = libraryController.libraryItems;
+                if (libraryController.isLoadingType.value || recentItems.isNotEmpty) {
                   return Column(
                     children: [
                       Row(
@@ -150,7 +152,7 @@ class HomeScreen extends StatelessWidget {
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: recentItems.isEmpty ? 4 : recentItems.length,
+                        itemCount: 4,
                         itemBuilder: (context, index) {
                           final item = recentItems.isEmpty ? null : recentItems[index];
                           if (item == null) {

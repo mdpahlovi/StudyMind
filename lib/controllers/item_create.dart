@@ -245,7 +245,6 @@ class ItemCreateController extends GetxController {
 
         // Refetch
         libraryController.fetchLibraryItems(parentUid: selectedFolder.value?.uid);
-        libraryController.fetchLibraryItemsByRecent();
         if (itemResponse.type == ItemType.folder) fetchFolders();
         chatController.fetchChatContents();
 
@@ -283,7 +282,6 @@ class ItemCreateController extends GetxController {
       libraryController.refreshByFolder();
     }
 
-    libraryController.fetchLibraryItemsByRecent();
     fetchFolders();
     chatController.fetchChatContents();
   }

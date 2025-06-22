@@ -86,11 +86,9 @@ class LibraryController extends GetxController {
   final libraryService = LibraryService();
 
   final RxBool isLoadingItem = true.obs;
-  final RxBool isLoadingRecent = true.obs;
   final RxBool isLoadingType = true.obs;
   final RxBool isLoadingFolder = true.obs;
   final Rxn<LibraryItem> libraryItem = Rxn<LibraryItem>(); // To show in item details screen
-  final RxList<LibraryItem> recentItems = <LibraryItem>[].obs; // To show in home screen
   final RxList<LibraryItem> libraryItems = <LibraryItem>[].obs; // To show in by type screen
   final RxList<LibraryItem> folderItems = <LibraryItem>[].obs; // To show in library and it's folder screen
   final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs; // To navigate between library and it's folder screen
@@ -100,18 +98,17 @@ class LibraryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchLibraryItemsByRecent();
+    fetchLibraryItemsByType();
+    fetchLibraryItems();
   }
 
   @override
   void onClose() {
     super.onClose();
     isLoadingItem.value = true;
-    isLoadingRecent.value = true;
     isLoadingType.value = true;
     isLoadingFolder.value = true;
     libraryItem.value = null;
-    recentItems.clear();
     libraryItems.clear();
     folderItems.clear();
     breadcrumbs.clear();
@@ -130,21 +127,6 @@ class LibraryController extends GetxController {
       }
 
       isLoadingFolder.value = false;
-    });
-  }
-
-  void fetchLibraryItemsByRecent() {
-    isLoadingRecent.value = true;
-
-    libraryService.getLibraryItemsByType(GetLibraryItemsByTypeQuery(limit: 4)).then((response) {
-      if (response.success && response.data != null) {
-        final libraryResponse = LibraryResponse.fromJson(response.data);
-        recentItems.value = libraryResponse.libraryItems;
-      } else {
-        Notification.error(response.message);
-      }
-
-      isLoadingRecent.value = false;
     });
   }
 

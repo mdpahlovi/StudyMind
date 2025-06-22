@@ -3,11 +3,8 @@ import 'package:get/get.dart';
 import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_session_empty.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_session_loader.dart';
-import 'package:studymind/routes/routes.dart';
 import 'package:studymind/widgets/chatbot/session_card.dart';
-import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/notification_button.dart';
-import 'package:uuid/uuid.dart';
 
 class ChatbotScreen extends StatelessWidget {
   const ChatbotScreen({super.key});
@@ -34,10 +31,6 @@ class ChatbotScreen extends StatelessWidget {
           separatorBuilder: (context, index) => const SizedBox(height: 12),
         );
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed(AppRoutes.chatSession.replaceFirst(':uid', Uuid().v4())),
-        child: CustomIcon(icon: 'add', size: 24),
-      ),
     );
   }
 }

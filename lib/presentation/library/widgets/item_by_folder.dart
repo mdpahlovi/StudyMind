@@ -4,22 +4,17 @@ import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/library/widgets/item_empty.dart';
 import 'package:studymind/presentation/library/widgets/item_grid.dart';
 import 'package:studymind/presentation/library/widgets/item_loader.dart';
-import 'package:studymind/widgets/library/item_create_sheet.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/library/item_app_bar.dart';
+import 'package:studymind/widgets/library/item_create_sheet.dart';
 
-class ItemByFolder extends StatefulWidget {
+class ItemByFolder extends StatelessWidget {
   const ItemByFolder({super.key});
 
   @override
-  State<ItemByFolder> createState() => ItemByFolderState();
-}
-
-class ItemByFolderState extends State<ItemByFolder> {
-  final LibraryController libraryController = Get.find<LibraryController>();
-
-  @override
   Widget build(BuildContext context) {
+    final LibraryController libraryController = Get.find<LibraryController>();
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {

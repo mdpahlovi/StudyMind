@@ -65,53 +65,63 @@ class ChatSessionScreenState extends State<ChatSessionScreen> with TickerProvide
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: CustomBackButton(),
-        title: Obx(() {
-          final selectedSession = chatController.selectedSession.value;
-          if (selectedSession != null) {
-            return Text(selectedSession.title);
-          } else {
-            return const Text('Chatbot');
-          }
-        }),
-        actions: [
-          Builder(
-            builder: (context) => Center(
-              child: IconButton(
-                icon: const Icon(Icons.menu_rounded, size: 24),
-                onPressed: () => Scaffold.of(context).openEndDrawer(),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) return;
+
+        chatController.navigateToBack();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: CustomBackButton(),
+          title: Obx(() {
+            final selectedSession = chatController.selectedSession.value;
+            if (selectedSession != null) {
+              return Text(selectedSession.title);
+            } else {
+              return const Text('Chatbot');
+            }
+          }),
+          actions: [
+            Builder(
+              builder: (context) => Center(
+                child: IconButton(
+                  icon: const Icon(Icons.menu_rounded, size: 24),
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      endDrawer: ChatbotDrawer(),
-      body: Column(
-        children: [
-          Expanded(
-            child: Obx(() {
-              final chatMessages = chatController.chatMessages;
-              final isGenAiTyping = chatController.isGenAiTyping.value;
+          ],
+        ),
+        endDrawer: ChatbotDrawer(),
+        body: Column(
+          children: [
+            Expanded(
+              child: Obx(() {
+                final chatMessages = chatController.chatMessages;
+                final isGenAiTyping = chatController.isGenAiTyping.value;
 
-              if (chatMessages.isEmpty) return const ChatbotEmpty();
+                if (chatController.isLoadingMessage.value) return Center(child: const CircularProgressIndicator());
 
-              return ListView.builder(
-                controller: scrollController,
-                padding: const EdgeInsets.all(16),
-                itemCount: chatMessages.length + (isGenAiTyping ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (index == chatMessages.length && isGenAiTyping) {
-                    return TypingIndicator();
-                  }
-                  return ChatBubble(message: chatMessages[index]);
-                },
-              );
-            }),
-          ),
-          ChatbotInput(onSendMessage: requestQuery),
-        ],
+                if (chatMessages.isEmpty) return const ChatbotEmpty();
+
+                return ListView.builder(
+                  controller: scrollController,
+                  padding: const EdgeInsets.all(16),
+                  itemCount: chatMessages.length + (isGenAiTyping ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == chatMessages.length && isGenAiTyping) {
+                      return TypingIndicator();
+                    }
+                    return ChatBubble(message: chatMessages[index]);
+                  },
+                );
+              }),
+            ),
+            ChatbotInput(onSendMessage: requestQuery),
+          ],
+        ),
       ),
     );
   }

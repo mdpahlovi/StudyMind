@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/controllers/main.dart';
 import 'package:studymind/presentation/chatbot/chatbot.dart';
 import 'package:studymind/presentation/home/home.dart';
 import 'package:studymind/presentation/library/library.dart';
 import 'package:studymind/presentation/profile/profile.dart';
 import 'package:studymind/widgets/custom_icon.dart';
+import 'package:studymind/widgets/library/item_create_sheet.dart';
 
 class MainLayout extends StatelessWidget {
   const MainLayout({super.key});
@@ -13,6 +15,7 @@ class MainLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MainController mainController = Get.find<MainController>();
+    final ChatController chatController = Get.find<ChatController>();
 
     return Scaffold(
       body: Obx(
@@ -45,6 +48,22 @@ class MainLayout extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: Obx(() {
+        if (mainController.selectedIndex.value == 1 || mainController.selectedIndex.value == 2) {
+          return FloatingActionButton(
+            onPressed: () {
+              if (mainController.selectedIndex.value == 1) {
+                Get.bottomSheet(ItemCreateSheet());
+              } else {
+                chatController.navigateToNewChat();
+              }
+            },
+            child: const Icon(Icons.add),
+          );
+        } else {
+          return const SizedBox();
+        }
+      }),
     );
   }
 }

@@ -2,8 +2,11 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/notification.dart';
+import 'package:studymind/core/utils.dart';
+import 'package:studymind/routes/routes.dart';
 import 'package:studymind/services/chat.dart';
 import 'package:studymind/services/library.dart';
+import 'package:uuid/uuid.dart';
 
 class ChatContent {
   final String uid;
@@ -222,13 +225,35 @@ class ChatController extends GetxController {
       if (response.success && response.data != null) {
         final sessionResponse = ChatSessionWithMessage.fromJson(response.data);
         chatMessages.value = sessionResponse.messages;
-        selectedSession.value = sessionResponse.session;
       } else {
         Notification.error(response.message);
       }
 
       isLoadingMessage.value = false;
     });
+  }
+
+  void navigateToNewChat({bool isReplace = false}) {
+    final page = AppRoutes.chatSession.replaceFirst(':uid', Uuid().v4());
+    !isReplace ? Get.toNamed(page) : Get.offNamed(page);
+
+    selectedSession.value = null;
+    chatMessages.clear();
+  }
+
+  void navigateToSession(ChatSession session, {bool isReplace = false}) async {
+    final page = AppRoutes.chatSession.replaceFirst(':uid', session.uid);
+    !isReplace ? Get.toNamed(page) : Get.offNamed(page);
+
+    selectedSession.value = session;
+    fetchOneChatSession(uid: session.uid);
+  }
+
+  void navigateToBack() async {
+    Get.back();
+
+    selectedSession.value = null;
+    chatMessages.clear();
   }
 
   Future<void> requestQuery() async {
@@ -255,7 +280,11 @@ class ChatController extends GetxController {
       chatSessions.insert(0, session);
       chatMessages.add(message);
     } else {
-      chatMessages.removeLast();
+      final message = chatMessages.last;
+      messageController.document = Document.fromDelta(markdownTODelta.convert(message.message));
+      messageController.moveCursorToEnd();
+      chatMessages.remove(message);
+
       Notification.error(response.message);
     }
 
