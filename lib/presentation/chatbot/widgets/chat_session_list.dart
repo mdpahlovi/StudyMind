@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
-import 'package:studymind/widgets/custom_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ChatSessionList extends StatelessWidget {
@@ -37,7 +37,7 @@ class ChatSessionList extends StatelessWidget {
               color: colorPalette.primary.withAlpha(50),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: CustomIcon(icon: 'message', color: colorPalette.primary),
+            child: Icon(HugeIcons.strokeRoundedChatBot, color: colorPalette.primary),
           ),
           title: Text(session.title, style: textTheme.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
           subtitle: Text(timeago.format(session.lastMessageAt!), style: textTheme.bodySmall),

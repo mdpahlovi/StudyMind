@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:studymind/bindings/initial.dart';
-import 'package:studymind/bindings/library.dart';
+import 'package:studymind/bindings/main.dart';
 import 'package:studymind/layouts/main.dart';
-import 'package:studymind/presentation/chatbot/chatbot.dart';
+import 'package:studymind/presentation/chatbot/widgets/chat_session.dart';
 import 'package:studymind/presentation/forgot_password/forgot_password.dart';
 import 'package:studymind/presentation/item_create/item_create.dart';
 import 'package:studymind/presentation/item_details/item_details.dart';
@@ -55,7 +55,7 @@ class AppRoutes {
     GetPage(
       name: home,
       page: () => const MainLayout(),
-      binding: LibraryBinding(),
+      binding: MainBinding(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
@@ -91,7 +91,7 @@ class AppRoutes {
     ),
     GetPage(
       name: chatSession,
-      page: () => const ChatbotScreen(),
+      page: () => const ChatSessionScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),

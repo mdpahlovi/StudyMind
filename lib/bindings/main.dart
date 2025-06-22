@@ -3,7 +3,7 @@ import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/controllers/item_create.dart';
 import 'package:studymind/controllers/library.dart';
 
-class LibraryBinding extends Bindings {
+class MainBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(LibraryController(), permanent: true);

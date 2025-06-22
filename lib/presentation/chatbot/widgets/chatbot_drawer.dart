@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_session_empty.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_session_list.dart';
-import 'package:studymind/presentation/chatbot/widgets/chat_session_loader.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
@@ -23,39 +22,25 @@ class ChatbotDrawer extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [colorPalette.primary, colorPalette.secondary],
-                ),
-              ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 8),
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.smart_toy_rounded, color: colorPalette.primary, size: 28),
-                  ),
-                  SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Chat History', style: textTheme.titleLarge),
-                      Text('Your conversations', style: textTheme.bodyMedium),
-                    ],
+                  Text("Chat Sessions", style: textTheme.headlineMedium),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: CustomIcon(icon: 'cancel', color: colorPalette.content, size: 24),
                   ),
                 ],
               ),
             ),
+            Divider(),
             Expanded(
               child: Obx(() {
                 final chatSessions = chatController.chatSessions;
                 final selectedChat = chatSessions.firstWhereOrNull((e) => e.uid == Get.parameters['uid']);
 
-                if (chatController.isLoadingSession.value) return const ChatSessionLoader();
                 if (chatSessions.isEmpty) return const ChatSessionEmpty();
 
                 return ChatSessionList(sessions: chatSessions, selectedChat: selectedChat);

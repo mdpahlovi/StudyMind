@@ -1,152 +1,43 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/chat.dart';
-import 'package:studymind/presentation/chatbot/widgets/chat_bubble.dart';
-import 'package:studymind/presentation/chatbot/widgets/chatbot_drawer.dart';
-import 'package:studymind/presentation/chatbot/widgets/chatbot_empty.dart';
-import 'package:studymind/presentation/chatbot/widgets/chatbot_input.dart';
-import 'package:studymind/presentation/chatbot/widgets/typing_indicator.dart';
-import 'package:studymind/widgets/custom_back_button.dart';
+import 'package:studymind/presentation/chatbot/widgets/chat_session_empty.dart';
+import 'package:studymind/presentation/chatbot/widgets/chat_session_loader.dart';
+import 'package:studymind/routes/routes.dart';
+import 'package:studymind/widgets/chatbot/session_card.dart';
+import 'package:studymind/widgets/custom_icon.dart';
+import 'package:studymind/widgets/notification_button.dart';
 import 'package:uuid/uuid.dart';
 
-class ChatbotScreen extends StatefulWidget {
+class ChatbotScreen extends StatelessWidget {
   const ChatbotScreen({super.key});
 
   @override
-  State<ChatbotScreen> createState() => ChatbotScreenState();
-}
-
-class ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMixin {
-  final ChatController chatController = Get.find<ChatController>();
-  final ScrollController scrollController = ScrollController();
-  late AnimationController fadeController;
-
-  @override
-  void initState() {
-    super.initState();
-    fadeController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
-  }
-
-  @override
-  void dispose() {
-    fadeController.dispose();
-    chatController.messageController.clear();
-    scrollController.dispose();
-    super.dispose();
-  }
-
-  void requestQuery() async {
-    final message = convertToString(chatController.messageController);
-
-    if (message.isEmpty) return;
-
-    chatController.chatMessages.add(
-      ChatMessage(
-        uid: Uuid().v4(),
-        role: ChatMessageRole.user,
-        message: message.trimRight(),
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      ),
-    );
-
-    chatController.messageController.clear();
-    scrollToBottom();
-    fadeController.repeat();
-
-    chatController.requestQuery();
-
-    HapticFeedback.lightImpact();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final chatController = Get.find<ChatController>();
+
     return Scaffold(
-      appBar: AppBar(
-        leading: CustomBackButton(),
-        title: Obx(() {
-          final selectedSession = chatController.selectedSession.value;
-          if (selectedSession != null) {
-            return Text(selectedSession.title);
-          } else {
-            return const Text('Chatbot');
-          }
-        }),
-        actions: [
-          Builder(
-            builder: (context) => Center(
-              child: IconButton(
-                icon: const Icon(Icons.menu_rounded, size: 24),
-                onPressed: () => Scaffold.of(context).openEndDrawer(),
-              ),
-            ),
-          ),
-        ],
-      ),
-      endDrawer: ChatbotDrawer(),
-      body: Column(
-        children: [
-          Expanded(
-            child: Obx(() {
-              final chatMessages = chatController.chatMessages;
-              final isGenAiTyping = chatController.isGenAiTyping.value;
+      appBar: AppBar(leading: SizedBox(), title: const Text('Chatbot'), actions: [NotificationButton()]),
+      body: Obx(() {
+        final List<ChatSession> chatSessions = chatController.chatSessions;
 
-              if (chatMessages.isEmpty) return const ChatbotEmpty();
+        if (chatController.isLoadingSession.value) return ChatSessionLoader();
+        if (chatSessions.isEmpty) return ChatSessionEmpty();
 
-              return ListView.builder(
-                controller: scrollController,
-                padding: const EdgeInsets.all(16),
-                itemCount: chatMessages.length + (isGenAiTyping ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (index == chatMessages.length && isGenAiTyping) {
-                    return TypingIndicator();
-                  }
-                  return ChatBubble(message: chatMessages[index]);
-                },
-              );
-            }),
-          ),
-          ChatbotInput(onSendMessage: requestQuery),
-        ],
+        return ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: chatSessions.length,
+          itemBuilder: (context, index) {
+            final session = chatSessions[index];
+            return SessionCard(session: session);
+          },
+          separatorBuilder: (context, index) => const SizedBox(height: 12),
+        );
+      }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed(AppRoutes.chatSession.replaceFirst(':uid', Uuid().v4())),
+        child: CustomIcon(icon: 'add', size: 24),
       ),
     );
   }
-
-  void scrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (scrollController.hasClients) {
-        scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-  }
-}
-
-String convertToString(QuillController controller) {
-  final buffer = StringBuffer();
-
-  for (final op in controller.document.toDelta().toList()) {
-    if (op.isInsert) {
-      if (op.data is String) {
-        buffer.write(op.data);
-      } else if (op.data is Map) {
-        final map = op.data as Map<String, dynamic>;
-        if (map.containsKey('custom') && jsonDecode(map['custom']) is Map) {
-          final customData = jsonDecode(map['custom']) as Map<String, dynamic>;
-          if (customData.containsKey('mention')) {
-            buffer.write(customData['mention'] as String);
-          }
-        }
-      }
-    }
-  }
-
-  return buffer.toString();
 }
