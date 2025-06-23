@@ -4,6 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/controllers/auth.dart';
 import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/controllers/library.dart';
+import 'package:studymind/controllers/main.dart';
 import 'package:studymind/presentation/home/widgets/recent_card.dart';
 import 'package:studymind/presentation/home/widgets/recent_loader.dart';
 import 'package:studymind/theme/colors.dart';
@@ -16,6 +17,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MainController mainController = Get.find<MainController>();
     final AuthController authController = Get.find<AuthController>();
     final LibraryController libraryController = Get.find<LibraryController>();
     final ChatController chatController = Get.find<ChatController>();
@@ -127,7 +129,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // Recent Activity
+              // Recent Items
               const SizedBox(height: 16),
               Obx(() {
                 final List<LibraryItem> recentItems = libraryController.libraryItems;
@@ -137,7 +139,7 @@ class HomeScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Recent Activity', style: textTheme.headlineMedium),
+                          Text('Recent Items', style: textTheme.headlineMedium),
                           GestureDetector(
                             onTap: () => libraryController.navigateToItemByType(''),
                             child: Text(
@@ -170,7 +172,7 @@ class HomeScreen extends StatelessWidget {
                   return const SizedBox();
                 }
               }),
-              // Continue Learn
+              // Recent Chats
               Obx(() {
                 final List<ChatSession> sessions = chatController.chatSessions;
                 if (chatController.isLoadingSession.value || sessions.isNotEmpty) {
@@ -179,9 +181,9 @@ class HomeScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Continue Learn', style: textTheme.headlineMedium),
+                          Text('Recent Chats', style: textTheme.headlineMedium),
                           GestureDetector(
-                            onTap: () => libraryController.navigateToItemByType(''),
+                            onTap: () => mainController.onDestinationSelected(2),
                             child: Text(
                               'View All',
                               style: textTheme.labelMedium?.copyWith(color: colorPalette.primary),

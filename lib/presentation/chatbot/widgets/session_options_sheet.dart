@@ -70,19 +70,21 @@ class SessionOptionsSheetState extends State<SessionOptionsSheet> {
         disabled: selectedSessions.length != 1,
       ),
       SessionOption(
-        onTap: () {
-          Get.dialog(
-            ConfirmDialog(
-              message: 'You want to remove? If yes,\nPlease press confirm.',
-              onConfirm: () {
-                Get.back();
-                setState(() => isRemoving = true);
-                chatController.removeChatSession(uid: selectedSessions.map((e) => e.uid).toList());
-                setState(() => isRemoving = false);
-              },
-            ),
-          );
-        },
+        onTap: selectedSessions.isNotEmpty
+            ? () {
+                Get.dialog(
+                  ConfirmDialog(
+                    message: 'You want to remove? If yes,\nPlease press confirm.',
+                    onConfirm: () {
+                      Get.back();
+                      setState(() => isRemoving = true);
+                      chatController.removeChatSession(uid: selectedSessions.map((e) => e.uid).toList());
+                      setState(() => isRemoving = false);
+                    },
+                  ),
+                );
+              }
+            : null,
         title: 'Remove',
         icon: HugeIcons.strokeRoundedDelete02,
         danger: true,

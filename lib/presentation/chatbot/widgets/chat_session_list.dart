@@ -24,7 +24,7 @@ class ChatSessionList extends StatelessWidget {
 
         return ListTile(
           selected: selectedChat == session,
-          selectedTileColor: colorPalette.primary.withAlpha(20),
+          selectedTileColor: colorPalette.primary.withAlpha(25),
           onTap: () => chatController.navigateToSession(session, isReplace: true),
           leading: Container(
             width: 40,

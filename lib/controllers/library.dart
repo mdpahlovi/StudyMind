@@ -163,7 +163,7 @@ class LibraryController extends GetxController {
 
   void navigateToItemByType(String type) {
     if (type == '') {
-      Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', 'recent_activity'));
+      Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', 'recent_items'));
       fetchLibraryItemsByType(type: '');
     } else {
       Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', type));
@@ -212,7 +212,7 @@ class LibraryController extends GetxController {
   void refreshByType() {
     final type = Get.parameters['type'];
 
-    if (type == 'recent_activity') {
+    if (type == 'recent_items') {
       fetchLibraryItemsByType(type: '');
     } else if (type != null) {
       fetchLibraryItemsByType(type: type);

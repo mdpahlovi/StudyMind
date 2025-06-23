@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:intl/intl.dart';
 import 'package:studymind/controllers/chat.dart';
+import 'package:studymind/controllers/main.dart';
+import 'package:studymind/presentation/chatbot/widgets/session_options_sheet.dart';
 import 'package:studymind/theme/colors.dart';
+import 'package:studymind/widgets/custom_icon_button.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class SessionCard extends StatelessWidget {
   final ChatSession session;
@@ -18,33 +21,20 @@ class SessionCard extends StatelessWidget {
     this.selectedSessions = const [],
   });
 
-  String getFormattedDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
-
-    if (difference.inDays == 0) {
-      return 'Today, ${DateFormat.jm().format(date)}';
-    } else if (difference.inDays == 1) {
-      return 'Yesterday, ${DateFormat.jm().format(date)}';
-    } else if (difference.inDays < 7) {
-      return '${DateFormat.EEEE().format(date)}, ${DateFormat.jm().format(date)}';
-    } else {
-      return DateFormat.yMMMd().format(date);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final MainController mainController = Get.find<MainController>();
     final ChatController chatController = Get.find<ChatController>();
+
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final isSelected = selectedSessions.contains(session);
 
     return Card(
-      color: isSelected ? colorPalette.content.withAlpha(25) : colorPalette.surface,
+      color: isSelected ? colorPalette.primary.withAlpha(25) : colorPalette.surface,
       shape: RoundedRectangleBorder(
-        side: isSelected ? BorderSide(width: 2, color: colorPalette.content) : BorderSide.none,
         borderRadius: BorderRadius.circular(12),
+        side: isSelected ? BorderSide(color: colorPalette.primary.withAlpha(50), width: 1) : BorderSide.none,
       ),
       child: InkWell(
         onTap: () {
@@ -58,34 +48,100 @@ class SessionCard extends StatelessWidget {
         },
         onLongPress: selectedSessions.isEmpty ? addSession : null,
         child: Padding(
-          padding: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 10),
+          padding: const EdgeInsets.only(left: 12, right: 8, top: 8, bottom: 12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Thumbnail
               Container(
-                margin: const EdgeInsets.only(top: 4),
+                margin: EdgeInsets.only(top: 4),
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
-                  color: colorPalette.white.withAlpha(25),
-                  borderRadius: BorderRadius.circular(8),
+                  color: colorPalette.primary.withAlpha(50),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: colorPalette.primary.withAlpha(100), width: 1),
                 ),
-                child: SizedBox(width: 62, height: 66, child: Icon(HugeIcons.strokeRoundedChatBot, size: 36)),
+                child: Icon(HugeIcons.strokeRoundedChatBot, color: colorPalette.primary, size: 24),
               ),
               const SizedBox(width: 12),
-              // Content
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(session.title, style: textTheme.titleMedium, overflow: TextOverflow.ellipsis),
-                    const SizedBox(height: 2),
-                    Text(
-                      '${session.lastMessage!}\n',
-                      style: textTheme.bodySmall?.copyWith(height: 1.25),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            session.title,
+                            style: textTheme.titleMedium?.copyWith(height: 1.25),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        selectedSessions.isNotEmpty
+                            ? CustomIconButton(
+                                onTap: () => isSelected ? removeSession!() : addSession!(),
+                                child: isSelected
+                                    ? Icon(HugeIcons.strokeRoundedCheckmarkCircle01, size: 20)
+                                    : Icon(HugeIcons.strokeRoundedCircle, size: 20),
+                              )
+                            : Obx(() {
+                                if (mainController.selectedIndex == 0) {
+                                  return CustomIconButton(child: Icon(HugeIcons.strokeRoundedArrowRight01, size: 20));
+                                } else {
+                                  return CustomIconButton(
+                                    onTap: () => Get.bottomSheet(SessionOptionsSheet(selectedSessions: [session])),
+                                    child: Icon(Icons.more_vert, size: 20),
+                                  );
+                                }
+                              }),
+                      ],
                     ),
-                    Text(getFormattedDate(session.lastMessageAt!), style: textTheme.bodySmall),
+                    if (session.lastMessage != null && session.lastMessage!.isNotEmpty)
+                      Text(
+                        '${session.lastMessage!}\n',
+                        style: textTheme.bodyMedium?.copyWith(color: colorPalette.contentDim, height: 1.25),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Icon(
+                          HugeIcons.strokeRoundedClock01,
+                          size: 14,
+                          color: colorPalette.contentDim.withValues(alpha: 0.7),
+                        ),
+                        const SizedBox(width: 4),
+                        Padding(
+                          padding: EdgeInsets.only(right: 4),
+                          child: Text(
+                            timeago.format(session.lastMessageAt!),
+                            style: textTheme.bodySmall?.copyWith(
+                              color: colorPalette.contentDim.withValues(alpha: 0.7),
+                              height: 1.25,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Container(
+                          margin: EdgeInsets.only(right: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                            color: colorPalette.contentDim.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            '20',
+                            style: textTheme.labelSmall?.copyWith(
+                              color: colorPalette.contentDim,
+                              height: 1.25,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

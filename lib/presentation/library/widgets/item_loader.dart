@@ -6,22 +6,16 @@ class ItemLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    final Size size = MediaQuery.of(context).size;
+    final itemWidth = (size.width - 16 * 2 - 12) / 2;
+
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
-      children: [
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-          ),
-          itemCount: 12,
-          itemBuilder: (context, index) => const ItemLoaderCard(),
-        ),
-      ],
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 12,
+        children: List.generate(8, (index) => SizedBox(width: itemWidth, height: 160, child: const ItemLoaderCard())),
+      ),
     );
   }
 }

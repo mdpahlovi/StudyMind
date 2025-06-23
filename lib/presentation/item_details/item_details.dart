@@ -121,9 +121,9 @@ Widget buildDescriptionCard(String description, ColorPalette colorPalette, TextT
     width: double.infinity,
     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     decoration: BoxDecoration(
-      color: typeStyle.color.withValues(alpha: 0.1),
+      color: typeStyle.color.withAlpha(25),
       borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: typeStyle.color.withValues(alpha: 0.2), width: 1),
+      border: Border.all(color: typeStyle.color.withAlpha(50), width: 1),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,

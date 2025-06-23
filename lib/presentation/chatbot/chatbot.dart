@@ -32,7 +32,7 @@ class ChatbotScreenState extends State<ChatbotScreen> {
                 icon: const CustomIcon(icon: 'cancel', size: 28),
                 onPressed: () => setState(() => selectedSessions.clear()),
               ),
-        title: selectedSessions.isEmpty ? const Text('Chatbot') : Text('${selectedSessions.length}  selected'),
+        title: selectedSessions.isEmpty ? const Text('Chatbot') : Text('${selectedSessions.length}  chats'),
         actions: selectedSessions.isEmpty
             ? [NotificationButton()]
             : [

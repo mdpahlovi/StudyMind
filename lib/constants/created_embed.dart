@@ -39,9 +39,11 @@ class CreatedEmbedBuilder extends EmbedBuilder {
     return OutlinedButton(
       onPressed: () => libraryController.navigateToItem(created as dynamic),
       style: OutlinedButton.styleFrom(
-        side: BorderSide(color: color.withAlpha(128)),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        backgroundColor: color.withAlpha(26),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: color.withAlpha(50)),
+        ),
+        backgroundColor: color.withAlpha(25),
       ),
       child: Text(created.name, style: textTheme.titleSmall?.copyWith(color: color)),
     );

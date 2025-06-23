@@ -38,8 +38,8 @@ PreferredSizeWidget buildItemAppBar() {
       if (selectedItems.isEmpty) {
         if (Get.currentRoute.contains('/item_by_type')) {
           switch (Get.parameters['type']) {
-            case 'recent_activity':
-              return Text('Recent Activity');
+            case 'recent_items':
+              return Text('Recent Items');
             default:
               return Text(Get.parameters['type']?.capitalize ?? '');
           }

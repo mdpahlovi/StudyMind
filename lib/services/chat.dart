@@ -17,10 +17,10 @@ class ChatService {
   }
 
   Future<ApiResponse> renameChatSession({required String uid, required String name}) async {
-    return await apiService.patch('/chat/$uid', data: {'name': name});
+    return await apiService.patch('/chat/update/$uid', data: {'name': name});
   }
 
   Future<ApiResponse> removeChatSession({required List<String> uid}) async {
-    return await apiService.patch('/chat/bulk', data: {'uid': uid});
+    return await apiService.patch('/chat/update/bulk', data: {'uid': uid});
   }
 }

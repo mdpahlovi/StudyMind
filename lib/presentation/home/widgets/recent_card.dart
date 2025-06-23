@@ -1,36 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_badge.dart';
 import 'package:studymind/widgets/custom_icon.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class RecentCard extends StatelessWidget {
   final LibraryItem item;
-
   const RecentCard({super.key, required this.item});
-
-  String getFormattedDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
-
-    if (difference.inDays == 0) {
-      return 'Today, ${DateFormat.jm().format(date)}';
-    } else if (difference.inDays == 1) {
-      return 'Yesterday, ${DateFormat.jm().format(date)}';
-    } else if (difference.inDays < 7) {
-      return '${DateFormat.EEEE().format(date)}, ${DateFormat.jm().format(date)}';
-    } else {
-      return DateFormat.yMMMd().format(date);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final LibraryController libraryController = Get.find<LibraryController>();
-
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final Color color = item.metadata?['color'] != null
@@ -42,17 +26,20 @@ class RecentCard extends StatelessWidget {
       child: InkWell(
         onTap: () => libraryController.navigateToItem(item),
         child: Padding(
-          padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 10),
+          padding: const EdgeInsets.only(left: 12, right: 8, top: 8, bottom: 12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Thumbnail
               Container(
+                margin: EdgeInsets.only(top: 4),
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
-                  color: colorPalette.white.withAlpha(25),
-                  borderRadius: BorderRadius.circular(8),
+                  color: color.withAlpha(50),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: color.withAlpha(100), width: 1),
                 ),
-                child: SizedBox(width: 62, height: 62, child: CustomIcon(icon: icon, size: 36)),
+                child: CustomIcon(icon: icon, color: color, size: 24),
               ),
               const SizedBox(width: 12),
               // Content
@@ -64,12 +51,42 @@ class RecentCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomBadge(label: item.type.name, color: color),
-                        CustomIcon(icon: 'arrowRight', color: colorPalette.content, size: 20),
+                        Container(
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(shape: BoxShape.circle),
+                          child: Icon(HugeIcons.strokeRoundedArrowRight01, size: 20),
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(item.name, style: textTheme.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
-                    Text(getFormattedDate(item.createdAt), style: textTheme.bodySmall),
+                    const SizedBox(height: 2),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Text(
+                        item.name,
+                        style: textTheme.titleMedium?.copyWith(height: 1.25),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Icon(
+                          HugeIcons.strokeRoundedClock01,
+                          size: 14,
+                          color: colorPalette.contentDim.withValues(alpha: 0.7),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          timeago.format(item.updatedAt),
+                          style: textTheme.bodySmall?.copyWith(
+                            color: colorPalette.contentDim.withValues(alpha: 0.7),
+                            height: 1.25,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
