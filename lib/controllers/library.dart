@@ -161,16 +161,6 @@ class LibraryController extends GetxController {
     });
   }
 
-  void navigateToItemByType(String type) {
-    if (type == '') {
-      Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', 'recent_items'));
-      fetchLibraryItemsByType(type: '');
-    } else {
-      Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', type));
-      fetchLibraryItemsByType(type: type);
-    }
-  }
-
   void navigateToItem(LibraryItem item, {bool isReplace = false}) {
     breadcrumbs.add(item);
 

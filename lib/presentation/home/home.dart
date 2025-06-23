@@ -7,6 +7,7 @@ import 'package:studymind/controllers/library.dart';
 import 'package:studymind/controllers/main.dart';
 import 'package:studymind/presentation/home/widgets/recent_card.dart';
 import 'package:studymind/presentation/home/widgets/recent_loader.dart';
+import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/chatbot/session_card.dart';
 import 'package:studymind/widgets/custom_image.dart';
@@ -141,7 +142,7 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           Text('Recent Items', style: textTheme.headlineMedium),
                           GestureDetector(
-                            onTap: () => libraryController.navigateToItemByType(''),
+                            onTap: () => Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', 'recent_items')),
                             child: Text(
                               'View All',
                               style: textTheme.labelMedium?.copyWith(color: colorPalette.primary),

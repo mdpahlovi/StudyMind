@@ -25,7 +25,8 @@ class ChatbotEmpty extends StatelessWidget {
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [colorPalette.primary, colorPalette.secondary],
+                      colors: [colorPalette.primary, colorPalette.secondary, colorPalette.tertiary],
+                      stops: [0.0, 0.5, 1.0],
                     ),
                     borderRadius: BorderRadius.circular(30),
                   ),

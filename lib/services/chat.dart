@@ -16,11 +16,11 @@ class ChatService {
     return await apiService.patch('/chat/$uid', data: {'message': message.map((m) => m.toJson()).toList()});
   }
 
-  Future<ApiResponse> renameChatSession({required String uid, required String name}) async {
-    return await apiService.patch('/chat/update/$uid', data: {'name': name});
+  Future<ApiResponse> updateChatSession({required String uid, required String title}) async {
+    return await apiService.patch('/chat/update/$uid', data: {'title': title});
   }
 
-  Future<ApiResponse> removeChatSession({required List<String> uid}) async {
-    return await apiService.patch('/chat/update/bulk', data: {'uid': uid});
+  Future<ApiResponse> updateBulkChatSession({required List<String> uid, bool? isActive}) async {
+    return await apiService.patch('/chat/update/bulk', data: {'uid': uid, 'isActive': isActive});
   }
 }

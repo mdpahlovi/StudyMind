@@ -55,10 +55,10 @@ class SessionOptionsSheetState extends State<SessionOptionsSheet> {
                 Get.dialog(
                   RenameDialog(
                     value: selectedSessions.first.title,
-                    onConfirm: (name) {
+                    onConfirm: (title) {
                       Get.back();
                       setState(() => isRenaming = true);
-                      chatController.renameChatSession(uid: selectedSessions.first.uid, name: name);
+                      chatController.updateChatSession(uid: selectedSessions.first.uid, title: title);
                       setState(() => isRenaming = false);
                     },
                   ),
@@ -78,7 +78,10 @@ class SessionOptionsSheetState extends State<SessionOptionsSheet> {
                     onConfirm: () {
                       Get.back();
                       setState(() => isRemoving = true);
-                      chatController.removeChatSession(uid: selectedSessions.map((e) => e.uid).toList());
+                      chatController.updateBulkChatSession(
+                        uid: selectedSessions.map((e) => e.uid).toList(),
+                        isActive: false,
+                      );
                       setState(() => isRemoving = false);
                     },
                   ),
