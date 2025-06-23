@@ -123,23 +123,6 @@ class SessionCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const Spacer(),
-                        Container(
-                          margin: EdgeInsets.only(right: 4),
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          decoration: BoxDecoration(
-                            color: colorPalette.contentDim.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            '20',
-                            style: textTheme.labelSmall?.copyWith(
-                              color: colorPalette.contentDim,
-                              height: 1.25,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ],

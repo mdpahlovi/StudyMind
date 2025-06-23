@@ -16,7 +16,7 @@ class ItemByType extends StatefulWidget {
 }
 
 class ItemByTypeState extends State<ItemByType> {
-  late String searchQuery;
+  late String searchQuery = "";
   Timer? debounce;
 
   @override
@@ -31,7 +31,12 @@ class ItemByTypeState extends State<ItemByType> {
         if (didPop) return;
 
         if (libraryController.selectedItems.isEmpty) {
-          Get.back();
+          if (searchQuery.isNotEmpty) {
+            Get.back();
+            libraryController.fetchLibraryItemsByType();
+          } else {
+            Get.back();
+          }
         } else {
           libraryController.selectedItems.clear();
         }
@@ -39,7 +44,7 @@ class ItemByTypeState extends State<ItemByType> {
       child: RefreshIndicator(
         onRefresh: () async => libraryController.refreshByType(),
         child: Scaffold(
-          appBar: buildItemAppBar(),
+          appBar: buildItemAppBar(isSearchKey: searchQuery.isNotEmpty),
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [

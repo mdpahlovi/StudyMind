@@ -8,7 +8,7 @@ import 'package:studymind/widgets/custom_back_button.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/notification_button.dart';
 
-PreferredSizeWidget buildItemAppBar() {
+PreferredSizeWidget buildItemAppBar({bool? isSearchKey}) {
   final LibraryController libraryController = Get.find<LibraryController>();
   final ColorPalette colorPalette = AppColors().palette;
 
@@ -20,7 +20,14 @@ PreferredSizeWidget buildItemAppBar() {
         if (Get.currentRoute == AppRoutes.home) {
           return SizedBox();
         } else if (Get.currentRoute.contains('/item_by_type')) {
-          return CustomBackButton();
+          return CustomBackButton(
+            onPressed: () {
+              Get.back();
+              if (isSearchKey == true) {
+                libraryController.fetchLibraryItemsByType();
+              }
+            },
+          );
         } else {
           return CustomBackButton(onPressed: libraryController.navigateToBack);
         }
