@@ -286,11 +286,11 @@ class ItemCreateController extends GetxController {
     chatController.fetchChatContents();
   }
 
-  void updateLibraryItem(String uid, String name) {
+  void updateLibraryItem(String uid, {String? name, bool? isEmbedded}) {
     Get.back();
     updateLoader(true);
 
-    final UpdateLibraryItem updateLibraryItemData = UpdateLibraryItem(uid: uid, name: name);
+    final UpdateLibraryItem updateLibraryItemData = UpdateLibraryItem(uid: uid, name: name, isEmbedded: isEmbedded);
 
     libraryService.updateLibraryItem(updateLibraryItemData).then((response) {
       if (response.success && response.data != null) {

@@ -16,14 +16,14 @@ class ItemOption {
   final IconData icon;
   final String title;
   final bool danger;
-  final bool disabled;
+  final bool hide;
   final bool isLoading;
 
   ItemOption({
     required this.icon,
     required this.title,
     this.danger = false,
-    this.disabled = false,
+    this.hide = false,
     this.onTap,
     this.isLoading = false,
   });
@@ -54,60 +54,68 @@ class ItemOptionsSheetState extends State<ItemOptionsSheet> {
 
     final List<ItemOption> options = [
       ItemOption(
-        onTap: selectedItems.length == 1 && selectedItems.first.metadata?['filePath'] != null && !isDownloading
-            ? () async {
-                Get.back();
-                setState(() => isDownloading = true);
-                await Download.fromSupabase(selectedItems.first.metadata!['filePath']);
-                setState(() => isDownloading = false);
-              }
-            : null,
-        title: 'Download',
-        icon: HugeIcons.strokeRoundedDownload01,
-        disabled:
+        onTap: () async {
+          Get.dialog(
+            ConfirmDialog(
+              message: 'You want to make it mentionable? This enables it to mentionable in\nai chat.',
+              onConfirm: () => itemCreateController.updateLibraryItem(selectedItems.first.uid, isEmbedded: true),
+            ),
+          );
+        },
+        title: 'Mentionable',
+        icon: HugeIcons.strokeRoundedAiContentGenerator01,
+        hide:
             selectedItems.length != 1 ||
-            selectedItems.first.type == ItemType.folder ||
-            selectedItems.first.type == ItemType.note ||
-            selectedItems.first.type == ItemType.flashcard,
+            selectedItems.first.metadata?['filePath'] == null ||
+            selectedItems.first.type != ItemType.document ||
+            selectedItems.first.isEmbedded,
         isLoading: isDownloading,
       ),
       ItemOption(
-        onTap: selectedItems.length == 1
-            ? () {
-                Get.dialog(
-                  RenameDialog(
-                    value: selectedItems.first.name,
-                    onConfirm: (name) {
-                      itemCreateController.updateLibraryItem(selectedItems.first.uid, name);
-                    },
-                  ),
-                );
-              }
-            : null,
+        onTap: () async {
+          Get.back();
+          setState(() => isDownloading = true);
+          await Download.fromSupabase(selectedItems.first.metadata!['filePath']);
+          setState(() => isDownloading = false);
+        },
+        title: 'Download',
+        icon: HugeIcons.strokeRoundedDownload01,
+        hide: selectedItems.length != 1 || selectedItems.first.metadata?['filePath'] == null,
+      ),
+      ItemOption(
+        onTap: () {
+          Get.dialog(
+            RenameDialog(
+              value: selectedItems.first.name,
+              onConfirm: (name) {
+                itemCreateController.updateLibraryItem(selectedItems.first.uid, name: name);
+              },
+            ),
+          );
+        },
         title: 'Rename',
         icon: HugeIcons.strokeRoundedEdit02,
-        disabled: selectedItems.length != 1,
+        hide: selectedItems.length != 1,
       ),
       ItemOption(
-        onTap: isInSameFolder ? () => Get.dialog(MoveDialog(items: selectedItems)) : null,
+        onTap: () => Get.dialog(MoveDialog(items: selectedItems)),
         title: 'Move',
         icon: HugeIcons.strokeRoundedFolderExport,
-        disabled: !isInSameFolder,
+        hide: !isInSameFolder,
       ),
       ItemOption(
-        onTap: selectedItems.isNotEmpty
-            ? () {
-                Get.dialog(
-                  ConfirmDialog(
-                    message: 'You want to remove? If yes,\nPlease press confirm.',
-                    onConfirm: () => itemCreateController.updateBulkLibraryItem(selectedItems, 'REMOVE'),
-                  ),
-                );
-              }
-            : null,
+        onTap: () {
+          Get.dialog(
+            ConfirmDialog(
+              message: 'You want to remove? If yes,\nPlease press confirm.',
+              onConfirm: () => itemCreateController.updateBulkLibraryItem(selectedItems, 'REMOVE'),
+            ),
+          );
+        },
         title: 'Remove',
         icon: HugeIcons.strokeRoundedDelete02,
         danger: true,
+        hide: selectedItems.isEmpty,
       ),
     ];
 
@@ -147,7 +155,7 @@ class ItemOptionsSheetState extends State<ItemOptionsSheet> {
               padding: EdgeInsets.only(bottom: paddings.bottom),
               child: Column(
                 children: options
-                    .where((option) => !option.disabled)
+                    .where((option) => !option.hide)
                     .map<List<Widget>>((option) => [buildOptionTile(context, option), const Divider()])
                     .expand((widget) => widget)
                     .toList(),

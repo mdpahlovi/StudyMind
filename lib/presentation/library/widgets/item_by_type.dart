@@ -31,11 +31,9 @@ class ItemByTypeState extends State<ItemByType> {
         if (didPop) return;
 
         if (libraryController.selectedItems.isEmpty) {
+          Get.back();
           if (searchQuery.isNotEmpty) {
-            Get.back();
             libraryController.fetchLibraryItemsByType();
-          } else {
-            Get.back();
           }
         } else {
           libraryController.selectedItems.clear();

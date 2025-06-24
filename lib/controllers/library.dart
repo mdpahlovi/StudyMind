@@ -92,8 +92,7 @@ class LibraryController extends GetxController {
   final RxList<LibraryItem> libraryItems = <LibraryItem>[].obs; // To show in by type screen
   final RxList<LibraryItem> folderItems = <LibraryItem>[].obs; // To show in library and it's folder screen
   final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs; // To navigate between library and it's folder screen
-  final RxList<LibraryItem> selectedItems =
-      <LibraryItem>[].obs; // To handle selected items in library and it's folder screen
+  final RxList<LibraryItem> selectedItems = <LibraryItem>[].obs; // To handle select items functionality
 
   @override
   void onInit() {

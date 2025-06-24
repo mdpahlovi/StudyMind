@@ -164,6 +164,8 @@ class ChatController extends GetxController {
   final RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
   final Rxn<ChatSession> selectedSession = Rxn<ChatSession>();
 
+  final RxList<ChatSession> selectedSessions = <ChatSession>[].obs; // To handle select session functionality
+
   final QuillController messageController = QuillController.basic();
 
   @override
@@ -184,6 +186,8 @@ class ChatController extends GetxController {
     chatSessions.clear();
     chatMessages.clear();
     selectedSession.value = null;
+    selectedSessions.clear();
+    messageController.clear();
   }
 
   Future<void> fetchChatContents() async {

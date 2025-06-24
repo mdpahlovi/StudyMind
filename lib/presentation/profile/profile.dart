@@ -147,12 +147,13 @@ class ProfileScreenState extends State<ProfileScreen> {
               return ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 leading: Container(
-                  padding: const EdgeInsets.all(8),
+                  width: 36,
+                  height: 36,
                   decoration: BoxDecoration(
                     color: item['color']?.withAlpha(50) ?? colorPalette.primary.withAlpha(50),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(item['icon'], color: item['color'] ?? colorPalette.primary),
+                  child: Icon(item['icon'], color: item['color'] ?? colorPalette.primary, size: 20),
                 ),
                 title: Text(item['title'], style: textTheme.titleMedium),
                 trailing: item['toggle']
@@ -173,18 +174,19 @@ class ProfileScreenState extends State<ProfileScreen> {
       width: double.infinity,
       decoration: BoxDecoration(
         color: colorPalette.error.withAlpha(25),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: colorPalette.error.withAlpha(50), width: 1),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: colorPalette.error.withAlpha(50), borderRadius: BorderRadius.circular(10)),
-          child: Icon(HugeIcons.strokeRoundedLogout01, color: colorPalette.error),
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(color: colorPalette.error.withAlpha(50), borderRadius: BorderRadius.circular(8)),
+          child: Icon(HugeIcons.strokeRoundedLogout01, color: colorPalette.error, size: 20),
         ),
         title: Text("Logout", style: textTheme.titleMedium?.copyWith(color: colorPalette.error)),
-        trailing: Icon(HugeIcons.strokeRoundedArrowRight01, size: 20, color: colorPalette.error),
+        trailing: Icon(HugeIcons.strokeRoundedArrowRight01, color: colorPalette.error, size: 20),
         onTap: () => Get.dialog(
           ConfirmDialog(message: 'Are you sure you want to logout?', onConfirm: () => authController.logout()),
         ),

@@ -12,14 +12,14 @@ class SessionOption {
   final IconData icon;
   final String title;
   final bool danger;
-  final bool disabled;
+  final bool hide;
   final bool isLoading;
 
   SessionOption({
     required this.icon,
     required this.title,
     this.danger = false,
-    this.disabled = false,
+    this.hide = false,
     this.onTap,
     this.isLoading = false,
   });
@@ -50,47 +50,41 @@ class SessionOptionsSheetState extends State<SessionOptionsSheet> {
 
     final List<SessionOption> options = [
       SessionOption(
-        onTap: selectedSessions.length == 1
-            ? () {
-                Get.dialog(
-                  RenameDialog(
-                    value: selectedSessions.first.title,
-                    onConfirm: (title) {
-                      Get.back();
-                      setState(() => isRenaming = true);
-                      chatController.updateChatSession(uid: selectedSessions.first.uid, title: title);
-                      setState(() => isRenaming = false);
-                    },
-                  ),
-                );
-              }
-            : null,
+        onTap: () {
+          Get.dialog(
+            RenameDialog(
+              value: selectedSessions.first.title,
+              onConfirm: (title) {
+                Get.back();
+                setState(() => isRenaming = true);
+                chatController.updateChatSession(uid: selectedSessions.first.uid, title: title);
+                setState(() => isRenaming = false);
+              },
+            ),
+          );
+        },
         title: 'Rename',
         icon: HugeIcons.strokeRoundedEdit02,
-        disabled: selectedSessions.length != 1,
+        hide: selectedSessions.length != 1,
       ),
       SessionOption(
-        onTap: selectedSessions.isNotEmpty
-            ? () {
-                Get.dialog(
-                  ConfirmDialog(
-                    message: 'You want to remove? If yes,\nPlease press confirm.',
-                    onConfirm: () {
-                      Get.back();
-                      setState(() => isRemoving = true);
-                      chatController.updateBulkChatSession(
-                        uid: selectedSessions.map((e) => e.uid).toList(),
-                        isActive: false,
-                      );
-                      setState(() => isRemoving = false);
-                    },
-                  ),
-                );
-              }
-            : null,
+        onTap: () {
+          Get.dialog(
+            ConfirmDialog(
+              message: 'You want to remove? If yes,\nPlease press confirm.',
+              onConfirm: () {
+                Get.back();
+                setState(() => isRemoving = true);
+                chatController.updateBulkChatSession(uid: selectedSessions.map((e) => e.uid).toList(), isActive: false);
+                setState(() => isRemoving = false);
+              },
+            ),
+          );
+        },
         title: 'Remove',
         icon: HugeIcons.strokeRoundedDelete02,
         danger: true,
+        hide: selectedSessions.isEmpty,
       ),
     ];
 
@@ -130,7 +124,7 @@ class SessionOptionsSheetState extends State<SessionOptionsSheet> {
               padding: EdgeInsets.only(bottom: paddings.bottom),
               child: Column(
                 children: options
-                    .where((option) => !option.disabled)
+                    .where((option) => !option.hide)
                     .map<List<Widget>>((option) => [buildOptionTile(context, option), const Divider()])
                     .expand((widget) => widget)
                     .toList(),

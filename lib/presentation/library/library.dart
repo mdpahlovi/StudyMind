@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/library/widgets/item_empty.dart';
@@ -18,10 +19,10 @@ class LibraryScreen extends StatelessWidget {
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (didPop) return;
 
-        if (libraryController.selectedItems.isEmpty) {
-          Get.back();
-        } else {
+        if (libraryController.selectedItems.isNotEmpty) {
           libraryController.selectedItems.clear();
+        } else {
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         }
       },
       child: RefreshIndicator(

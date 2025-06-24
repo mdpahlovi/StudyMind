@@ -56,11 +56,19 @@ class CreateLibraryItem {
 
 class UpdateLibraryItem {
   final String uid;
-  final String name;
+  final String? name;
+  final bool? isEmbedded;
 
-  UpdateLibraryItem({required this.uid, required this.name});
+  UpdateLibraryItem({required this.uid, this.name, this.isEmbedded});
 
-  Map<String, dynamic> toJson() => {'name': name};
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+
+    if (name != null) data['name'] = name;
+    if (isEmbedded != null) data['isEmbedded'] = isEmbedded;
+
+    return data;
+  }
 }
 
 class UpdateBulkLibraryItem {

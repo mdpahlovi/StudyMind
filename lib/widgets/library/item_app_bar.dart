@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/library/widgets/item_options_sheet.dart';
 import 'package:studymind/routes/routes.dart';
-import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_back_button.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 import 'package:studymind/widgets/notification_button.dart';
 
 PreferredSizeWidget buildItemAppBar({bool? isSearchKey}) {
   final LibraryController libraryController = Get.find<LibraryController>();
-  final ColorPalette colorPalette = AppColors().palette;
 
   return AppBar(
     leading: Obx(() {
@@ -76,17 +75,9 @@ PreferredSizeWidget buildItemAppBar({bool? isSearchKey}) {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 2, color: colorPalette.content),
-                ),
-                child: libraryItems.length == selectedItems.length
-                    ? const CustomIcon(icon: 'tick', size: 16)
-                    : const SizedBox(),
-              ),
+              icon: libraryItems.length == selectedItems.length
+                  ? Icon(HugeIcons.strokeRoundedCheckmarkCircle01, size: 22)
+                  : Icon(HugeIcons.strokeRoundedCircle, size: 22),
               onPressed: () {
                 if (libraryItems.length == selectedItems.length) {
                   selectedItems.clear();

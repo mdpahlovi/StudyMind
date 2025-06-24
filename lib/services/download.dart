@@ -8,7 +8,7 @@ class Download {
   static Future<void> fromSupabase(String filePath, {String? saveAs}) async {
     try {
       // Ask for storage permission
-      final status = await Permission.storage.request();
+      final status = await Permission.manageExternalStorage.request();
       if (!status.isGranted) {
         Notification.error('Storage permission denied');
         return;
