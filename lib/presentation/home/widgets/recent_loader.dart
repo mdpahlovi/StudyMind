@@ -3,7 +3,7 @@ import 'package:studymind/theme/colors.dart';
 
 class RecentLoader extends StatefulWidget {
   final double height;
-  const RecentLoader({super.key, this.height = 90});
+  const RecentLoader({super.key, this.height = 104});
 
   @override
   State<RecentLoader> createState() => RecentLoaderState();

@@ -24,6 +24,7 @@ class ItemByTypeState extends State<ItemByType> {
     final LibraryController libraryController = Get.find<LibraryController>();
     final TextTheme textTheme = Theme.of(context).textTheme;
     final Size size = MediaQuery.of(context).size;
+    final itemWidth = (size.width - 16 * 2 - 12) / 2;
 
     return PopScope(
       canPop: false,
@@ -43,72 +44,68 @@ class ItemByTypeState extends State<ItemByType> {
         onRefresh: () async => libraryController.refreshByType(),
         child: Scaffold(
           appBar: buildItemAppBar(isSearchKey: searchQuery.isNotEmpty),
-          body: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              TextField(
-                onChanged: (value) => setState(() {
-                  searchQuery = value;
-                  if (debounce?.isActive ?? false) debounce?.cancel();
-                  debounce = Timer(const Duration(milliseconds: 500), () {
-                    final type = Get.parameters['type'];
+          body: SafeArea(
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                TextField(
+                  onChanged: (value) => setState(() {
+                    searchQuery = value;
+                    if (debounce?.isActive ?? false) debounce?.cancel();
+                    debounce = Timer(const Duration(milliseconds: 500), () {
+                      final type = Get.parameters['type'];
 
-                    if (type == 'recent_items') {
-                      libraryController.fetchLibraryItemsByType(search: searchQuery, type: '');
-                    } else if (type != null) {
-                      libraryController.fetchLibraryItemsByType(search: searchQuery, type: type);
-                    }
-                  });
+                      if (type == 'recent_items') {
+                        libraryController.fetchLibraryItemsByType(search: searchQuery, type: '');
+                      } else if (type != null) {
+                        libraryController.fetchLibraryItemsByType(search: searchQuery, type: type);
+                      }
+                    });
+                  }),
+                  decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search)),
+                ),
+                const SizedBox(height: 16),
+                Obx(() {
+                  final List<LibraryItem> libraryItems = libraryController.libraryItems;
+
+                  if (libraryController.isLoadingType.value) {
+                    return Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: List.generate(
+                        8,
+                        (index) => SizedBox(width: itemWidth, height: 160, child: const ItemLoaderCard()),
+                      ),
+                    );
+                  }
+
+                  if (libraryItems.isEmpty) {
+                    return SizedBox(
+                      height: size.height * 0.6,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(HugeIcons.strokeRoundedSadDizzy, size: 64),
+                          const SizedBox(height: 16),
+                          Text('Oops! No items found', style: textTheme.bodyMedium),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: libraryItems.map((item) {
+                      return SizedBox(
+                        width: itemWidth,
+                        child: ItemCard(item: item),
+                      );
+                    }).toList(),
+                  );
                 }),
-                decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search)),
-              ),
-              const SizedBox(height: 16),
-              Obx(() {
-                final List<LibraryItem> libraryItems = libraryController.libraryItems;
-
-                if (libraryController.isLoadingType.value) {
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                    ),
-                    itemCount: 8,
-                    itemBuilder: (context, index) => const ItemLoaderCard(),
-                  );
-                }
-
-                if (libraryItems.isEmpty) {
-                  return SizedBox(
-                    height: size.height * 0.6,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(HugeIcons.strokeRoundedSadDizzy, size: 64),
-                        const SizedBox(height: 16),
-                        Text('Oops! No items found', style: textTheme.bodyMedium),
-                      ],
-                    ),
-                  );
-                }
-
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                  ),
-                  itemCount: libraryItems.length,
-                  itemBuilder: (context, index) => ItemCard(item: libraryItems[index]),
-                );
-              }),
-            ],
+              ],
+            ),
           ),
         ),
       ),

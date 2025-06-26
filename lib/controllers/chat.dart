@@ -296,20 +296,24 @@ class ChatController extends GetxController {
   }
 
   Future<void> updateChatSession({required String uid, required String title}) async {
+    isLoadingSession.value = true;
     final response = await chatService.updateChatSession(uid: uid, title: title);
     if (response.success && response.data != null) {
       fetchChatSessions();
     } else {
       Notification.error(response.message);
     }
+    isLoadingSession.value = false;
   }
 
   Future<void> updateBulkChatSession({required List<String> uid, bool? isActive}) async {
+    isLoadingSession.value = true;
     final response = await chatService.updateBulkChatSession(uid: uid, isActive: isActive);
     if (response.success && response.data != null) {
       fetchChatSessions();
     } else {
       Notification.error(response.message);
     }
+    isLoadingSession.value = false;
   }
 }

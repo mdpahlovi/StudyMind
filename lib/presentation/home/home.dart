@@ -159,7 +159,7 @@ class HomeScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final item = recentItems.isEmpty ? null : recentItems[index];
                           if (item == null) {
-                            return const RecentLoader();
+                            return const RecentLoader(height: 90);
                           } else {
                             return RecentCard(item: item);
                           }

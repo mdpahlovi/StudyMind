@@ -72,7 +72,7 @@ class QuillConstant {
     ),
     code: DefaultTextBlockStyle(
       GoogleFonts.plusJakartaSans(color: colorPalette.content, fontSize: 14),
-      const HorizontalSpacing(8, 8),
+      const HorizontalSpacing(0, 0),
       const VerticalSpacing(6, 6),
       const VerticalSpacing(3, 3),
       BoxDecoration(color: colorPalette.content.withAlpha(25), borderRadius: BorderRadius.circular(8)),
