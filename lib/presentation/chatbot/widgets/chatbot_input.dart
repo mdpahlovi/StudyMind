@@ -20,7 +20,6 @@ class ChatbotInput extends StatefulWidget {
 class ChatbotInputState extends State<ChatbotInput> {
   final ChatController chatController = Get.find<ChatController>();
   late FocusNode focusNode;
-  // To generate unique mention IDs
 
   @override
   void initState() {
@@ -43,42 +42,40 @@ class ChatbotInputState extends State<ChatbotInput> {
     // Check if user typed @ and show dialog
     if (text.isNotEmpty && selection.baseOffset > 0) {
       final char = text[selection.baseOffset - 1];
-      if (char == '@') showMentionDialog();
+      if (char == '@') showMentionDialog(true);
     }
   }
 
-  void showMentionDialog() {
-    Get.dialog(ChatContentDialog(onSelect: (chatContent) => insertMention(chatContent)));
+  void showMentionDialog(bool? hasAtSymbol) {
+    Get.dialog(ChatContentDialog(onSelect: (chatContent) => insertMention(chatContent, hasAtSymbol)));
   }
 
-  void insertMention(ChatContent chatContent) {
+  void insertMention(ChatContent chatContent, bool? hasAtSymbol) {
     final selection = chatController.messageController.selection;
     final currentOffset = selection.baseOffset;
 
-    // Create ChatMention
-    final mention = ChatMention(uid: chatContent.uid, name: chatContent.name, type: chatContent.type);
-
-    // Remove the @ character
-    chatController.messageController.replaceText(
-      currentOffset - 1,
-      1,
-      '',
-      TextSelection.collapsed(offset: currentOffset - 1),
-    );
+    // Remove the @ character if it exists
+    if (hasAtSymbol == true) {
+      chatController.messageController.replaceText(
+        currentOffset - 1,
+        1,
+        '',
+        TextSelection.collapsed(offset: currentOffset - 1),
+      );
+    }
 
     // Insert the mention embed
-    chatController.messageController.document.insert(currentOffset - 1, EmbeddableMention.fromChatMention(mention));
-
-    // Move cursor after the mention and add a space
-    chatController.messageController.updateSelection(
-      TextSelection.collapsed(offset: currentOffset),
-      ChangeSource.local,
+    chatController.messageController.document.insert(
+      hasAtSymbol == true ? currentOffset - 1 : currentOffset,
+      EmbeddableMention.fromChatMention(
+        ChatMention(uid: chatContent.uid, name: chatContent.name, type: chatContent.type),
+      ),
     );
 
-    // Add a space after the mention
-    chatController.messageController.document.insert(currentOffset, ' ');
+    // Insert a space and move the cursor
+    chatController.messageController.document.insert(hasAtSymbol == true ? currentOffset : currentOffset + 1, ' ');
     chatController.messageController.updateSelection(
-      TextSelection.collapsed(offset: currentOffset + 1),
+      TextSelection.collapsed(offset: hasAtSymbol == true ? currentOffset + 1 : currentOffset + 2),
       ChangeSource.local,
     );
   }
@@ -123,16 +120,20 @@ class ChatbotInputState extends State<ChatbotInput> {
                     IconButton.outlined(
                       padding: EdgeInsets.zero,
                       constraints: BoxConstraints(minWidth: 32, minHeight: 32),
-                      onPressed: showMentionDialog,
+                      onPressed: () => showMentionDialog(false),
                       icon: CustomIcon(icon: 'add', size: 18),
                     ),
                     Expanded(child: SizedBox()),
-                    IconButton.filled(
-                      padding: EdgeInsets.zero,
-                      constraints: BoxConstraints(minWidth: 32, minHeight: 32),
-                      onPressed: () => widget.onSendMessage(),
-                      icon: CustomIcon(icon: 'sent', size: 18),
-                    ),
+                    Obx(() {
+                      final isTyping = chatController.isGenAiTyping.value;
+
+                      return IconButton.filled(
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(minWidth: 32, minHeight: 32),
+                        onPressed: isTyping ? null : () => widget.onSendMessage(),
+                        icon: CustomIcon(icon: 'sent', size: 18),
+                      );
+                    }),
                   ],
                 ),
               ),

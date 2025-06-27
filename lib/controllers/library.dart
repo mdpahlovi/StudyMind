@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/models/library.dart';
@@ -65,6 +67,16 @@ class LibraryItem {
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };
+  }
+
+  factory LibraryItem.fromString(String data) {
+    final Map<String, dynamic> json = jsonDecode(data.replaceFirst('@created ', ''));
+    return LibraryItem.fromJson(json);
+  }
+
+  @override
+  String toString() {
+    return '@created ${jsonEncode(toJson())}';
   }
 }
 

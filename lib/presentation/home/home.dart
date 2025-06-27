@@ -133,7 +133,7 @@ class HomeScreen extends StatelessWidget {
               // Recent Items
               const SizedBox(height: 16),
               Obx(() {
-                final List<LibraryItem> recentItems = libraryController.libraryItems;
+                final recentItems = libraryController.libraryItems.take(4).toList();
                 if (libraryController.isLoadingType.value || recentItems.isNotEmpty) {
                   return Column(
                     children: [
@@ -155,7 +155,7 @@ class HomeScreen extends StatelessWidget {
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 4,
+                        itemCount: recentItems.length,
                         itemBuilder: (context, index) {
                           final item = recentItems.isEmpty ? null : recentItems[index];
                           if (item == null) {
@@ -175,7 +175,7 @@ class HomeScreen extends StatelessWidget {
               }),
               // Recent Chats
               Obx(() {
-                final List<ChatSession> sessions = chatController.chatSessions;
+                final sessions = chatController.chatSessions.take(4).toList();
                 if (chatController.isLoadingSession.value || sessions.isNotEmpty) {
                   return Column(
                     children: [
@@ -197,7 +197,7 @@ class HomeScreen extends StatelessWidget {
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 4,
+                        itemCount: sessions.length,
                         itemBuilder: (context, index) {
                           final session = sessions.isEmpty ? null : sessions[index];
                           if (session == null) {

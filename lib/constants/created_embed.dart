@@ -1,29 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/controllers/library.dart';
-
-class ChatCreated {
-  final String uid;
-  final String name;
-  final ItemType type;
-
-  ChatCreated({required this.uid, required this.name, required this.type});
-
-  factory ChatCreated.fromString(String data) {
-    final Map<String, dynamic> json = jsonDecode(data.replaceFirst('@created ', ''));
-    return ChatCreated(uid: json['uid'], name: json['name'], type: ItemType.values.byName(json['type'].toLowerCase()));
-  }
-
-  @override
-  String toString() {
-    return '@created {"uid": "$uid", "name": "$name", "type": "${type.name.toUpperCase()}"}';
-  }
-}
 
 class CreatedEmbedBuilder extends EmbedBuilder {
   @override
@@ -32,7 +12,7 @@ class CreatedEmbedBuilder extends EmbedBuilder {
   @override
   Widget build(BuildContext context, EmbedContext embedContext) {
     final LibraryController libraryController = Get.find<LibraryController>();
-    final ChatCreated created = ChatCreated.fromString(embedContext.node.value.data);
+    final LibraryItem created = LibraryItem.fromString(embedContext.node.value.data);
     final TextTheme textTheme = Theme.of(context).textTheme;
     final Color color = ItemTypeStyle.getStyle(created.type).color;
 
