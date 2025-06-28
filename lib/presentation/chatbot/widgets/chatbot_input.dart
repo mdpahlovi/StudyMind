@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:studymind/constants/mention_embed.dart';
 import 'package:studymind/constants/quill_constant.dart';
 import 'package:studymind/controllers/chat.dart';
+import 'package:studymind/controllers/library.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_content_dialog.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
@@ -50,7 +51,7 @@ class ChatbotInputState extends State<ChatbotInput> {
     Get.dialog(ChatContentDialog(onSelect: (chatContent) => insertMention(chatContent, hasAtSymbol)));
   }
 
-  void insertMention(ChatContent chatContent, bool? hasAtSymbol) {
+  void insertMention(LibraryItemWithPath chatContent, bool? hasAtSymbol) {
     final selection = chatController.messageController.selection;
     final currentOffset = selection.baseOffset;
 

@@ -10,18 +10,6 @@ import 'package:studymind/models/library.dart';
 import 'package:studymind/services/library.dart';
 import 'package:studymind/widgets/dialog/success.dart';
 
-class Folder {
-  final int? id;
-  final String? uid;
-  final String name;
-  final String path;
-
-  Folder({this.id, this.uid, required this.name, required this.path});
-
-  factory Folder.fromJson(Map<String, dynamic> json) =>
-      Folder(id: json['id'], uid: json['uid'], name: json['name'], path: json['path']);
-}
-
 class Flashcard {
   final String question;
   final String answer;
@@ -41,13 +29,7 @@ class ItemCreateController extends GetxController {
 
   final RxBool isCreating = false.obs;
   final RxBool isUpdating = false.obs;
-  final RxBool isLoadingFolder = true.obs;
-  final RxList<Folder> folders = <Folder>[].obs;
-  final Rxn<Folder> selectedFolder = Rxn<Folder>();
-
-  void setSelectedFolder(String? uid) {
-    selectedFolder.value = folders.firstWhere((folder) => folder.uid == uid);
-  }
+  final Rxn<LibraryItemWithPath> selectedFolder = Rxn<LibraryItemWithPath>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -66,18 +48,10 @@ class ItemCreateController extends GetxController {
   final Rxn<PlatformFile> selectedFile = Rxn<PlatformFile>();
 
   @override
-  void onInit() {
-    super.onInit();
-    fetchFolders();
-  }
-
-  @override
   void onClose() {
     super.onClose();
     isCreating.value = false;
     isUpdating.value = false;
-    isLoadingFolder.value = true;
-    folders.clear();
     selectedFolder.value = null;
 
     // Item Common Data
@@ -96,22 +70,6 @@ class ItemCreateController extends GetxController {
 
     // Document, Audio, Video, Image Metadata
     selectedFile.value = null;
-  }
-
-  void fetchFolders() {
-    isLoadingFolder.value = true;
-
-    libraryService.getLibraryItemsWithPath(type: 'FOLDER').then((response) {
-      if (response.success && response.data != null) {
-        final folderResponse = response.data.map((x) => Folder.fromJson(x));
-        folders.value = [Folder(id: null, uid: null, name: "Root Folder", path: "/"), ...folderResponse];
-        selectedFolder.value = folders.first;
-      } else {
-        Notification.error(response.message);
-      }
-
-      isLoadingFolder.value = false;
-    });
   }
 
   void createLibraryItem(ItemType type) async {
@@ -244,9 +202,9 @@ class ItemCreateController extends GetxController {
         final itemResponse = LibraryItem.fromJson(response.data);
 
         // Refetch
-        libraryController.fetchLibraryItems(parentUid: selectedFolder.value?.uid);
-        if (itemResponse.type == ItemType.folder) fetchFolders();
-        chatController.fetchChatContents();
+        libraryController.refreshByType();
+        libraryController.refreshByFolder();
+        libraryController.fetchLibraryItemWithPath();
 
         // Show Success Dialog
         Get.dialog(
@@ -276,14 +234,9 @@ class ItemCreateController extends GetxController {
   void updateRefetch() {
     libraryController.selectedItems.clear();
 
-    if (Get.currentRoute.contains('/item_by_type')) {
-      libraryController.refreshByType();
-    } else {
-      libraryController.refreshByFolder();
-    }
-
-    fetchFolders();
-    chatController.fetchChatContents();
+    libraryController.refreshByType();
+    libraryController.refreshByFolder();
+    libraryController.fetchLibraryItemWithPath();
   }
 
   void updateLibraryItem(String uid, {String? name, bool? isEmbedded}) {

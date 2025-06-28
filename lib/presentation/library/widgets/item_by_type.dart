@@ -34,7 +34,7 @@ class ItemByTypeState extends State<ItemByType> {
         if (libraryController.selectedItems.isEmpty) {
           Get.back();
           if (searchQuery.isNotEmpty) {
-            libraryController.fetchLibraryItemsByType();
+            libraryController.fetchLibraryItemByType();
           }
         } else {
           libraryController.selectedItems.clear();
@@ -56,9 +56,9 @@ class ItemByTypeState extends State<ItemByType> {
                       final type = Get.parameters['type'];
 
                       if (type == 'recent_items') {
-                        libraryController.fetchLibraryItemsByType(search: searchQuery, type: '');
+                        libraryController.fetchLibraryItemByType(search: searchQuery, type: '');
                       } else if (type != null) {
-                        libraryController.fetchLibraryItemsByType(search: searchQuery, type: type);
+                        libraryController.fetchLibraryItemByType(search: searchQuery, type: type);
                       }
                     });
                   }),

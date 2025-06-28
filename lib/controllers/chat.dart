@@ -5,34 +5,7 @@ import 'package:studymind/core/notification.dart';
 import 'package:studymind/core/utils.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/services/chat.dart';
-import 'package:studymind/services/library.dart';
 import 'package:uuid/uuid.dart';
-
-class ChatContent {
-  final String uid;
-  final bool isEmbedded;
-  final String name;
-  final ItemType type;
-  final String path;
-
-  ChatContent({
-    required this.uid,
-    required this.isEmbedded,
-    required this.name,
-    required this.type,
-    required this.path,
-  });
-
-  factory ChatContent.fromJson(Map<String, dynamic> json) {
-    return ChatContent(
-      uid: json['uid'],
-      isEmbedded: ['DOCUMENT', 'AUDIO', 'VIDEO'].contains(json['type']) ? json['is_embedded'] : true,
-      name: json['name'],
-      type: ItemType.values.byName(json['type'].toLowerCase()),
-      path: json['path'],
-    );
-  }
-}
 
 class ChatSession {
   final int id;
@@ -152,14 +125,12 @@ class ChatSessionWithMessage {
 }
 
 class ChatController extends GetxController {
-  final LibraryService libraryService = LibraryService();
+  final LibraryController libraryController = Get.find<LibraryController>();
   final ChatService chatService = ChatService();
 
-  final RxBool isLoadingContext = false.obs;
   final RxBool isLoadingSession = false.obs;
   final RxBool isLoadingMessage = false.obs;
   final RxBool isGenAiTyping = false.obs;
-  final RxList<ChatContent> chatContents = <ChatContent>[].obs;
   final RxList<ChatSession> chatSessions = <ChatSession>[].obs;
   final RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
   final Rxn<ChatSession> selectedSession = Rxn<ChatSession>();
@@ -171,40 +142,20 @@ class ChatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchChatContents();
     fetchChatSessions();
   }
 
   @override
   void onClose() {
     super.onClose();
-    isLoadingContext.value = false;
     isLoadingSession.value = false;
     isLoadingMessage.value = false;
     isGenAiTyping.value = false;
-    chatContents.clear();
     chatSessions.clear();
     chatMessages.clear();
     selectedSession.value = null;
     selectedSessions.clear();
     messageController.clear();
-  }
-
-  Future<void> fetchChatContents() async {
-    isLoadingContext.value = true;
-
-    libraryService.getLibraryItemsWithPath(type: '').then((response) {
-      if (response.success && response.data != null) {
-        final List<ChatContent> contextResponse = List<ChatContent>.from(
-          response.data.map((x) => ChatContent.fromJson(x)),
-        );
-        chatContents.value = contextResponse;
-      } else {
-        Notification.error(response.message);
-      }
-
-      isLoadingContext.value = false;
-    });
   }
 
   Future<void> fetchChatSessions({String search = ''}) async {
@@ -278,11 +229,19 @@ class ChatController extends GetxController {
     if (response.success && response.data != null) {
       final session = ChatSession.fromJson(response.data['session']);
       final message = ChatMessage.fromJson(response.data['message']);
+      final bool isCreatedItem = response.data['isCreatedItem'];
 
       if (selectedSession.value != null) chatSessions.remove(selectedSession.value);
       selectedSession.value = session;
       chatSessions.insert(0, session);
       chatMessages.add(message);
+
+      // Refresh library
+      if (isCreatedItem) {
+        libraryController.refreshByType();
+        libraryController.refreshByFolder();
+        libraryController.fetchLibraryItemWithPath();
+      }
     } else {
       final message = chatMessages.last;
       messageController.document = Document.fromDelta(markdownTODelta.convert(message.message));

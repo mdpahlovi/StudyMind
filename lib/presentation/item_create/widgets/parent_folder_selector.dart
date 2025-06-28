@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/controllers/item_create.dart';
+import 'package:studymind/controllers/library.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
@@ -9,6 +9,7 @@ class ParentFolderSelector extends StatelessWidget {
   const ParentFolderSelector({super.key});
 
   Widget buildFolderSelectorSheet(BuildContext context) {
+    final LibraryController libraryController = Get.find<LibraryController>();
     final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
 
     final ColorPalette colorPalette = AppColors().palette;
@@ -40,9 +41,11 @@ class ParentFolderSelector extends StatelessWidget {
           // Folder list
           Expanded(
             child: Obx(() {
-              final List<Folder> folders = itemCreateController.folders;
+              final List<LibraryItemWithPath> folders = libraryController.libraryItemsWithPath
+                  .where((item) => item.type == ItemType.folder)
+                  .toList();
 
-              if (itemCreateController.isLoadingFolder.value) {
+              if (libraryController.isLoadingWithPath.value) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -51,45 +54,51 @@ class ParentFolderSelector extends StatelessWidget {
                 );
               }
 
-              if (folders.isEmpty) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(HugeIcons.strokeRoundedSadDizzy, size: 44),
-                      const SizedBox(height: 16),
-                      Text('No other folders found'),
-                    ],
-                  ),
-                );
-              }
-
               return ListView.separated(
-                itemCount: folders.length,
+                itemCount: folders.length + 1,
                 itemBuilder: (context, index) {
-                  final folder = folders[index];
-                  final isSelected = itemCreateController.selectedFolder.value?.id == folder.id;
-                  final isRoot = folder.id == null;
-                  return ListTile(
-                    onTap: () {
-                      itemCreateController.selectedFolder.value = folder;
-                      Get.back();
-                    },
-                    leading: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: isRoot ? colorPalette.primary.withAlpha(50) : colorPalette.content.withAlpha(50),
-                        borderRadius: BorderRadius.circular(8),
+                  if (index == 0) {
+                    final isSelected = itemCreateController.selectedFolder.value?.id == null;
+
+                    return ListTile(
+                      onTap: () {
+                        itemCreateController.selectedFolder.value = null;
+                        Get.back();
+                      },
+                      leading: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: colorPalette.primary.withAlpha(50),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: CustomIcon(icon: 'home', color: colorPalette.primary),
                       ),
-                      child: CustomIcon(
-                        icon: isRoot ? 'home' : 'folder',
-                        color: isRoot ? colorPalette.primary : colorPalette.content,
+                      title: Text('Root Folder', style: textTheme.titleMedium),
+                      subtitle: Text('./', style: textTheme.bodySmall),
+                      trailing: isSelected ? CustomIcon(icon: 'tickCircle', color: colorPalette.primary) : null,
+                    );
+                  } else {
+                    final folder = folders[index - 1];
+                    final isSelected = itemCreateController.selectedFolder.value?.id == folder.id;
+
+                    return ListTile(
+                      onTap: () {
+                        itemCreateController.selectedFolder.value = folder;
+                        Get.back();
+                      },
+                      leading: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: colorPalette.content.withAlpha(50),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: CustomIcon(icon: 'folder', color: colorPalette.content),
                       ),
-                    ),
-                    title: Text(folder.name, style: textTheme.titleMedium),
-                    subtitle: Text(isRoot ? 'Main directory' : folder.path, style: textTheme.bodySmall),
-                    trailing: isSelected ? CustomIcon(icon: 'tickCircle', color: colorPalette.primary) : null,
-                  );
+                      title: Text(folder.name, style: textTheme.titleMedium),
+                      subtitle: Text(folder.path, style: textTheme.bodySmall),
+                      trailing: isSelected ? CustomIcon(icon: 'tickCircle', color: colorPalette.primary) : null,
+                    );
+                  }
                 },
                 separatorBuilder: (context, index) => const Divider(),
               );
@@ -144,7 +153,7 @@ class ParentFolderSelector extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        isRoot ? 'Main directory' : folder?.path ?? '/',
+                        isRoot ? './' : folder?.path ?? '/',
                         style: textTheme.bodySmall,
                         overflow: TextOverflow.ellipsis,
                       ),

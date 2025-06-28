@@ -30,8 +30,9 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          libraryController.fetchLibraryItemsByType();
-          libraryController.fetchLibraryItems();
+          libraryController.fetchLibraryItemByType();
+          libraryController.fetchLibraryItemByFolder();
+          libraryController.fetchLibraryItemWithPath();
           chatController.fetchChatSessions();
         },
         child: SingleChildScrollView(
@@ -155,7 +156,7 @@ class HomeScreen extends StatelessWidget {
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: recentItems.length,
+                        itemCount: recentItems.isEmpty ? 4 : recentItems.length,
                         itemBuilder: (context, index) {
                           final item = recentItems.isEmpty ? null : recentItems[index];
                           if (item == null) {
@@ -197,7 +198,7 @@ class HomeScreen extends StatelessWidget {
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: sessions.length,
+                        itemCount: sessions.isEmpty ? 4 : sessions.length,
                         itemBuilder: (context, index) {
                           final session = sessions.isEmpty ? null : sessions[index];
                           if (session == null) {

@@ -23,7 +23,7 @@ PreferredSizeWidget buildItemAppBar({bool? isSearchKey}) {
             onPressed: () {
               Get.back();
               if (isSearchKey == true) {
-                libraryController.fetchLibraryItemsByType();
+                libraryController.fetchLibraryItemByType();
               }
             },
           );

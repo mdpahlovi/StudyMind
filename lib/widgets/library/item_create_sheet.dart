@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/controllers/item_create.dart';
+import 'package:studymind/controllers/library.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
@@ -68,6 +69,7 @@ class CreateOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LibraryController libraryController = Get.find<LibraryController>();
     final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
 
     final ColorPalette colorPalette = AppColors().palette;
@@ -75,8 +77,12 @@ class CreateOption extends StatelessWidget {
 
     return ListTile(
       onTap: () {
-        if (Get.currentRoute != AppRoutes.home) {
-          itemCreateController.setSelectedFolder(Get.parameters['uid']);
+        if (libraryController.breadcrumbs.isEmpty) {
+          itemCreateController.selectedFolder.value = null;
+        } else {
+          itemCreateController.selectedFolder.value = libraryController.libraryItemsWithPath.firstWhere((element) {
+            return element.uid == libraryController.breadcrumbs.last.uid && element.type == ItemType.folder;
+          });
         }
         Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
       },

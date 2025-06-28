@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -92,7 +94,7 @@ class SessionCard extends StatelessWidget {
                       ),
                       if (session.lastMessage != null && session.lastMessage!.isNotEmpty)
                         Text(
-                          '${session.lastMessage!}\n',
+                          '${convertMentions(session.lastMessage!)}\n',
                           style: textTheme.bodyMedium?.copyWith(color: colorPalette.contentDim, height: 1.25),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -128,4 +130,20 @@ class SessionCard extends StatelessWidget {
       );
     });
   }
+}
+
+String convertMentions(String input) {
+  final mentionRegex = RegExp(r'@mention\s+(\{[^}]+\})');
+
+  return input.replaceAllMapped(mentionRegex, (match) {
+    String jsonString = match.group(1)!;
+
+    try {
+      Map<String, dynamic> mentionData = jsonDecode(jsonString);
+      String name = mentionData['name'] ?? 'Unknown';
+      return name.isNotEmpty ? '@$name' : "";
+    } catch (e) {
+      return match.group(0)!;
+    }
+  });
 }

@@ -80,6 +80,35 @@ class LibraryItem {
   }
 }
 
+class LibraryItemWithPath {
+  final int id;
+  final String uid;
+  final bool isEmbedded;
+  final String name;
+  final ItemType type;
+  final String path;
+
+  LibraryItemWithPath({
+    required this.id,
+    required this.uid,
+    required this.isEmbedded,
+    required this.name,
+    required this.type,
+    required this.path,
+  });
+
+  factory LibraryItemWithPath.fromJson(Map<String, dynamic> json) {
+    return LibraryItemWithPath(
+      id: json['id'],
+      uid: json['uid'],
+      isEmbedded: ['DOCUMENT', 'AUDIO', 'VIDEO'].contains(json['type']) ? json['is_embedded'] : true,
+      name: json['name'],
+      type: ItemType.values.byName(json['type'].toLowerCase()),
+      path: json['path'],
+    );
+  }
+}
+
 class LibraryResponse {
   final List<LibraryItem> libraryItems;
   final int total;
@@ -100,17 +129,20 @@ class LibraryController extends GetxController {
   final RxBool isLoadingItem = true.obs;
   final RxBool isLoadingType = true.obs;
   final RxBool isLoadingFolder = true.obs;
+  final RxBool isLoadingWithPath = true.obs;
   final Rxn<LibraryItem> libraryItem = Rxn<LibraryItem>(); // To show in item details screen
   final RxList<LibraryItem> libraryItems = <LibraryItem>[].obs; // To show in by type screen
   final RxList<LibraryItem> folderItems = <LibraryItem>[].obs; // To show in library and it's folder screen
   final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs; // To navigate between library and it's folder screen
   final RxList<LibraryItem> selectedItems = <LibraryItem>[].obs; // To handle select items functionality
+  final RxList<LibraryItemWithPath> libraryItemsWithPath = <LibraryItemWithPath>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchLibraryItemsByType();
-    fetchLibraryItems();
+    fetchLibraryItemByType();
+    fetchLibraryItemByFolder();
+    fetchLibraryItemWithPath();
   }
 
   @override
@@ -119,13 +151,16 @@ class LibraryController extends GetxController {
     isLoadingItem.value = true;
     isLoadingType.value = true;
     isLoadingFolder.value = true;
+    isLoadingWithPath.value = true;
     libraryItem.value = null;
     libraryItems.clear();
     folderItems.clear();
     breadcrumbs.clear();
+    selectedItems.clear();
+    libraryItemsWithPath.clear();
   }
 
-  void fetchLibraryItems({String? parentUid, int page = 1, int limit = 12}) {
+  void fetchLibraryItemByFolder({String? parentUid, int page = 1, int limit = 12}) {
     isLoadingFolder.value = true;
 
     final query = GetLibraryItemsQuery(parentUid: parentUid, page: page, limit: limit);
@@ -141,7 +176,7 @@ class LibraryController extends GetxController {
     });
   }
 
-  void fetchLibraryItemsByType({String search = '', String type = '', int page = 1, int limit = 12}) {
+  void fetchLibraryItemByType({String search = '', String type = '', int page = 1, int limit = 12}) {
     isLoadingType.value = true;
 
     final query = GetLibraryItemsByTypeQuery(search: search, type: type, page: page, limit: limit);
@@ -154,6 +189,22 @@ class LibraryController extends GetxController {
       }
 
       isLoadingType.value = false;
+    });
+  }
+
+  void fetchLibraryItemWithPath() {
+    isLoadingWithPath.value = true;
+
+    libraryService.getLibraryItemsWithPath().then((response) {
+      if (response.success && response.data != null) {
+        libraryItemsWithPath.value = List<LibraryItemWithPath>.from(
+          response.data.map((x) => LibraryItemWithPath.fromJson(x)),
+        );
+      } else {
+        Notification.error(response.message);
+      }
+
+      isLoadingWithPath.value = false;
     });
   }
 
@@ -179,7 +230,7 @@ class LibraryController extends GetxController {
       final page = AppRoutes.itemByFolder.replaceFirst(':uid', item.uid);
       !isReplace ? Get.toNamed(page) : Get.offNamed(page);
 
-      fetchLibraryItems(parentUid: item.uid);
+      fetchLibraryItemByFolder(parentUid: item.uid);
     } else {
       final page = AppRoutes.itemDetails.replaceFirst(':uid', item.uid);
       !isReplace ? Get.toNamed(page) : Get.offNamed(page);
@@ -194,9 +245,9 @@ class LibraryController extends GetxController {
 
       Get.back();
       if (breadcrumbs.isEmpty) {
-        fetchLibraryItems(parentUid: null);
+        fetchLibraryItemByFolder(parentUid: null);
       } else {
-        fetchLibraryItems(parentUid: breadcrumbs.last.uid);
+        fetchLibraryItemByFolder(parentUid: breadcrumbs.last.uid);
       }
     }
   }
@@ -214,9 +265,9 @@ class LibraryController extends GetxController {
     final type = Get.parameters['type'];
 
     if (type == 'recent_items') {
-      fetchLibraryItemsByType(type: '');
+      fetchLibraryItemByType(type: '');
     } else if (type != null) {
-      fetchLibraryItemsByType(type: type);
+      fetchLibraryItemByType(type: type);
     }
   }
 
@@ -225,9 +276,9 @@ class LibraryController extends GetxController {
     final parentUid = Get.parameters['uid'];
 
     if (Get.currentRoute == AppRoutes.home) {
-      fetchLibraryItems(parentUid: null);
+      fetchLibraryItemByFolder(parentUid: null);
     } else {
-      fetchLibraryItems(parentUid: parentUid);
+      fetchLibraryItemByFolder(parentUid: parentUid);
     }
   }
 

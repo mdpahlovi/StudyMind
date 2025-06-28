@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/controllers/chat.dart';
+import 'package:studymind/controllers/library.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
 class ChatContentDialog extends StatefulWidget {
-  final Function(ChatContent) onSelect;
+  final Function(LibraryItemWithPath) onSelect;
 
   const ChatContentDialog({super.key, required this.onSelect});
 
@@ -16,17 +17,18 @@ class ChatContentDialog extends StatefulWidget {
 }
 
 class ChatContentDialogState extends State<ChatContentDialog> {
+  final LibraryController libraryController = Get.find<LibraryController>();
   final ChatController chatController = Get.find<ChatController>();
   final TextEditingController searchController = TextEditingController();
-  List<ChatContent> allChatContent = [];
-  List<ChatContent> filteredChatContent = [];
+  List<LibraryItemWithPath> allChatContent = [];
+  List<LibraryItemWithPath> filteredChatContent = [];
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      allChatContent = chatController.chatContents;
-      filteredChatContent = chatController.chatContents;
+      allChatContent = libraryController.libraryItemsWithPath;
+      filteredChatContent = libraryController.libraryItemsWithPath;
     });
     searchController.addListener(filterContent);
   }
@@ -40,6 +42,8 @@ class ChatContentDialogState extends State<ChatContentDialog> {
 
   @override
   void dispose() {
+    allChatContent.clear();
+    filteredChatContent.clear();
     searchController.dispose();
     super.dispose();
   }
@@ -84,18 +88,29 @@ class ChatContentDialogState extends State<ChatContentDialog> {
             ),
             Divider(),
             // Scrollable content
-            Flexible(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: filteredChatContent
-                      .map<List<Widget>>(
-                        (content) => [buildChatContent(context, content, widget.onSelect), const Divider()],
-                      )
-                      .expand((widget) => widget)
-                      .toList(),
-                ),
-              ),
-            ),
+            filteredChatContent.isEmpty
+                ? Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(HugeIcons.strokeRoundedSadDizzy, size: 64),
+                        const SizedBox(height: 16),
+                        Text('Oops! No content found', style: textTheme.bodyMedium),
+                      ],
+                    ),
+                  )
+                : Flexible(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: filteredChatContent
+                            .map<List<Widget>>(
+                              (content) => [buildChatContent(context, content, widget.onSelect), const Divider()],
+                            )
+                            .expand((widget) => widget)
+                            .toList(),
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),
@@ -103,7 +118,7 @@ class ChatContentDialogState extends State<ChatContentDialog> {
   }
 }
 
-Widget buildChatContent(BuildContext context, ChatContent content, Function(ChatContent) onSelect) {
+Widget buildChatContent(BuildContext context, LibraryItemWithPath content, Function(LibraryItemWithPath) onSelect) {
   final ColorPalette colorPalette = AppColors().palette;
   final TextTheme textTheme = Theme.of(context).textTheme;
   final Color color = ItemTypeStyle.getStyle(content.type).color;
