@@ -27,7 +27,7 @@ class ChatContentDialogState extends State<ChatContentDialog> {
   void initState() {
     super.initState();
     searchController.addListener(filterContent);
-    setState(() => filterChatContents = widget.chatContents);
+    filterChatContents = List.from(widget.chatContents);
   }
 
   void filterContent() {
@@ -42,7 +42,7 @@ class ChatContentDialogState extends State<ChatContentDialog> {
   @override
   void dispose() {
     searchController.dispose();
-    filterChatContents.clear();
+    filterChatContents = List.from(widget.chatContents);
     super.dispose();
   }
 
