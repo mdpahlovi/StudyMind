@@ -136,7 +136,7 @@ class CreateDocumentState extends State<CreateDocument> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Supported: PDF, DOC, DOCX, TXT',
+                  'Supported: PDF, DOC, DOCX, TXT\nMax allowed size: 5 MB',
                   style: TextStyle(fontSize: 12, color: colorPalette.warning),
                 ),
               ),

@@ -43,12 +43,7 @@ PreferredSizeWidget buildItemAppBar({bool? isSearchKey}) {
 
       if (selectedItems.isEmpty) {
         if (Get.currentRoute.contains('/item_by_type')) {
-          switch (Get.parameters['type']) {
-            case 'recent_items':
-              return Text('Recent Items');
-            default:
-              return Text(Get.parameters['type']?.capitalize ?? '');
-          }
+          return Text('Library Items');
         } else {
           return Text(breadcrumbs.isEmpty ? 'Library' : breadcrumbs.last.name);
         }

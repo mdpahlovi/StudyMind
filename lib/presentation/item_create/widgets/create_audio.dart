@@ -135,7 +135,10 @@ class CreateAudioState extends State<CreateAudio> {
               Icon(Icons.info_outline, size: 16, color: colorPalette.warning),
               const SizedBox(width: 8),
               Expanded(
-                child: Text('Supported: MP3, WAV, OGG', style: TextStyle(fontSize: 12, color: colorPalette.warning)),
+                child: Text(
+                  'Supported: MP3, WAV, OGG\nMax allowed size: 5 MB',
+                  style: TextStyle(fontSize: 12, color: colorPalette.warning),
+                ),
               ),
             ],
           ),

@@ -41,7 +41,7 @@ class ItemByTypeState extends State<ItemByType> {
         }
       },
       child: RefreshIndicator(
-        onRefresh: () async => libraryController.refreshByType(),
+        onRefresh: () async => libraryController.fetchLibraryItemByType(),
         child: Scaffold(
           appBar: buildItemAppBar(isSearchKey: searchQuery.isNotEmpty),
           body: SafeArea(
@@ -53,13 +53,7 @@ class ItemByTypeState extends State<ItemByType> {
                     searchQuery = value;
                     if (debounce?.isActive ?? false) debounce?.cancel();
                     debounce = Timer(const Duration(milliseconds: 500), () {
-                      final type = Get.parameters['type'];
-
-                      if (type == 'recent_items') {
-                        libraryController.fetchLibraryItemByType(search: searchQuery, type: '');
-                      } else if (type != null) {
-                        libraryController.fetchLibraryItemByType(search: searchQuery, type: type);
-                      }
+                      libraryController.fetchLibraryItemByType(search: searchQuery, type: '');
                     });
                   }),
                   decoration: InputDecoration(hintText: 'Search in library...', prefixIcon: Icon(Icons.search)),

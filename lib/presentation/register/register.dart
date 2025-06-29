@@ -35,6 +35,8 @@ class RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> handleRegister() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+
     if (formKey.currentState!.validate()) {
       await authController.register(emailController.text, passwordController.text, nameController.text);
     }

@@ -2,7 +2,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
-import 'package:studymind/controllers/chat.dart';
 import 'package:studymind/controllers/library.dart';
 import 'package:studymind/core/notification.dart';
 import 'package:studymind/core/utils.dart';
@@ -25,7 +24,6 @@ class Flashcard {
 class ItemCreateController extends GetxController {
   final libraryService = LibraryService();
   final LibraryController libraryController = Get.find<LibraryController>();
-  final ChatController chatController = Get.find<ChatController>();
 
   final RxBool isCreating = false.obs;
   final RxBool isUpdating = false.obs;
@@ -202,7 +200,7 @@ class ItemCreateController extends GetxController {
         final itemResponse = LibraryItem.fromJson(response.data);
 
         // Refetch
-        libraryController.refreshByType();
+        libraryController.fetchLibraryItemByType();
         libraryController.refreshByFolder();
         libraryController.fetchLibraryItemWithPath();
 
@@ -234,7 +232,7 @@ class ItemCreateController extends GetxController {
   void updateRefetch() {
     libraryController.selectedItems.clear();
 
-    libraryController.refreshByType();
+    libraryController.fetchLibraryItemByType();
     libraryController.refreshByFolder();
     libraryController.fetchLibraryItemWithPath();
   }

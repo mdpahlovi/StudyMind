@@ -33,6 +33,8 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> handleLogin() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+
     if (formKey.currentState!.validate()) {
       await authController.login(emailController.text, passwordController.text);
     }

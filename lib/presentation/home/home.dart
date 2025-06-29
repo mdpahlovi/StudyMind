@@ -58,9 +58,7 @@ class HomeScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                             border: Border.all(width: 2, color: colorPalette.content),
                           ),
-                          child: ClipOval(
-                            child: CustomImage(imageUrl: imageUrl, fit: BoxFit.cover),
-                          ),
+                          child: ClipOval(child: CustomImage(imageUrl: imageUrl, isUser: true)),
                         ),
                       );
                     }),
@@ -143,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           Text('Recent Items', style: textTheme.headlineMedium),
                           GestureDetector(
-                            onTap: () => Get.toNamed(AppRoutes.itemByType.replaceFirst(':type', 'recent_items')),
+                            onTap: () => Get.toNamed(AppRoutes.itemByType),
                             child: Text(
                               'View All',
                               style: textTheme.labelMedium?.copyWith(color: colorPalette.primary),

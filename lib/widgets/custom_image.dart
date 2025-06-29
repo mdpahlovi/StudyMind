@@ -7,6 +7,7 @@ class CustomImage extends StatefulWidget {
   final double width;
   final double height;
   final BoxFit fit;
+  final bool isUser;
 
   /// Optional widget to show when the image fails to load.
   /// If null, a default asset image is shown.
@@ -18,6 +19,7 @@ class CustomImage extends StatefulWidget {
     this.width = 60,
     this.height = 60,
     this.fit = BoxFit.cover,
+    this.isUser = false,
     this.errorWidget,
   });
 
@@ -60,40 +62,38 @@ class CustomImageState extends State<CustomImage> with SingleTickerProviderState
       fit: widget.fit,
 
       // Use caller-supplied widget if provided, else fallback asset.
-      errorWidget:
-          (context, url, error) =>
-              widget.errorWidget ??
-              Image.asset(
-                'assets/images/broken-image.jpg',
-                fit: widget.fit,
-                width: widget.width,
-                height: widget.height,
-              ),
-
-      placeholder:
-          (context, url) => AnimatedBuilder(
-            animation: animation,
-            builder: (context, child) {
-              return Container(
-                width: widget.width,
-                height: widget.height,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  gradient: LinearGradient(
-                    colors: [
-                      colorPalette.content.withAlpha(13),
-                      colorPalette.content.withAlpha(25),
-                      colorPalette.content.withAlpha(13),
-                    ],
-                    stops: const [0.1, 0.25, 0.5],
-                    begin: Alignment(animation.value - 1, -0.5),
-                    end: Alignment(animation.value + 1, 0.5),
-                    tileMode: TileMode.clamp,
-                  ),
-                ),
-              );
-            },
+      errorWidget: (context, url, error) =>
+          widget.errorWidget ??
+          Image.asset(
+            widget.isUser ? 'assets/images/profile.png' : 'assets/images/broken-image.jpg',
+            fit: widget.fit,
+            width: widget.width,
+            height: widget.height,
           ),
+
+      placeholder: (context, url) => AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          return Container(
+            width: widget.width,
+            height: widget.height,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              gradient: LinearGradient(
+                colors: [
+                  colorPalette.content.withAlpha(13),
+                  colorPalette.content.withAlpha(25),
+                  colorPalette.content.withAlpha(13),
+                ],
+                stops: const [0.1, 0.25, 0.5],
+                begin: Alignment(animation.value - 1, -0.5),
+                end: Alignment(animation.value + 1, 0.5),
+                tileMode: TileMode.clamp,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

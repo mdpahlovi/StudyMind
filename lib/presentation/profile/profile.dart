@@ -4,8 +4,8 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:studymind/controllers/auth.dart';
 import 'package:studymind/core/notification.dart';
-import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
+import 'package:studymind/widgets/custom_image.dart';
 import 'package:studymind/widgets/dialog/confirm.dart';
 import 'package:studymind/widgets/notification_button.dart';
 
@@ -75,16 +75,14 @@ class ProfileScreenState extends State<ProfileScreen> {
       children: [
         Obx(() {
           final imageUrl = authController.user.value?.photo ?? "";
-          return Stack(
-            children: [
-              Center(
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: colorPalette.content,
-                  child: CircleAvatar(radius: 48, backgroundImage: NetworkImage(imageUrl)),
-                ),
-              ),
-            ],
+          return Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(width: 2, color: colorPalette.content),
+            ),
+            child: ClipOval(child: CustomImage(imageUrl: imageUrl, isUser: true)),
           );
         }),
         const SizedBox(height: 16),
@@ -240,14 +238,14 @@ class ProfileScreenState extends State<ProfileScreen> {
         'title': 'Removed Items',
         'toggle': false,
         'color': Colors.red,
-        'onTap': () => Get.toNamed(AppRoutes.removedItem),
+        'onTap': () => Notification.error('Removed items screen coming soon'),
       },
       {
         'icon': HugeIcons.strokeRoundedMessage02,
         'title': 'Removed Chats',
         'toggle': false,
         'color': Colors.purple,
-        'onTap': () => Get.toNamed(AppRoutes.removedChat),
+        'onTap': () => Notification.error('Removed chats screen coming soon'),
       },
     ];
   }

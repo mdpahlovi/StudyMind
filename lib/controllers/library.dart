@@ -260,33 +260,20 @@ class LibraryController extends GetxController {
     }
   }
 
-  // Refresh data for by type screen
-  void refreshByType() {
-    final type = Get.parameters['type'];
-
-    if (type == 'recent_items') {
-      fetchLibraryItemByType(type: '');
-    } else if (type != null) {
-      fetchLibraryItemByType(type: type);
-    }
-  }
-
   // Refresh data for library and folder screen
   void refreshByFolder() {
-    final parentUid = Get.parameters['uid'];
-
-    if (Get.currentRoute == AppRoutes.home) {
+    if (breadcrumbs.isEmpty) {
       fetchLibraryItemByFolder(parentUid: null);
     } else {
-      fetchLibraryItemByFolder(parentUid: parentUid);
+      fetchLibraryItemByFolder(parentUid: breadcrumbs.last.uid);
     }
   }
 
   // Refresh data for item details screen
   void refreshItemDetails() {
-    final uid = Get.parameters['uid'];
-
-    if (uid != null) fetchLibraryItemByUid(uid);
+    if (breadcrumbs.isNotEmpty) {
+      fetchLibraryItemByUid(breadcrumbs.last.uid);
+    }
   }
 
   Map<String, int> getFolderStats() {

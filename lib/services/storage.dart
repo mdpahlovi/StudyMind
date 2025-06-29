@@ -56,4 +56,12 @@ class StorageService {
       loggerSimp.e('StorageService: Failed to remove $key - $e');
     }
   }
+
+  Future<void> clear() async {
+    try {
+      await storage.erase();
+    } catch (e) {
+      loggerSimp.e('StorageService: Failed to clear storage - $e');
+    }
+  }
 }

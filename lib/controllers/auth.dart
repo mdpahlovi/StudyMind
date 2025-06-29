@@ -162,14 +162,11 @@ class AuthController extends GetxController {
   }
 
   Future<void> logout() async {
-    storageService.remove(StorageKey.accessToken);
-    storageService.remove(StorageKey.refreshToken);
-    storageService.remove(StorageKey.user);
-
-    user.value = null;
-    isLoggedIn.value = false;
-
     Get.offAllNamed(AppRoutes.login);
     Notification.success('Logged out. Thank you for visiting.');
+
+    await storageService.clear();
+    Get.deleteAll(force: true);
+    Get.put(AuthController(), permanent: true);
   }
 }

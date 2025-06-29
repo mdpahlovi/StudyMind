@@ -238,7 +238,7 @@ class ChatController extends GetxController {
 
       // Refresh library
       if (isCreatedItem) {
-        libraryController.refreshByType();
+        libraryController.fetchLibraryItemByType();
         libraryController.refreshByFolder();
         libraryController.fetchLibraryItemWithPath();
       }

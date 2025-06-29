@@ -136,7 +136,7 @@ class VideoState extends State<CreateVideo> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Supported: MP4, WebM, AVI, MOV, MKV',
+                  'Supported: MP4, WebM, AVI, MOV, MKV\n Max allowed size: 10 MB',
                   style: TextStyle(fontSize: 12, color: colorPalette.warning),
                 ),
               ),

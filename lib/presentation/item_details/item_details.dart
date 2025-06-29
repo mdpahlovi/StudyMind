@@ -78,7 +78,9 @@ class ItemDetailsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         buildItemDetailsWidget(item),
-                        if (item.metadata?['description'] != null && item.metadata?['description'] != "") ...[
+                        if (item.type != ItemType.document &&
+                            item.metadata?['description'] != null &&
+                            item.metadata?['description'] != "") ...[
                           const SizedBox(height: 16),
                           buildDescriptionCard(item.metadata?['description'], colorPalette, textTheme, typeStyle),
                         ],

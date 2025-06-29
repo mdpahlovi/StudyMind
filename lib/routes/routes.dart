@@ -23,7 +23,7 @@ class AppRoutes {
   static const String register = '/register';
   static const String forgotPassword = '/forgot_password';
   static const String home = '/home';
-  static const String itemByType = '/item_by_type/:type';
+  static const String itemByType = '/item_by_type';
   static const String itemByFolder = '/item_by_folder/:uid';
   static const String notification = '/notification';
   static const String itemCreate = '/item_create/:type';

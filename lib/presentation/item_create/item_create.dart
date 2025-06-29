@@ -116,6 +116,8 @@ class ItemCreateScreenState extends State<ItemCreateScreen> {
                       () => CustomButton(
                         text: 'Create ${type.name.capitalize}',
                         onPressed: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+
                           if (formKey.currentState!.validate()) {
                             Get.dialog(
                               ConfirmDialog(

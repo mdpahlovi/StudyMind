@@ -136,7 +136,7 @@ class CreateImageState extends State<CreateImage> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Supported: JPG, JPEG, PNG, GIF',
+                  'Supported: JPG, JPEG, PNG, GIF\nMax allowed size: 1 MB',
                   style: TextStyle(fontSize: 12, color: colorPalette.warning),
                 ),
               ),
