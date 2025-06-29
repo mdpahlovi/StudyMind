@@ -29,13 +29,13 @@ class ItemDetailsScreen extends StatelessWidget {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (didPop) return;
-        libraryController.backFromDetail();
+        libraryController.navigateToBack();
       },
       child: RefreshIndicator(
         onRefresh: () async => libraryController.refreshItemDetails(),
         child: Scaffold(
           appBar: AppBar(
-            leading: CustomBackButton(icon: 'cancel', onPressed: libraryController.backFromDetail),
+            leading: CustomBackButton(icon: 'cancel', onPressed: libraryController.navigateToBack),
             title: Obx(() {
               final breadcrumbs = libraryController.breadcrumbs;
               return breadcrumbs.isEmpty ? const Text('') : Text(breadcrumbs.last.name);

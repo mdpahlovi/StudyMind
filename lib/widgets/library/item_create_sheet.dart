@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studymind/constants/item_type.dart';
-import 'package:studymind/controllers/item_create.dart';
-import 'package:studymind/controllers/library.dart';
 import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
@@ -69,23 +67,11 @@ class CreateOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LibraryController libraryController = Get.find<LibraryController>();
-    final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
-
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return ListTile(
-      onTap: () {
-        if (libraryController.breadcrumbs.isEmpty) {
-          itemCreateController.selectedFolder.value = null;
-        } else {
-          itemCreateController.selectedFolder.value = libraryController.libraryItemsWithPath.firstWhere((element) {
-            return element.uid == libraryController.breadcrumbs.last.uid && element.type == ItemType.folder;
-          });
-        }
-        Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase()));
-      },
+      onTap: () => Get.offNamed(AppRoutes.itemCreate.replaceFirst(':type', option.title.toLowerCase())),
       leading: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(color: option.color.withAlpha(50), borderRadius: BorderRadius.circular(8)),

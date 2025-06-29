@@ -73,10 +73,18 @@ class UpdateLibraryItem {
 
 class UpdateBulkLibraryItem {
   final List<String> uid;
-  final bool isActive;
   final int? parentId;
+  final String action;
 
-  UpdateBulkLibraryItem({required this.uid, required this.isActive, required this.parentId});
+  UpdateBulkLibraryItem({required this.uid, required this.parentId, required this.action});
 
-  Map<String, dynamic> toJson() => {'uid': uid, 'isActive': isActive, 'parentId': parentId};
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {'uid': uid};
+
+    if (action == 'MOVE') data['parentId'] = parentId;
+    if (action == 'REMOVE') data['isActive'] = false;
+    if (action == 'RESTORE') data['isActive'] = true;
+
+    return data;
+  }
 }

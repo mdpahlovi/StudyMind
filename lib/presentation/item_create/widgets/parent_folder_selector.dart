@@ -5,13 +5,18 @@ import 'package:studymind/controllers/library.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
-class ParentFolderSelector extends StatelessWidget {
+class ParentFolderSelector extends StatefulWidget {
   const ParentFolderSelector({super.key});
 
-  Widget buildFolderSelectorSheet(BuildContext context) {
-    final LibraryController libraryController = Get.find<LibraryController>();
-    final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
+  @override
+  State<ParentFolderSelector> createState() => ParentFolderSelectorState();
+}
 
+class ParentFolderSelectorState extends State<ParentFolderSelector> {
+  final LibraryController libraryController = Get.find<LibraryController>();
+  final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
+
+  Widget buildFolderSelectorSheet(BuildContext context, List<LibraryItemWithPath> folders) {
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
@@ -40,69 +45,54 @@ class ParentFolderSelector extends StatelessWidget {
           Divider(),
           // Folder list
           Expanded(
-            child: Obx(() {
-              final List<LibraryItemWithPath> folders = libraryController.libraryItemsWithPath
-                  .where((item) => item.type == ItemType.folder)
-                  .toList();
+            child: ListView.separated(
+              itemCount: folders.length + 1,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  final isSelected = libraryController.selectedFolder.value?.id == null;
 
-              if (libraryController.isLoadingWithPath.value) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [CircularProgressIndicator(), const SizedBox(height: 16), Text('Fetching folders...')],
-                  ),
-                );
-              }
-
-              return ListView.separated(
-                itemCount: folders.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    final isSelected = itemCreateController.selectedFolder.value?.id == null;
-
-                    return ListTile(
-                      onTap: () {
-                        itemCreateController.selectedFolder.value = null;
-                        Get.back();
-                      },
-                      leading: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: colorPalette.primary.withAlpha(50),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: CustomIcon(icon: 'home', color: colorPalette.primary),
+                  return ListTile(
+                    onTap: () {
+                      libraryController.selectedFolder.value = null;
+                      Get.back();
+                    },
+                    leading: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: colorPalette.primary.withAlpha(50),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      title: Text('Root Folder', style: textTheme.titleMedium),
-                      subtitle: Text('./', style: textTheme.bodySmall),
-                      trailing: isSelected ? CustomIcon(icon: 'tickCircle', color: colorPalette.primary) : null,
-                    );
-                  } else {
-                    final folder = folders[index - 1];
-                    final isSelected = itemCreateController.selectedFolder.value?.id == folder.id;
+                      child: CustomIcon(icon: 'home', color: colorPalette.primary),
+                    ),
+                    title: Text('Root Folder', style: textTheme.titleMedium),
+                    subtitle: Text('./', style: textTheme.bodySmall),
+                    trailing: isSelected ? CustomIcon(icon: 'tickCircle', color: colorPalette.primary) : null,
+                  );
+                } else {
+                  final folder = folders[index - 1];
+                  final isSelected = libraryController.selectedFolder.value?.id == folder.id;
 
-                    return ListTile(
-                      onTap: () {
-                        itemCreateController.selectedFolder.value = folder;
-                        Get.back();
-                      },
-                      leading: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: colorPalette.content.withAlpha(50),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: CustomIcon(icon: 'folder', color: colorPalette.content),
+                  return ListTile(
+                    onTap: () {
+                      libraryController.selectedFolder.value = folder;
+                      Get.back();
+                    },
+                    leading: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: colorPalette.content.withAlpha(50),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      title: Text(folder.name, style: textTheme.titleMedium),
-                      subtitle: Text(folder.path, style: textTheme.bodySmall),
-                      trailing: isSelected ? CustomIcon(icon: 'tickCircle', color: colorPalette.primary) : null,
-                    );
-                  }
-                },
-                separatorBuilder: (context, index) => const Divider(),
-              );
-            }),
+                      child: CustomIcon(icon: 'folder', color: colorPalette.content),
+                    ),
+                    title: Text(folder.name, style: textTheme.titleMedium),
+                    subtitle: Text(folder.path, style: textTheme.bodySmall),
+                    trailing: isSelected ? CustomIcon(icon: 'tickCircle', color: colorPalette.primary) : null,
+                  );
+                }
+              },
+              separatorBuilder: (context, index) => const Divider(),
+            ),
           ),
         ],
       ),
@@ -111,8 +101,6 @@ class ParentFolderSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
-
     final ColorPalette colorPalette = AppColors().palette;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
@@ -122,11 +110,20 @@ class ParentFolderSelector extends StatelessWidget {
         side: BorderSide(color: colorPalette.border),
       ),
       child: InkWell(
-        onTap: () => Get.bottomSheet(buildFolderSelectorSheet(context)),
+        onTap: () {
+          Get.bottomSheet(
+            buildFolderSelectorSheet(
+              context,
+              libraryController.libraryItemsWithPath.where((item) {
+                return item.type == ItemType.folder;
+              }).toList(),
+            ),
+          );
+        },
         child: Padding(
           padding: EdgeInsets.all(12),
           child: Obx(() {
-            final folder = itemCreateController.selectedFolder.value;
+            final folder = libraryController.selectedFolder.value;
             final isRoot = folder?.id == null;
 
             return Row(

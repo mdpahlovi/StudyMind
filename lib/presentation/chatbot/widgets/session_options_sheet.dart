@@ -105,7 +105,7 @@ class SessionOptionsSheetState extends State<SessionOptionsSheet> {
                   child: Text(
                     selectedSessions.length == 1
                         ? selectedSessions.first.title
-                        : '${selectedSessions.length} sessions selected',
+                        : '${selectedSessions.length} chats selected',
                     style: textTheme.headlineMedium,
                     overflow: TextOverflow.ellipsis,
                   ),

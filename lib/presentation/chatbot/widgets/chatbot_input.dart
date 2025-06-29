@@ -19,6 +19,7 @@ class ChatbotInput extends StatefulWidget {
 }
 
 class ChatbotInputState extends State<ChatbotInput> {
+  final LibraryController libraryController = Get.find<LibraryController>();
   final ChatController chatController = Get.find<ChatController>();
   late FocusNode focusNode;
 
@@ -48,7 +49,12 @@ class ChatbotInputState extends State<ChatbotInput> {
   }
 
   void showMentionDialog(bool? hasAtSymbol) {
-    Get.dialog(ChatContentDialog(onSelect: (chatContent) => insertMention(chatContent, hasAtSymbol)));
+    Get.dialog(
+      ChatContentDialog(
+        chatContents: libraryController.libraryItemsWithPath,
+        onSelect: (chatContent) => insertMention(chatContent, hasAtSymbol),
+      ),
+    );
   }
 
   void insertMention(LibraryItemWithPath chatContent, bool? hasAtSymbol) {

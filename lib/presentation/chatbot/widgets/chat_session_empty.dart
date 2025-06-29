@@ -19,10 +19,10 @@ class ChatSessionEmpty extends StatelessWidget {
         children: [
           Icon(HugeIcons.strokeRoundedSadDizzy, size: 64),
           const SizedBox(height: 16),
-          Text('Oops! No chat sessions yet', style: textTheme.bodyMedium),
+          Text('Oops! No chats found', style: textTheme.bodyMedium),
           if (Get.currentRoute == AppRoutes.home) ...[
             const SizedBox(height: 8),
-            Text('Tap + button to create new chat session', style: textTheme.bodySmall),
+            Text('Tap + button to create a new chat', style: textTheme.bodySmall),
           ],
         ],
       ),

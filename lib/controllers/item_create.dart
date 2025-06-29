@@ -27,7 +27,6 @@ class ItemCreateController extends GetxController {
 
   final RxBool isCreating = false.obs;
   final RxBool isUpdating = false.obs;
-  final Rxn<LibraryItemWithPath> selectedFolder = Rxn<LibraryItemWithPath>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -50,7 +49,6 @@ class ItemCreateController extends GetxController {
     super.onClose();
     isCreating.value = false;
     isUpdating.value = false;
-    selectedFolder.value = null;
 
     // Item Common Data
     nameController.dispose();
@@ -79,7 +77,7 @@ class ItemCreateController extends GetxController {
         createLibraryItemData = CreateLibraryItem(
           name: nameController.text,
           type: ItemType.folder,
-          parentId: selectedFolder.value?.id,
+          parentId: libraryController.selectedFolder.value?.id,
           metadata: {'color': folderColor.value, 'icon': folderIcon.value},
         );
         break;
@@ -88,7 +86,7 @@ class ItemCreateController extends GetxController {
           createLibraryItemData = CreateLibraryItem(
             name: nameController.text,
             type: ItemType.note,
-            parentId: selectedFolder.value?.id,
+            parentId: libraryController.selectedFolder.value?.id,
             metadata: {
               'description': descriptionController.text,
               'notes': deltaToMarkdown.convert(noteController.document.toDelta()),
@@ -103,7 +101,7 @@ class ItemCreateController extends GetxController {
           createLibraryItemData = CreateLibraryItem(
             name: nameController.text,
             type: type,
-            parentId: selectedFolder.value?.id,
+            parentId: libraryController.selectedFolder.value?.id,
             metadata: {'description': descriptionController.text, 'fileType': selectedFile.value!.extension},
             file: selectedFile.value,
           );
@@ -116,7 +114,7 @@ class ItemCreateController extends GetxController {
           createLibraryItemData = CreateLibraryItem(
             name: nameController.text,
             type: ItemType.flashcard,
-            parentId: selectedFolder.value?.id,
+            parentId: libraryController.selectedFolder.value?.id,
             metadata: {
               'description': descriptionController.text,
               'cards': flashcards.map((flashcard) => flashcard.toJson()).toList(),
@@ -132,7 +130,7 @@ class ItemCreateController extends GetxController {
           createLibraryItemData = CreateLibraryItem(
             name: nameController.text,
             type: type,
-            parentId: selectedFolder.value?.id,
+            parentId: libraryController.selectedFolder.value?.id,
             metadata: {
               'description': descriptionController.text,
               'fileType': selectedFile.value!.extension,
@@ -149,7 +147,7 @@ class ItemCreateController extends GetxController {
           createLibraryItemData = CreateLibraryItem(
             name: nameController.text,
             type: type,
-            parentId: selectedFolder.value?.id,
+            parentId: libraryController.selectedFolder.value?.id,
             metadata: {
               'description': descriptionController.text,
               'fileType': selectedFile.value!.extension,
@@ -166,7 +164,7 @@ class ItemCreateController extends GetxController {
           createLibraryItemData = CreateLibraryItem(
             name: nameController.text,
             type: type,
-            parentId: selectedFolder.value?.id,
+            parentId: libraryController.selectedFolder.value?.id,
             metadata: {
               'description': descriptionController.text,
               'fileType': selectedFile.value!.extension,
@@ -260,12 +258,10 @@ class ItemCreateController extends GetxController {
     Get.back();
     updateLoader(true);
 
-    final currentFolder = libraryController.breadcrumbs.isNotEmpty ? libraryController.breadcrumbs.last : null;
-
     final UpdateBulkLibraryItem updateBulkLibraryItemData = UpdateBulkLibraryItem(
       uid: selectedItems.map((e) => e.uid).toList(),
-      isActive: action == 'REMOVE' ? false : true,
-      parentId: action == 'MOVE' ? selectedFolder.value?.id : currentFolder?.id,
+      parentId: libraryController.selectedFolder.value?.id,
+      action: action,
     );
 
     libraryService.updateBulkLibraryItem(updateBulkLibraryItemData).then((response) {

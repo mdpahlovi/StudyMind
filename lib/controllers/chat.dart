@@ -216,12 +216,12 @@ class ChatController extends GetxController {
     final session = Get.parameters['uid'];
 
     if (session == null) {
-      Notification.error('Please select a chat session');
+      Notification.error('Please select a chat');
       return;
     }
 
     if (chatMessages.isEmpty) {
-      Notification.error('Please send a message first');
+      Notification.error('Something went wrong');
       return;
     }
 

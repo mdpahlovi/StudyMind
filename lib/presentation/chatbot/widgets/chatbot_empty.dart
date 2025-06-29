@@ -11,9 +11,8 @@ class ChatbotEmpty extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        print("constraints.maxHeight: ${constraints.maxHeight}");
         return SizedBox(
-          height: constraints.maxHeight * 0.5, // 80% of available height
+          height: constraints.maxHeight * 0.5,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

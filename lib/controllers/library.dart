@@ -135,6 +135,7 @@ class LibraryController extends GetxController {
   final RxList<LibraryItem> folderItems = <LibraryItem>[].obs; // To show in library and it's folder screen
   final RxList<LibraryItem> breadcrumbs = <LibraryItem>[].obs; // To navigate between library and it's folder screen
   final RxList<LibraryItem> selectedItems = <LibraryItem>[].obs; // To handle select items functionality
+  final Rxn<LibraryItemWithPath> selectedFolder = Rxn<LibraryItemWithPath>();
   final RxList<LibraryItemWithPath> libraryItemsWithPath = <LibraryItemWithPath>[].obs;
 
   @override
@@ -157,6 +158,7 @@ class LibraryController extends GetxController {
     folderItems.clear();
     breadcrumbs.clear();
     selectedItems.clear();
+    selectedFolder.value = null;
     libraryItemsWithPath.clear();
   }
 
@@ -229,6 +231,7 @@ class LibraryController extends GetxController {
     if (item.type == ItemType.folder) {
       final page = AppRoutes.itemByFolder.replaceFirst(':uid', item.uid);
       !isReplace ? Get.toNamed(page) : Get.offNamed(page);
+      selectedFolder.value = libraryItemsWithPath.firstWhere((element) => element.uid == item.uid);
 
       fetchLibraryItemByFolder(parentUid: item.uid);
     } else {
@@ -240,23 +243,18 @@ class LibraryController extends GetxController {
   }
 
   void navigateToBack() {
+    final clearItem = breadcrumbs.last;
     if (breadcrumbs.isNotEmpty) {
       breadcrumbs.removeLast();
 
       Get.back();
       if (breadcrumbs.isEmpty) {
-        fetchLibraryItemByFolder(parentUid: null);
+        selectedFolder.value = null;
+        clearItem.type == ItemType.folder ? fetchLibraryItemByFolder(parentUid: null) : null;
       } else {
-        fetchLibraryItemByFolder(parentUid: breadcrumbs.last.uid);
+        selectedFolder.value = libraryItemsWithPath.firstWhere((element) => element.uid == breadcrumbs.last.uid);
+        clearItem.type == ItemType.folder ? fetchLibraryItemByFolder(parentUid: breadcrumbs.last.uid) : null;
       }
-    }
-  }
-
-  void backFromDetail() {
-    if (breadcrumbs.isNotEmpty) {
-      breadcrumbs.removeLast();
-
-      Get.back();
     }
   }
 

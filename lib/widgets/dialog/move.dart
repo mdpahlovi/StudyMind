@@ -47,7 +47,7 @@ class MoveDialogState extends State<MoveDialog> {
                   final currentFolder = libraryController.breadcrumbs.isNotEmpty
                       ? libraryController.breadcrumbs.last.uid
                       : null;
-                  final selectedFolder = itemCreateController.selectedFolder.value?.uid;
+                  final selectedFolder = libraryController.selectedFolder.value?.uid;
 
                   return ElevatedButton(
                     onPressed: currentFolder != selectedFolder

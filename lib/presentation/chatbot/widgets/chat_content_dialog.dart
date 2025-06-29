@@ -8,43 +8,41 @@ import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
 
 class ChatContentDialog extends StatefulWidget {
+  final List<LibraryItemWithPath> chatContents;
   final Function(LibraryItemWithPath) onSelect;
 
-  const ChatContentDialog({super.key, required this.onSelect});
+  const ChatContentDialog({super.key, required this.onSelect, required this.chatContents});
 
   @override
   State<ChatContentDialog> createState() => ChatContentDialogState();
 }
 
 class ChatContentDialogState extends State<ChatContentDialog> {
-  final LibraryController libraryController = Get.find<LibraryController>();
   final ChatController chatController = Get.find<ChatController>();
   final TextEditingController searchController = TextEditingController();
-  List<LibraryItemWithPath> allChatContent = [];
-  List<LibraryItemWithPath> filteredChatContent = [];
+
+  List<LibraryItemWithPath> filterChatContents = [];
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      allChatContent = libraryController.libraryItemsWithPath;
-      filteredChatContent = libraryController.libraryItemsWithPath;
-    });
     searchController.addListener(filterContent);
+    setState(() => filterChatContents = widget.chatContents);
   }
 
   void filterContent() {
     final query = searchController.text.toLowerCase();
     setState(() {
-      filteredChatContent = allChatContent.where((item) => item.name.toLowerCase().contains(query)).toList();
+      filterChatContents = widget.chatContents.where((item) {
+        return item.name.toLowerCase().contains(query);
+      }).toList();
     });
   }
 
   @override
   void dispose() {
-    allChatContent.clear();
-    filteredChatContent.clear();
     searchController.dispose();
+    filterChatContents.clear();
     super.dispose();
   }
 
@@ -88,7 +86,7 @@ class ChatContentDialogState extends State<ChatContentDialog> {
             ),
             Divider(),
             // Scrollable content
-            filteredChatContent.isEmpty
+            filterChatContents.isEmpty
                 ? Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -102,7 +100,7 @@ class ChatContentDialogState extends State<ChatContentDialog> {
                 : Flexible(
                     child: SingleChildScrollView(
                       child: Column(
-                        children: filteredChatContent
+                        children: filterChatContents
                             .map<List<Widget>>(
                               (content) => [buildChatContent(context, content, widget.onSelect), const Divider()],
                             )
