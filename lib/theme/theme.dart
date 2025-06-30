@@ -153,6 +153,7 @@ class AppTheme {
       clipBehavior: Clip.antiAlias,
       margin: const EdgeInsets.only(bottom: 0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      shadowColor: Colors.transparent,
     ),
     inputDecorationTheme: InputDecorationTheme(
       fillColor: colorPalette.surface,

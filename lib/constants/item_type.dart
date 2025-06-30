@@ -25,9 +25,9 @@ class ItemTypeStyle {
       case ItemType.note:
         return TypeStyle(color: Color(0xFF7D9B5F), icon: 'note');
       case ItemType.document:
-        return TypeStyle(color: Color(0xFFF5F5DC), icon: 'document');
+        return TypeStyle(color: Color(0xFFCDCDB4), icon: 'document');
       case ItemType.flashcard:
-        return TypeStyle(color: Color(0xFF8FBC8F), icon: 'flashcard');
+        return TypeStyle(color: Color(0xFF6EA06E), icon: 'flashcard');
       case ItemType.audio:
         return TypeStyle(color: Color(0xFFE6C79C), icon: 'audio');
       case ItemType.video:

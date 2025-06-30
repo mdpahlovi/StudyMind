@@ -114,7 +114,7 @@ class ProfileScreenState extends State<ProfileScreen> {
             ),
             child: Text(
               'Member since ${createdAt != null ? DateFormat('MMM yyyy').format(createdAt) : "Apr 2024"}',
-              style: textTheme.bodySmall?.copyWith(color: colorPalette.primary, fontWeight: FontWeight.w500),
+              style: textTheme.labelSmall?.copyWith(color: colorPalette.primary, fontWeight: FontWeight.bold),
             ),
           );
         }),

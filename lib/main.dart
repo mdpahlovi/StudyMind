@@ -36,6 +36,7 @@ class StudyMind extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         FlutterQuillLocalizations.delegate,
       ],
+      debugShowCheckedModeBanner: false,
     );
   }
 }

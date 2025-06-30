@@ -118,10 +118,10 @@ class AppColors {
     info: Color(0xFF06B6D4), // Cyan
     // UI colors
     background: Color(0xFFFFFFFF), // White background
-    surface: Color(0xFFF5F5F5), // Light gray surface
-    content: Color(0xFF000000), // Black content text
-    contentDim: Color(0xFF575757), // Grayish content text
-    border: Color(0xFFE0E0E0), // Light gray border
+    surface: Color(0xFFF9F9F9), // Light gray surface
+    content: Color(0xFF000000), // Pure black
+    contentDim: Color(0xFF4B4B4B), // Grayish content text
+    border: Color(0xFFE1E1E1), // Light gray border
   );
 
   static const dark = ColorPalette(
@@ -197,7 +197,7 @@ class AppColors {
     surface: Color(0xFF101010), // Slightly lighter surface
     content: Color(0xFFFFFFFF), // White content text
     contentDim: Color(0xFFB4B4BE), // Slightly lighter content text
-    border: Color(0xFF242424), // Dark gray border
+    border: Color(0xFF1E1E1E), // Dark gray border
   );
 
   ColorPalette get palette => Get.isDarkMode ? dark : light;

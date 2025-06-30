@@ -13,7 +13,10 @@ class CustomBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
       decoration: BoxDecoration(color: color.withAlpha(50), borderRadius: BorderRadius.circular(4)),
-      child: Text(label.toUpperCase(), style: textTheme.labelSmall?.copyWith(fontSize: 10, color: color)),
+      child: Text(
+        label.toUpperCase(),
+        style: textTheme.labelSmall?.copyWith(fontSize: 10, fontWeight: FontWeight.bold, color: color),
+      ),
     );
   }
 }
