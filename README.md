@@ -11,7 +11,7 @@
 
 </div>
 
-## 🚀 Overview
+### 🚀 Overview
 
 StudyMind is an AI-powered educational assistant mobile app built with Flutter. This app features a hierarchical content management system with an agentic AI chat system, allowing users to create and interact with educational content through natural language prompts.
 
@@ -22,7 +22,7 @@ StudyMind is an AI-powered educational assistant mobile app built with Flutter. 
 -   **🤖 AI-Powered Content Creation**: Generate folders, notes, documents, flashcards, audio, and images through natural language prompts
 -   **💬 Intelligent Chat System**: Contextual chat system with natural language understanding
 
-## 📱 Screenshots
+### 📱 Screenshots
 
 <div align="center" style="display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px;">
@@ -32,7 +32,7 @@ StudyMind is an AI-powered educational assistant mobile app built with Flutter. 
   <img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/Profile.jpg" alt="Profile Page" width="200" style="margin: 10px">
 </div>
 
-## 🛠️ Technical Stack
+### 🛠️ Technical Stack
 
 **Frontend**: Flutter, Dart, Getx
 
