@@ -28,7 +28,7 @@ StudyMind is an AI-powered educational assistant mobile app built with Flutter. 
   grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px;">
   <img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/Home.jpg" alt="Home Screen" width="200" style="margin: 10px">
   <img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/Library.jpg" alt="Library Screen" width="200" style="margin: 10px">
-  <img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/Chat.png" alt="Chat Screen" width="200" style="margin: 10px">
+  <img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/Chat.jpg" alt="Chat Screen" width="200" style="margin: 10px">
   <img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/Profile.jpg" alt="Profile Screen" width="200" style="margin: 10px">
 </div>
 
