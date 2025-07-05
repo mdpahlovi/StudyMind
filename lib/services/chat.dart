@@ -12,8 +12,8 @@ class ChatService {
     return await apiService.get('/chat/$uid');
   }
 
-  Future<ApiResponse> requestQuery({required String uid, required List<ChatMessage> message}) async {
-    return await apiService.patch('/chat/$uid', data: {'message': message.map((m) => m.toJson()).toList()});
+  Future<ApiResponse> requestQuery({required String uid, required String? summary, required List<ChatMessage> message}) async {
+    return await apiService.patch('/chat/$uid', data: {'summary': summary ?? "", 'message': message.map((m) => m.toJson()).toList()});
   }
 
   Future<ApiResponse> updateChatSession({required String uid, required String title}) async {

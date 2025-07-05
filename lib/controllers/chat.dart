@@ -13,7 +13,7 @@ class ChatSession {
   final bool isActive;
   final int userId;
   final String title;
-  final String? description;
+  final String? summary;
   final String? lastMessage;
   final DateTime? lastMessageAt;
   final DateTime createdAt;
@@ -25,7 +25,7 @@ class ChatSession {
     required this.isActive,
     required this.userId,
     required this.title,
-    this.description,
+    this.summary,
     this.lastMessage,
     this.lastMessageAt,
     required this.createdAt,
@@ -39,7 +39,7 @@ class ChatSession {
       isActive: json['isActive'] ?? true,
       userId: json['userId'],
       title: json['title'],
-      description: json['description'],
+      summary: json['summary'],
       lastMessage: json['lastMessage'],
       lastMessageAt: json['lastMessageAt'] != null ? DateTime.parse(json['lastMessageAt']) : null,
       createdAt: DateTime.parse(json['createdAt']),
@@ -81,13 +81,7 @@ class ChatMessage {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  ChatMessage({
-    required this.uid,
-    required this.role,
-    required this.message,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+  ChatMessage({required this.uid, required this.role, required this.message, required this.createdAt, required this.updatedAt});
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
     return ChatMessage(
@@ -225,7 +219,7 @@ class ChatController extends GetxController {
       return;
     }
 
-    final response = await chatService.requestQuery(uid: session, message: chatMessages);
+    final response = await chatService.requestQuery(uid: session, summary: selectedSession.value?.summary, message: chatMessages);
     if (response.success && response.data != null) {
       final session = ChatSession.fromJson(response.data['session']);
       final message = ChatMessage.fromJson(response.data['message']);
