@@ -49,7 +49,7 @@ class ChatbotInputState extends State<ChatbotInput> {
   }
 
   void showMentionDialog(bool? hasAtSymbol) {
-    Get.dialog(
+    Get.bottomSheet(
       ChatContentDialog(
         chatContents: libraryController.libraryItemsWithPath,
         onSelect: (chatContent) => insertMention(chatContent, hasAtSymbol),
@@ -63,20 +63,13 @@ class ChatbotInputState extends State<ChatbotInput> {
 
     // Remove the @ character if it exists
     if (hasAtSymbol == true) {
-      chatController.messageController.replaceText(
-        currentOffset - 1,
-        1,
-        '',
-        TextSelection.collapsed(offset: currentOffset - 1),
-      );
+      chatController.messageController.replaceText(currentOffset - 1, 1, '', TextSelection.collapsed(offset: currentOffset - 1));
     }
 
     // Insert the mention embed
     chatController.messageController.document.insert(
       hasAtSymbol == true ? currentOffset - 1 : currentOffset,
-      EmbeddableMention.fromChatMention(
-        ChatMention(uid: chatContent.uid, name: chatContent.name, type: chatContent.type),
-      ),
+      EmbeddableMention.fromChatMention(ChatMention(uid: chatContent.uid, name: chatContent.name, type: chatContent.type)),
     );
 
     // Insert a space and move the cursor

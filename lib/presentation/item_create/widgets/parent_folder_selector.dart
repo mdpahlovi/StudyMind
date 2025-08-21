@@ -58,10 +58,7 @@ class ParentFolderSelectorState extends State<ParentFolderSelector> {
                     },
                     leading: Container(
                       padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: colorPalette.primary.withAlpha(50),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      decoration: BoxDecoration(color: colorPalette.primary.withAlpha(50), borderRadius: BorderRadius.circular(8)),
                       child: CustomIcon(icon: 'home', color: colorPalette.primary),
                     ),
                     title: Text('Root Folder', style: textTheme.titleMedium),
@@ -79,10 +76,7 @@ class ParentFolderSelectorState extends State<ParentFolderSelector> {
                     },
                     leading: Container(
                       padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: colorPalette.content.withAlpha(50),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      decoration: BoxDecoration(color: colorPalette.content.withAlpha(50), borderRadius: BorderRadius.circular(8)),
                       child: CustomIcon(icon: 'folder', color: colorPalette.content),
                     ),
                     title: Text(folder.name, style: textTheme.titleMedium),
@@ -110,16 +104,7 @@ class ParentFolderSelectorState extends State<ParentFolderSelector> {
         side: BorderSide(color: colorPalette.border),
       ),
       child: InkWell(
-        onTap: () {
-          Get.bottomSheet(
-            buildFolderSelectorSheet(
-              context,
-              libraryController.libraryItemsWithPath.where((item) {
-                return item.type == ItemType.folder;
-              }).toList(),
-            ),
-          );
-        },
+        onTap: () => Get.bottomSheet(buildFolderSelectorSheet(context, flatFolder(libraryController.libraryItemsWithPath))),
         child: Padding(
           padding: EdgeInsets.all(12),
           child: Obx(() {
@@ -134,26 +119,15 @@ class ParentFolderSelectorState extends State<ParentFolderSelector> {
                     color: isRoot ? colorPalette.primary.withAlpha(50) : colorPalette.content.withAlpha(50),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: CustomIcon(
-                    icon: isRoot ? 'home' : 'folder',
-                    color: isRoot ? colorPalette.primary : colorPalette.content,
-                  ),
+                  child: CustomIcon(icon: isRoot ? 'home' : 'folder', color: isRoot ? colorPalette.primary : colorPalette.content),
                 ),
                 SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        folder?.name ?? 'Root Folder',
-                        style: textTheme.titleMedium,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        isRoot ? './' : folder?.path ?? '/',
-                        style: textTheme.bodySmall,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      Text(folder?.name ?? 'Root Folder', style: textTheme.titleMedium, overflow: TextOverflow.ellipsis),
+                      Text(folder?.path ?? './', style: textTheme.bodySmall, overflow: TextOverflow.ellipsis),
                     ],
                   ),
                 ),
@@ -165,4 +139,20 @@ class ParentFolderSelectorState extends State<ParentFolderSelector> {
       ),
     );
   }
+}
+
+List<LibraryItemWithPath> flatFolder(List<LibraryItemWithPath> items) {
+  List<LibraryItemWithPath> flatList = [];
+
+  void flatRecursively(List<LibraryItemWithPath> currentItems) {
+    for (LibraryItemWithPath item in currentItems) {
+      if (item.type == ItemType.folder) {
+        flatList.add(item);
+        if (item.children.isNotEmpty) flatRecursively(item.children);
+      }
+    }
+  }
+
+  flatRecursively(items);
+  return flatList;
 }

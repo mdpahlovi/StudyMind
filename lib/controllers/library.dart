@@ -83,28 +83,28 @@ class LibraryItem {
 class LibraryItemWithPath {
   final int id;
   final String uid;
-  final bool isEmbedded;
   final String name;
   final ItemType type;
   final String path;
+  final List<LibraryItemWithPath> children;
 
   LibraryItemWithPath({
     required this.id,
     required this.uid,
-    required this.isEmbedded,
     required this.name,
     required this.type,
     required this.path,
+    required this.children,
   });
 
   factory LibraryItemWithPath.fromJson(Map<String, dynamic> json) {
     return LibraryItemWithPath(
       id: json['id'],
       uid: json['uid'],
-      isEmbedded: ['DOCUMENT', 'AUDIO', 'VIDEO'].contains(json['type']) ? json['is_embedded'] : true,
       name: json['name'],
       type: ItemType.values.byName(json['type'].toLowerCase()),
       path: json['path'],
+      children: (json['children'] as List<dynamic>?)?.map((child) => LibraryItemWithPath.fromJson(child)).toList() ?? [],
     );
   }
 }
@@ -199,9 +199,7 @@ class LibraryController extends GetxController {
 
     libraryService.getLibraryItemsWithPath().then((response) {
       if (response.success && response.data != null) {
-        libraryItemsWithPath.value = List<LibraryItemWithPath>.from(
-          response.data.map((x) => LibraryItemWithPath.fromJson(x)),
-        );
+        libraryItemsWithPath.value = List<LibraryItemWithPath>.from(response.data.map((x) => LibraryItemWithPath.fromJson(x)));
       } else {
         Notification.error(response.message);
       }
