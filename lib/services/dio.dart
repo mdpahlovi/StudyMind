@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:studymind/core/logger.dart';
 import 'package:studymind/routes/routes.dart';
@@ -12,7 +13,7 @@ class DioService {
     initializeDio();
   }
   void initializeDio() {
-    dio.options.baseUrl = 'http://103.108.140.184:4000/api/v1';
+    dio.options.baseUrl = dotenv.env['SERVER_URL']!;
     dio.options.connectTimeout = const Duration(seconds: 60);
     dio.options.receiveTimeout = const Duration(seconds: 60);
     dio.options.sendTimeout = const Duration(seconds: 60);
