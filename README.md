@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/logo.png" alt="StudyMind" width="120" height="120" style="margin-top: 20px; margin-bottom: 16px">
+<img src="https://bksaotrljfplhsqtqgre.supabase.co/storage/v1/object/public/studymind/GitHub%20Content/logo.png" alt="StudyMind" width="120" height="120" style="margin-top: 20px; margin-bottom: 16px">
 
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
 [![NestJs](https://img.shields.io/badge/NestJs-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com)
@@ -17,26 +17,25 @@ StudyMind is an AI-powered educational assistant mobile app built with Flutter. 
 
 ### ✨ Key Features
 
--   **📚 Hierarchical Content Management**: Organize study materials in a structured, easy-to-navigate system
--   **📖 RAG-Powered Analysis**: Advanced retrieval-augmented generation for content-based queries
--   **🤖 AI-Powered Content Creation**: Generate folders, notes, documents, flashcards, audio, and images through natural language prompts
--   **💬 Intelligent Chat System**: Contextual chat system with natural language understanding
+- **📚 Hierarchical Content Management**: Organize study materials in a structured, easy-to-navigate system
+- **📖 RAG-Powered Analysis**: Advanced retrieval-augmented generation for content-based queries
+- **🤖 AI-Powered Content Creation**: Generate folders, notes, documents, flashcards, audio, and images through natural language prompts
+- **💬 Intelligent Chat System**: Contextual chat system with natural language understanding
 
 ### 📱 Screenshots
 
 <div align="center" style="display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px;">
-  <img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/Home.jpg" alt="Home Screen" width="200" style="margin: 10px">
-  <img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/Library.jpg" alt="Library Screen" width="200" style="margin: 10px">
-  <img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/Chat.jpg" alt="Chat Screen" width="200" style="margin: 10px">
-  <img src="https://jeojfydynpyoyxywxnyy.supabase.co/storage/v1/object/public/studymind/github_content/Profile.jpg" alt="Profile Screen" width="200" style="margin: 10px">
+  grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+  <img src="https://bksaotrljfplhsqtqgre.supabase.co/storage/v1/object/public/studymind/GitHub%20Content/Home.png" alt="Home Screen" width="200" style="margin: 10px">
+  <img src="https://bksaotrljfplhsqtqgre.supabase.co/storage/v1/object/public/studymind/GitHub%20Content/Library.png" alt="Library Screen" width="200" style="margin: 10px">
+  <img src="https://bksaotrljfplhsqtqgre.supabase.co/storage/v1/object/public/studymind/GitHub%20Content/Chat.png" alt="Chat Screen" width="200" style="margin: 10px">
 </div>
 
 ### 🛠️ Technical Stack
 
-**Frontend**: Flutter, Dart, Getx
+**Frontend**: Dart, Flutter, Getx
 
-**Backend**: Node.js, Nest.js, PostgreSQL, Drizzle ORM
+**Backend**: TypeScript, NestJS, PostgreSQL, Drizzle ORM
 
 **AI & ML**: Gemini API, LangChain, LangGraph, Pinecone
 
