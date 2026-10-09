@@ -16,16 +16,13 @@ class CreateDocumentState extends State<CreateDocument> {
   final ItemCreateController itemCreateController = Get.find<ItemCreateController>();
 
   Future<void> handleUpload() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final PlatformFile? result = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'doc', 'docx', 'txt'],
-      allowMultiple: false,
-      withData: false, // Set to true if you need file data immediately
-      withReadStream: false,
     );
 
-    if (result != null && result.files.isNotEmpty) {
-      itemCreateController.selectedFile.value = result.files.first;
+    if (result != null) {
+      itemCreateController.selectedFile.value = result;
     }
   }
 
@@ -103,7 +100,7 @@ class CreateDocumentState extends State<CreateDocument> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(selectedFile.name, style: textTheme.bodySmall, overflow: TextOverflow.ellipsis),
-                        Text('${(selectedFile.size / 1024).toStringAsFixed(1)} KB', style: textTheme.bodySmall),
+                        Text('${((selectedFile.lengthSync() ?? 0) / 1024).toStringAsFixed(1)} KB', style: textTheme.bodySmall),
                       ],
                     ),
                   ),

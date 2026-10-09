@@ -36,7 +36,7 @@ dependencies:
     cupertino_icons: ^1.0.8
 
     # Google Fonts: https://pub.dev/packages/google_fonts
-    google_fonts: ^6.2.1
+    google_fonts: ^9.0.0
 
     # GetX: https://pub.dev/packages/get
     get: ^4.7.2
@@ -51,7 +51,7 @@ dependencies:
     intl: ^0.20.2
 
     # Cached Network Image: https://pub.dev/packages/cached_network_image
-    cached_network_image: ^3.4.1
+    cached_network_image: ^4.0.4
 
     # Dio: https://pub.dev/packages/dio
     dio: ^5.8.0+1
@@ -70,16 +70,19 @@ dependencies:
     markdown_quill: ^4.3.0
 
     # Connectivity Plus: https://pub.dev/packages/connectivity_plus
-    connectivity_plus: ^6.1.4
+    connectivity_plus: ^7.3.2
 
     # File Picker: https://pub.dev/packages/file_picker
-    file_picker: ^10.2.0
+    file_picker: ^13.1.0
 
     # Supabase Flutter: https://pub.dev/packages/supabase_flutter
     supabase_flutter: ^2.9.1
 
     # Flutter HTML: https://pub.dev/packages/flutter_html
     flutter_html: ^3.0.0
+
+    # HTML: https://pub.dev/packages/html
+    html: 0.15.6
 
     # Flutter HTML Iframe: https://pub.dev/packages/flutter_html_iframe
     flutter_html_iframe: ^3.0.0
@@ -106,13 +109,13 @@ dependencies:
     path_provider: ^2.1.5
 
     # Google Sign In: https://pub.dev/packages/google_sign_in
-    google_sign_in: ^6.3.0
+    google_sign_in: ^7.2.0
 
     # Infinite Scroll Pagination: https://pub.dev/packages/infinite_scroll_pagination
     infinite_scroll_pagination: ^5.1.0
 
     # Permission Handler: https://pub.dev/packages/permission_handler
-    permission_handler: ^12.0.0+1
+    permission_handler: ^12.0.3
 
     # Flutter Dotenv: https://pub.dev/packages/flutter_dotenv
     flutter_dotenv: ^6.0.0
