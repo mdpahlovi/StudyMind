@@ -8,10 +8,11 @@ class GetLibraryItemsQuery {
   final int page;
   final int limit;
   final String? parentUid;
+  final bool isActive;
 
-  GetLibraryItemsQuery({this.page = 1, this.limit = 12, this.parentUid});
+  GetLibraryItemsQuery({this.page = 1, this.limit = 12, this.parentUid, this.isActive = true});
 
-  Map<String, dynamic> toJson() => {'page': page, 'limit': limit, 'parentUid': parentUid};
+  Map<String, dynamic> toJson() => {'page': page, 'limit': limit, 'parentUid': parentUid, 'isActive': isActive};
 }
 
 class GetLibraryItemsByTypeQuery {
@@ -34,12 +35,7 @@ class CreateLibraryItem {
 
   CreateLibraryItem({required this.name, required this.type, this.parentId, this.metadata, this.file});
 
-  Map<String, dynamic> toJson() => {
-    'name': name,
-    'type': type.name.toUpperCase(),
-    'parentId': parentId,
-    'metadata': jsonEncode(metadata),
-  };
+  Map<String, dynamic> toJson() => {'name': name, 'type': type.name.toUpperCase(), 'parentId': parentId, 'metadata': jsonEncode(metadata)};
 
   Future<FormData> toFormData() async {
     final map = <String, dynamic>{};
@@ -87,4 +83,12 @@ class UpdateBulkLibraryItem {
 
     return data;
   }
+}
+
+class DeleteBulkLibraryItem {
+  final List<String> uid;
+
+  DeleteBulkLibraryItem({required this.uid});
+
+  Map<String, dynamic> toJson() => {'uid': uid};
 }

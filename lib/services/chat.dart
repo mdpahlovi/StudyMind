@@ -4,8 +4,8 @@ import 'package:studymind/services/api.dart';
 class ChatService {
   final ApiService apiService = ApiService();
 
-  Future<ApiResponse> getChatSessions({String search = ''}) async {
-    return await apiService.get('/chat', queryParameters: {'search': search});
+  Future<ApiResponse> getChatSessions({String search = '', bool isActive = true}) async {
+    return await apiService.get('/chat', queryParameters: {'search': search, 'isActive': isActive});
   }
 
   Future<ApiResponse> getOneChatSession({required String uid}) async {
@@ -22,5 +22,9 @@ class ChatService {
 
   Future<ApiResponse> updateBulkChatSession({required List<String> uid, bool? isActive}) async {
     return await apiService.patch('/chat/update/bulk', data: {'uid': uid, 'isActive': isActive});
+  }
+
+  Future<ApiResponse> deleteBulkChatSession({required List<String> uid}) async {
+    return await apiService.delete('/chat/bulk', data: {'uid': uid});
   }
 }

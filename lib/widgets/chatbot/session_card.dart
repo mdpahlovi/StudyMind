@@ -74,14 +74,13 @@ class SessionCard extends StatelessWidget {
                           ),
                           selectedSessions.isNotEmpty
                               ? CustomIconButton(
-                                  onTap: () =>
-                                      isSelected ? selectedSessions.remove(session) : selectedSessions.add(session),
+                                  onTap: () => isSelected ? selectedSessions.remove(session) : selectedSessions.add(session),
                                   child: isSelected
                                       ? Icon(HugeIcons.strokeRoundedCheckmarkCircle01, size: 20)
                                       : Icon(HugeIcons.strokeRoundedCircle, size: 20),
                                 )
                               : Obx(() {
-                                  if (mainController.selectedIndex == 0) {
+                                  if (mainController.selectedIndex.value == 0) {
                                     return CustomIconButton(child: Icon(HugeIcons.strokeRoundedArrowRight01, size: 20));
                                   } else {
                                     return CustomIconButton(
@@ -102,20 +101,13 @@ class SessionCard extends StatelessWidget {
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          Icon(
-                            HugeIcons.strokeRoundedClock01,
-                            size: 14,
-                            color: colorPalette.contentDim.withValues(alpha: 0.7),
-                          ),
+                          Icon(HugeIcons.strokeRoundedClock01, size: 14, color: colorPalette.contentDim.withValues(alpha: 0.7)),
                           const SizedBox(width: 4),
                           Padding(
                             padding: EdgeInsets.only(right: 4),
                             child: Text(
                               timeago.format(session.lastMessageAt!),
-                              style: textTheme.bodySmall?.copyWith(
-                                color: colorPalette.contentDim.withValues(alpha: 0.7),
-                                height: 1.25,
-                              ),
+                              style: textTheme.bodySmall?.copyWith(color: colorPalette.contentDim.withValues(alpha: 0.7), height: 1.25),
                             ),
                           ),
                         ],

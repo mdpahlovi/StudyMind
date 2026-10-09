@@ -46,6 +46,12 @@ class ChatSession {
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || (other is ChatSession && other.uid == uid);
+
+  @override
+  int get hashCode => uid.hashCode;
 }
 
 class ChatSessionResponse {
@@ -250,23 +256,31 @@ class ChatController extends GetxController {
 
   Future<void> updateChatSession({required String uid, required String title}) async {
     isLoadingSession.value = true;
+
     final response = await chatService.updateChatSession(uid: uid, title: title);
+
     if (response.success && response.data != null) {
-      fetchChatSessions();
+      selectedSessions.removeWhere((session) => session.uid == uid);
+      await fetchChatSessions();
     } else {
       Notification.error(response.message);
     }
+
     isLoadingSession.value = false;
   }
 
   Future<void> updateBulkChatSession({required List<String> uid, bool? isActive}) async {
     isLoadingSession.value = true;
+
     final response = await chatService.updateBulkChatSession(uid: uid, isActive: isActive);
+
     if (response.success && response.data != null) {
-      fetchChatSessions();
+      selectedSessions.removeWhere((session) => uid.contains(session.uid));
+      await fetchChatSessions();
     } else {
       Notification.error(response.message);
     }
+
     isLoadingSession.value = false;
   }
 }

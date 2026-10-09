@@ -4,6 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:studymind/controllers/auth.dart';
 import 'package:studymind/core/notification.dart';
+import 'package:studymind/routes/routes.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_image.dart';
 import 'package:studymind/widgets/dialog/confirm.dart';
@@ -45,19 +46,9 @@ class ProfileScreenState extends State<ProfileScreen> {
                 textTheme: textTheme,
               ),
               const SizedBox(height: 16),
-              buildSettingsSection(
-                title: 'App Settings',
-                items: getAppSettings(),
-                colorPalette: colorPalette,
-                textTheme: textTheme,
-              ),
+              buildSettingsSection(title: 'App Settings', items: getAppSettings(), colorPalette: colorPalette, textTheme: textTheme),
               const SizedBox(height: 16),
-              buildSettingsSection(
-                title: 'Support',
-                items: getSupportSettings(),
-                colorPalette: colorPalette,
-                textTheme: textTheme,
-              ),
+              buildSettingsSection(title: 'Support', items: getSupportSettings(), colorPalette: colorPalette, textTheme: textTheme),
               const SizedBox(height: 24),
               buildLogoutButton(colorPalette, textTheme),
               const SizedBox(height: 16),
@@ -108,10 +99,7 @@ class ProfileScreenState extends State<ProfileScreen> {
           final createdAt = authController.user.value?.createdAt;
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: colorPalette.primary.withAlpha(50),
-              borderRadius: BorderRadius.circular(20),
-            ),
+            decoration: BoxDecoration(color: colorPalette.primary.withAlpha(50), borderRadius: BorderRadius.circular(20)),
             child: Text(
               'Member since ${createdAt != null ? DateFormat('MMM yyyy').format(createdAt) : "Apr 2024"}',
               style: textTheme.labelSmall?.copyWith(color: colorPalette.primary, fontWeight: FontWeight.bold),
@@ -185,9 +173,7 @@ class ProfileScreenState extends State<ProfileScreen> {
         ),
         title: Text("Logout", style: textTheme.titleMedium?.copyWith(color: colorPalette.error)),
         trailing: Icon(HugeIcons.strokeRoundedArrowRight01, color: colorPalette.error, size: 20),
-        onTap: () => Get.dialog(
-          ConfirmDialog(message: 'Are you sure you want to logout?', onConfirm: () => authController.logout()),
-        ),
+        onTap: () => Get.dialog(ConfirmDialog(message: 'Are you sure you want to logout?', onConfirm: () => authController.logout())),
       ),
     );
   }
@@ -230,22 +216,21 @@ class ProfileScreenState extends State<ProfileScreen> {
         'toggle': true,
         'color': Colors.indigo,
         'value': Get.isDarkMode,
-        'onChanged': (bool value) =>
-            setState(() => Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark)),
+        'onChanged': (bool value) => setState(() => Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark)),
       },
       {
         'icon': HugeIcons.strokeRoundedDelete02,
         'title': 'Removed Items',
         'toggle': false,
         'color': Colors.red,
-        'onTap': () => Notification.error('Removed items screen coming soon'),
+        'onTap': () => Get.toNamed(AppRoutes.removedItem),
       },
       {
         'icon': HugeIcons.strokeRoundedMessage02,
         'title': 'Removed Chats',
         'toggle': false,
         'color': Colors.purple,
-        'onTap': () => Notification.error('Removed chats screen coming soon'),
+        'onTap': () => Get.toNamed(AppRoutes.removedChat),
       },
     ];
   }

@@ -35,9 +35,6 @@ class SessionOptionsSheet extends StatefulWidget {
 }
 
 class SessionOptionsSheetState extends State<SessionOptionsSheet> {
-  bool isRenaming = false;
-  bool isRemoving = false;
-
   @override
   Widget build(BuildContext context) {
     final List<ChatSession> selectedSessions = widget.selectedSessions;
@@ -56,9 +53,7 @@ class SessionOptionsSheetState extends State<SessionOptionsSheet> {
               value: selectedSessions.first.title,
               onConfirm: (title) {
                 Get.back();
-                setState(() => isRenaming = true);
                 chatController.updateChatSession(uid: selectedSessions.first.uid, title: title);
-                setState(() => isRenaming = false);
               },
             ),
           );
@@ -74,9 +69,7 @@ class SessionOptionsSheetState extends State<SessionOptionsSheet> {
               message: 'You want to remove? If yes,\nPlease press confirm.',
               onConfirm: () {
                 Get.back();
-                setState(() => isRemoving = true);
                 chatController.updateBulkChatSession(uid: selectedSessions.map((e) => e.uid).toList(), isActive: false);
-                setState(() => isRemoving = false);
               },
             ),
           );

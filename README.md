@@ -1,4 +1,4 @@
-# StudyMind - AI-Powered Educational Assistant
+# StudyMind - AI-Powered Learning Platform
 
 <div align="center">
 
@@ -13,14 +13,13 @@
 
 ### 🚀 Overview
 
-StudyMind is an AI-powered educational assistant mobile app built with Flutter. This app features a hierarchical content management system with an agentic AI chat system, allowing users to create and interact with educational content through natural language prompts.
+StudyMind is an AI-powered learning platform to create, organize, and interact with study materials. It includes hierarchical content management, RAG-based question answering, and agentic AI to generate content from natural-language prompts.
 
 ### ✨ Key Features
 
-- **📚 Hierarchical Content Management**: Organize study materials in a structured, easy-to-navigate system
-- **📖 RAG-Powered Analysis**: Advanced retrieval-augmented generation for content-based queries
-- **🤖 AI-Powered Content Creation**: Generate folders, notes, documents, flashcards, audio, and images through natural language prompts
-- **💬 Intelligent Chat System**: Contextual chat system with natural language understanding
+- **📚 Hierarchical Content Management**: Organize study materials in one place.
+- **📖 RAG-Based Question Answering**: Ask questions and get answers based on user-uploaded study materials.
+- **🤖 Agentic AI Content Generation**: Generate folder, note, document, flashcard, image, and audio from natural-language prompts.
 
 ### 📱 Screenshots
 

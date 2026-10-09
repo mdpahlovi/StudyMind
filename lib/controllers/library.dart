@@ -74,6 +74,14 @@ class LibraryItem {
     return LibraryItem.fromJson(json);
   }
 
+  // Items are re-created from JSON on every fetch, so identity comparison would
+  // break `selectedItems.contains(item)` after any refresh.
+  @override
+  bool operator ==(Object other) => identical(this, other) || (other is LibraryItem && other.uid == uid);
+
+  @override
+  int get hashCode => uid.hashCode;
+
   @override
   String toString() {
     return '@created ${jsonEncode(toJson())}';

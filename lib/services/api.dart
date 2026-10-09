@@ -10,11 +10,7 @@ class ApiResponse {
   ApiResponse({required this.success, required this.message, required this.data});
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
-    return ApiResponse(
-      success: json['success'] ?? false,
-      message: json['message'] ?? 'Something went wrong',
-      data: json['data'],
-    );
+    return ApiResponse(success: json['success'] ?? false, message: json['message'] ?? 'Something went wrong', data: json['data']);
   }
 }
 
@@ -48,6 +44,18 @@ class ApiService {
   Future<ApiResponse> patch(String url, {data}) async {
     try {
       final response = await dioService.dio.patch(url, data: data);
+
+      return ApiResponse.fromJson(response.data);
+    } catch (error) {
+      final message = Error.message(error as DioException);
+
+      return ApiResponse(success: false, message: message, data: null);
+    }
+  }
+
+  Future<ApiResponse> delete(String url, {Object? data}) async {
+    try {
+      final response = await dioService.dio.delete(url, data: data);
 
       return ApiResponse.fromJson(response.data);
     } catch (error) {

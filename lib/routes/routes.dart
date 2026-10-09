@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:studymind/bindings/initial.dart';
 import 'package:studymind/bindings/main.dart';
+import 'package:studymind/bindings/removed.dart';
 import 'package:studymind/layouts/main.dart';
 import 'package:studymind/presentation/chatbot/widgets/chat_session.dart';
 import 'package:studymind/presentation/edit_profile/edit_profile.dart';
@@ -112,20 +113,17 @@ class AppRoutes {
     GetPage(
       name: removedChat,
       page: () => const RemovedChatScreen(),
+      binding: RemovedChatBinding(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
     GetPage(
       name: removedItem,
       page: () => const RemovedItemScreen(),
+      binding: RemovedItemBinding(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
-    GetPage(
-      name: faq,
-      page: () => const FAQScreen(),
-      transition: Transition.fadeIn,
-      transitionDuration: const Duration(milliseconds: 300),
-    ),
+    GetPage(name: faq, page: () => const FAQScreen(), transition: Transition.fadeIn, transitionDuration: const Duration(milliseconds: 300)),
   ];
 }
