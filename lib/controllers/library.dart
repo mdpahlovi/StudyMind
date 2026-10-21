@@ -42,7 +42,7 @@ class LibraryItem {
       id: json['id'],
       uid: json['uid'],
       isActive: json['isActive'],
-      isEmbedded: ['DOCUMENT', 'AUDIO', 'VIDEO'].contains(json['type']) ? json['isEmbedded'] : true,
+      isEmbedded: ['DOCUMENT', 'AUDIO', 'VIDEO', 'IMAGE'].contains(json['type']) ? json['isEmbedded'] : true,
       name: json['name'],
       type: ItemType.values.byName(json['type'].toLowerCase()),
       parentId: json['parentId'],

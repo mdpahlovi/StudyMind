@@ -15,8 +15,7 @@ class Flashcard {
 
   Flashcard({required this.question, required this.answer});
 
-  factory Flashcard.fromJson(Map<String, dynamic> json) =>
-      Flashcard(question: json['question'], answer: json['answer']);
+  factory Flashcard.fromJson(Map<String, dynamic> json) => Flashcard(question: json['question'], answer: json['answer']);
 
   Map<String, String> toJson() => {'question': question, 'answer': answer};
 }
@@ -87,10 +86,7 @@ class ItemCreateController extends GetxController {
             name: nameController.text,
             type: ItemType.note,
             parentId: libraryController.selectedFolder.value?.id,
-            metadata: {
-              'description': descriptionController.text,
-              'notes': deltaToMarkdown.convert(noteController.document.toDelta()),
-            },
+            metadata: {'description': descriptionController.text, 'notes': deltaToMarkdown.convert(noteController.document.toDelta())},
           );
         } else {
           createLibraryItemData = null;
@@ -235,11 +231,11 @@ class ItemCreateController extends GetxController {
     libraryController.fetchLibraryItemWithPath();
   }
 
-  void updateLibraryItem(String uid, {String? name, bool? isEmbedded}) {
+  void updateLibraryItem(String uid, {String? name}) {
     Get.back();
     updateLoader(true);
 
-    final UpdateLibraryItem updateLibraryItemData = UpdateLibraryItem(uid: uid, name: name, isEmbedded: isEmbedded);
+    final UpdateLibraryItem updateLibraryItemData = UpdateLibraryItem(uid: uid, name: name);
 
     libraryService.updateLibraryItem(updateLibraryItemData).then((response) {
       if (response.success && response.data != null) {

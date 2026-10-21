@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Notification;
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:studymind/constants/item_type.dart';
 import 'package:studymind/controllers/item_create.dart';
 import 'package:studymind/controllers/library.dart';
+import 'package:studymind/core/notification.dart';
 import 'package:studymind/services/download.dart';
 import 'package:studymind/theme/colors.dart';
 import 'package:studymind/widgets/custom_icon.dart';
@@ -19,14 +20,7 @@ class ItemOption {
   final bool hide;
   final bool isLoading;
 
-  ItemOption({
-    required this.icon,
-    required this.title,
-    this.danger = false,
-    this.hide = false,
-    this.onTap,
-    this.isLoading = false,
-  });
+  ItemOption({required this.icon, required this.title, this.danger = false, this.hide = false, this.onTap, this.isLoading = false});
 }
 
 class ItemOptionsSheet extends StatefulWidget {
@@ -58,7 +52,7 @@ class ItemOptionsSheetState extends State<ItemOptionsSheet> {
           Get.dialog(
             ConfirmDialog(
               message: 'You want to make it mentionable? This enables it to mentionable in\nai chat.',
-              onConfirm: () => itemCreateController.updateLibraryItem(selectedItems.first.uid, isEmbedded: true),
+              onConfirm: () => Notification.info('Retry indexing is coming soon'),
             ),
           );
         },
@@ -177,8 +171,6 @@ Widget buildOptionTile(BuildContext context, ItemOption option) {
     onTap: option.isLoading ? null : option.onTap,
     leading: Icon(option.icon, color: color, size: 20),
     title: Text(option.title, style: textTheme.titleMedium?.copyWith(color: color)),
-    trailing: option.isLoading
-        ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: color))
-        : null,
+    trailing: option.isLoading ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: color)) : null,
   );
 }
